@@ -1,0 +1,88 @@
+\chapter{Thực nghiệm và đánh giá}
+\label{chap:experiment}
+Chương này sẽ tập trung trình bày về quá trình thực nghiệm và đánh giá phương pháp đánh giá điểm thưởng dựa trên thiết kế đã mô tả chi tiết trong phần trước. Phần thực nghiệm sẽ đi sâu vào việc áp dụng phương pháp để cải thiện hiệu quả công cụ ARAT-RL và so sánh hiệu suất của phương pháp mới với phương pháp đánh giá điểm thưởng mặc định của ARAT-RL. Dựa trên kết quả thu được, tôi sẽ đưa ra các nhận xét và kết luận về giải pháp đề xuất.
+
+
+
+
+
+
+
+
+\section{Dữ liệu}
+
+Bảng \ref{table:services} mô tả chi tiết về các hệ thống thực nghiệm. Bộ dữ liệu sử dụng trong báo cáo này bao gồm 10 hệ thống kiểm thử được thực nghiệm trong bài báo ARAT-RL. Bộ dữ liệu này chứa khoảng 860.000 dòng mã nguồn và 197 hoạt động (operation), được trích xuất từ một bài báo gần đây với mục đích xây dựng bộ dữ liệu cho kiểm thử API \cite{10.1145/3533767.3534401}. Theo Myeongsoo Kim và các cộng sự, những hệ thống này đảm bảo các điều kiện cần thiết để thực hiện kiểm thử hiệu quả. Cụ thể, chúng cung cấp đặc tả OpenAPI, có thể biên dịch và hoạt động tốt, và không phụ thuộc vào các dịch vụ bên ngoài có giới hạn yêu cầu. Điều này đảm bảo hiệu suất của công cụ kiểm thử không bị ảnh hưởng bởi các yếu tố ngoại vi. Thông tin này giúp đảm bảo tính nhất quán và độ tin cậy của các kết quả được thu thập và phân tích trong nghiên cứu.
+
+
+
+
+
+\section{Quy trình thực nghiệm}
+Quy trình thực nghiệm bắt đầu bằng việc xác định mục tiêu chính là cải thiện hiệu suất phát hiện lỗi của công cụ. Mục tiêu này rất quan trọng vì nó xem xét khả năng, tốc độ của công cụ trong môi trường thực tế. Để đạt được mục tiêu này, ba thực nghiệm đã được tiến hành, mỗi thực nghiệm được thiết kế để kiểm tra một khía cạnh cụ thể của hiệu suất công cụ.
+
+Thực nghiệm đầu tiên tập trung vào việc đánh giá số lượng lỗi mà công cụ phát hiện được sau khi đã được cải tiến so với phiên bản gốc. Quy trình này bao gồm việc chạy công cụ trên một tập dữ liệu thử nghiệm, sau đó so sánh kết quả thu được với phiên bản cũ. Bằng cách này, thực nghiệm có thể đánh giá sự cải thiện trong khả năng phát hiện lỗi của công cụ sau khi thực hiện các điều chỉnh và cải tiến.
+
+Thực nghiệm thứ hai tập trung vào so sánh tốc độ tìm lỗi giữa phiên bản đã được cải tiến và công cụ gốc. Để làm được điều này, thực nghiệm đã lập biểu đồ thể hiện sự tương quan giữa số lỗi tìm được và số yêu cầu gửi đi giữa hai phiên bản. Qua đó, ta có thể xác định ảnh hưởng việc cải tiến  đến tốc độ phát hiện lỗi.
+
+Thực nghiệm thứ ba đánh giá ảnh hưởng của cải tiến nguồn sinh dữ liệu đến tốc độ tìm lỗi trong công cụ áp dụng phương pháp đánh giá điểm thưởng mới. Tương tự với thực nghiệm thứ hai, biểu đồ thể hiện sự tương quan giữa số lỗi tìm được và số yêu cầu gửi đi giữa hai phiên bản đã được lập. Điều này giúp xác định liệu việc cải tiến về nguồn sinh dữ liệu đầu vào có ảnh hưởng tích cực đến tốc độ phát hiện lỗi hay không.
+
+Tổng hợp kết quả từ cả ba thực nghiệm sẽ cung cấp cái nhìn toàn diện về hiệu suất của công cụ phát hiện lỗi sau khi được cải tiến. Thông tin thu được từ các thực nghiệm này sẽ là cơ sở quan trọng để đánh giá và điều chỉnh chiến lược phát triển tiếp theo của dự án, đảm bảo rằng công cụ ngày càng hoàn thiện và hiệu quả hơn trong việc phát hiện và xử lý lỗi.
+
+
+
+
+
+
+\section{Độ đo đánh giá}
+
+
+Tương tự như ARAT-RL, hiệu quả của phương pháp đề xuất được đánh giá thông qua thước đo hiệu suất tìm lỗi, tập trung vào việc xác định các trường hợp duy nhất của mã lỗi \texttt{500}, biểu thị sự cố phía máy chủ. Nếu hệ thống cung cấp stack trace khi gặp phản hồi dạng \texttt{500}, công cụ thu thập stack trace và tiến hành phân tích, so sánh. Mỗi lỗi bên phía hệ thống được định nghĩa là phản hồi dạng 500 có stack trace riêng biệt. Trong phần lớn các trường hợp, các lỗi tìm được thuộc thể loại này. Ngoại lệ, nếu hệ thống không hỗ trợ trả về stack trace, công cụ sẽ phân tích nội dung phản hồi. Sau khi loại bỏ các thành phần không liên quan như mốc thời gian, giải pháp phân loại các trường hợp phản hồi dạng \texttt{500} có nội dung độc nhất thành các lỗi riêng lẻ.
+
+Với từng thực nghiệm, hiệu năng sẽ được đánh giá trên từng thang đo khác nhau. Trong thực nghiệm đầu tiên, vì tập trung đánh giá số lượng lỗi mà công cụ phát hiện được, thang đo đánh giá được xác định là trung bình số các lỗi duy nhất được xác định trong phiên thực nghiệm kéo dài một giờ. Để giảm thiểu ảnh hưởng của tính ngẫu nhiên, mỗi thực nghiệm được lặp lại 10 lần và tính trung bình số các lỗi được tìm thấy trong tất cả các thực nghiệm. Thang đo này tương tự với phương pháp mà ARAT-RL áp dụng.
+
+Trong hai thực nghiệm tiếp theo, giải pháp tập trung vào đánh giá tốc độ tìm lỗi, thang đo đánh giá được xác định là số lượng lỗi tìm được các một mốc yêu cầu (request). Tương tự, để giảm thiểu ảnh hưởng của tính ngẫu nhiên, mỗi thực nghiệm được lặp lại 10 lần. Việc này đảm bảo rằng các kết quả thu được có độ tin cậy cao và phản ánh chính xác hiệu suất của công cụ sau khi áp dụng các cải tiến.
+
+\section{Kết quả thực nghiệm}
+\subsection{Đánh giá số lượng lỗi mà công cụ phát hiện được sau khi đã được cải tiến so với phiên bản gốc}
+
+
+Bảng \ref{table:two-round-result} trình bày tổng số lỗi được phát hiện bởi từng công cụ trong 10 lần chạy  trên tập các hệ thống thực nghiệm. Lưu ý rằng tổng số lỗi này có thể bao gồm việc phát hiện nhiều lần cùng một lỗi trong các lần chạy khác nhau. Dựa theo bảng \ref{table:two-round-result}, công cụ sau khi cải tiến cho thấy khả năng phát hiện lỗi hiệu quả, vượt trội hoặc sánh ngang với công cụ gốc trong mọi hệ thống kiểm thử và xác định trung bình 126,9 lỗi trên các dịch vụ. Khả năng phát hiện lỗi của công cụ cải tiến đặc biệt rõ ràng trong các dịch vụ "Language Tool" và "Person Controller", lần lượt xác định trung bình 13,7 lỗi và 107,2 lỗi. Điều này được giải thích là các hệ thống này có bộ tham số lớn hơn, cho phép kiểm thử với nhiều tổ hợp tham số đa dạng, dẫn đến độ phủ đầu ra lớn hơn và xác suất phát hiện lỗi cao hơn.
+
+\subsection{So sánh về tốc độ tìm lỗi giữa phiên bản cải tiến và công cụ gốc}
+% \begin{figure}[htp]
+
+% \centering{
+% \includegraphics[scale=0.65]{figures/c4/caitien vs goc.pdf}
+% \caption{Tốc độ tìm lỗi giữa phiên bản cải tiến và phiên bản gốc}
+% \label{figure:MCATvsARAT}
+
+% }
+% \end{figure}
+Hình \ref{figure:MCATvsARAT} minh họa tổng quan tốc độ tìm lỗi giữa phiên bản cải tiến và phiên bản gốc, cung cấp cái nhìn chi tiết hơn về quá trình kiểm thử của công cụ. Trục hoành đại diện cho số lượng yêu cầu đã được thực hiện, trong khi trục tung biểu thị số lượng lỗi tìm được. Tổng quan, công cụ sau khi cải tiến cho thấy hiệu quả vượt trội rõ rệt so với phiên bản gốc. Ta có thể nhận xét đồ thị này dựa trên ba khía cạnh: số lượng lỗi tìm được trên mỗi mốc yêu cầu, thời điểm bão hòa và số lượng yêu cầu được sinh ra.
+
+Với tiêu chí đầu tiên, mặc dù có sự thua thiệt ở các mốc yêu cầu đầu tiên, nhìn tổng thế, giải pháp đánh giá điểm thưởng mới đã mang lại hiệu quả vượt trội so với công cụ gốc. Ta có thể thấy, khi thời gian chạy tăng, phiên bản cải tiến càng bỏ xa phiên bản gốc về số lượng lỗi tìm được trên mỗi mốc yêu cầu. Tại mốc yêu cầu cuối cùng mà phiên bản gốc có thể thực hiện, phiên bản cải tiến tìm được nhiều hơn gần 15 lỗi. Điều này cho thấy phiên bản cải tiến có khả năng tìm kiếm lỗi hiệu quả hơn, cần ít yêu cầu hơn để đạt được số lượng lỗi nhất định. Sự thua thiệt ban đầu ở các mốc yêu cầu đầu tiên có thể lý giải rằng, do phương pháp mới xét đến nhiều yếu tố hơn trong quá trình đánh giá, không tập trung một cách trực tiếp vào việc tìm lỗi, làm giảm tốc độ tìm lỗi ban đầu của công cụ.
+
+
+Với tiêu chí thứ hai, điểm bão hòa của công cụ gốc xuất hiện sớm hơn so với công cụ sau khi cải tiến. Ta có thể thấy rằng, vào khoảng yêu cầu thứ 35.000, công cụ gốc đã đạt điểm bão hòa, đồ thị đi theo hướng nằm ngang và số lượng lỗi tìm được không tăng. Trong khi đó, phiên bản cải tiến tiếp tục cho thấy khả năng tìm ra lỗi. Điều này cho thấy phương pháp đánh giá điểm thưởng mới có chiều sâu và tác động xuyên suốt quá trình kiểm thử.
+
+Với tiêu chí thứ ba, ta có thể thấy công cụ sinh được nhiều yêu cầu hơn trong cùng 1 phiên thực nghiệm. Đồ thị trên được thực nghiệm trên 10 phiên để loại bỏ tính ngẫu nhiên trong quá trình thực nghiệm. Một trong những lý do có thể được đưa ra trong quá trình này, đó là việc mở rộng và tinh chỉnh các nguồn sinh dữ liệu, đã có ảnh hưởng đến tốc độ sinh yêu cầu của công cụ. Cụ thể hơn, đó là việc áp dụng thư viện Hypothesis vào quá trình sinh dữ liệu.
+
+
+\subsection{Đánh giá ảnh hưởng của cải tiến nguồn sinh dữ liệu đến tốc độ tìm lỗi trong công cụ áp dụng phương pháp đánh giá điểm thưởng mới}
+% \begin{figure}[htp]
+
+% \centering{
+% \includegraphics[scale=0.65]{figures/c4/nguon va khong nguon.pdf}
+% \caption{ Biểu đồ đánh giá ảnh hưởng của cải tiến nguồn sinh dữ liệu đến tốc độ tìm lỗi trong công cụ áp dụng phương pháp đánh giá điểm thưởng mới}
+% \label{figure:nguon_vs_khongnguon}
+
+% }
+% \end{figure}
+
+Để đánh giá ảnh hưởng của cải tiến nguồn sinh dữ liệu đến tốc độ tìm lỗi trong công cụ áp dụng phương pháp đánh giá điểm thưởng mới, ta làm một thử nghiệm tương tự với thử nghiệm số hai. Với các tiêu chí đánh giá tương tự thử nghiệm trước, ở đây, ta có thể thấy sự khác biệt trên hai khía cạnh sau đây: số lượng lỗi tìm được trên mỗi mốc yêu cầu và số lượng yêu cầu sinh ra
+
+Về tiêu chí đầu tiên, hình \ref{figure:nguon_vs_khongnguon} cho thấy tốc độ tìm lỗi tổng thể được cải thiện khi áp dụng mở rộng và tinh chỉnh các nguồn sinh dữ liệu.Đặc biệt trong giai đoạn đầu (khoảng 25.000 yêu cầu đầu tiên), sự chênh lệch về hiệu quả tìm lỗi giữa hai phiên bản được thể hiện rõ ràng nhất. Sự khác biệt lên đến 10 lỗi đã được ghi nhận tại mốc 13.000 yêu cầu, cho thấy phiên bản cải tiến có khả năng phát hiện lỗi vượt trội so với phiên bản gốc trong giai đoạn này.
+
+Về tiêu chí thứ hai, như đã giải thích ở trên, việc tích hợp thư viện Hypothesis trong quá trình mở rộng và tinh chỉnh nguồn sinh dữ liệu đầu vào đã giúp nâng cao khả năng sinh yêu cầu trong cùng một phiên thực nghiệm. Cụ thể, phiên bản cải tiến đã sinh thêm 18.000 yêu cầu, tương đương tăng 25\% so với phiên bản gốc. Khả năng sinh nhiều yêu cầu hơn giúp phiên bản cải tiến khám phá nhiều trường hợp kiểm thử hơn, nâng cao tiềm năng tìm ra nhiều lỗi tiềm ẩn. Ví dụ, phiên bản cải tiến đã tìm thêm lỗi ở yêu cầu thứ 88.500. Mặc dù phiên bản cải tiến chưa cho thấy dấu hiệu bão hòa khi kết thúc phiên kiểm thử, nhưng để đảm bảo tính công bằng, phiên kiểm thử đã được dừng lại.
+
+% \section{Tổng kết chương}

@@ -1,0 +1,357 @@
+
+\chapter{Kiến thức cơ sở}
+Trong chương này, một số kiến thức chung về Restful API sẽ được giới thiệu. Bên cạnh đó, những kiến thức  về kiểm thử API và kiểm thử mờ được đề cập để làm nền tảng cho giải pháp sẽ được đưa ra trong khóa luận này. Phần tiếp theo sẽ tập trung trình bày về học tăng cường và thuật toán Q-learning, một thuật toán được sử dụng rộng rãi trong lĩnh vực này. Phần cuối cùng sẽ trình bày về ARAT-RL, công cụ kiểm thử API mới nhất hiện nay ứng dụng học tăng cường.
+% giới thiệu về ARAT-RL
+\section{Restful API}
+Restful API hay còn được gọi là REST API, là các API trên nền trình duyệt web tuân theo phong cách kiến trúc REpresentational State Transfer (REST) \cite{RESTAPI}. Chúng cho phép người dùng tương tác với các dịch vụ web bằng cách gửi các yêu cầu HTTP và nhận phản hồi. Người dùng sử dụng các yêu cầu để truy cập và thao tác với các tài nguyên được dịch vụ quản lý. Tài nguyên là một phần dữ liệu mà người dùng có thể thực hiện các hành động: tạo, đọc, cập nhật hoặc xóa.
+Yêu cầu từ người dùng sẽ được gửi đến một điểm truy cập API, đây là đường dẫn tài nguyên xác định tài nguyên, cùng với phương thức HTTP chỉ định hành động được thực hiện trên tài nguyên. Các phương thức phổ biến nhất là \textit{POST, GET, PUT và DELETE}, ứng với lần lượt các hành động người dùng.
+
+Sau khi máy chủ tiếp nhận và xử lý yêu cầu từ người dùng, phản hồi trả về có định dạng gồm 3 phần: tiêu đề (header), nội dung yêu cầu (request body) và mã trạng thái HTTP (HTTP status code). Tiêu đề cung cấp thông tin bổ sung về ngữ cảnh của yêu cầu vừa được thực hiện, như định dạng dữ liệu, thời gian, kiểu mã hóa, v.v. Nội dung yêu cầu chứa dữ liệu chính mà người dùng quan tâm. Mã trạng thái HTTP thể hiện tình trạng hoàn thành của yêu cầu. Mã trạng thái này được chia thành 5 loại:
+\begin{itemize}
+        \item Mã \texttt{1xx}: Chỉ ra yêu cầu đã được nhận và đang được xử lý.
+        \item Mã \texttt{2xx}: Cho biết yêu cầu đã được xử lý thành công. Trong nhóm này, mã \texttt{200} là mã thành công phổ biến nhất.
+        \item Mã \texttt{3xx}: Yêu cầu chuyển hướng, ví dụ như tài nguyên mục tiêu đã được di chuyển đến một URL mới (mã \texttt{301}).
+        \item Mã \texttt{4xx}: Chỉ ra lỗi của khách hàng. Ví dụ, mã \texttt{400} biểu thị yêu cầu không hợp lệ, thường do giá trị đầu vào không chính xác, trong khi mã \texttt{404} cho biết khách hàng đã yêu cầu một tài nguyên không tồn tại.
+        \item Mã \texttt{5xx}: Chỉ ra lỗi của máy chủ trong quá trình xử lý yêu cầu. Đặc biệt, mã \texttt{500} cho biết lỗi máy chủ nội bộ và thường xảy ra trong các trường hợp dịch vụ gặp lỗi và không thể xử lý yêu cầu một cách chính xác. Do đó, nhiều nghiên cứu thực nghiệm về các công cụ kiểm thử REST API, bao gồm cả báo cáo này, xem xét số lượng mã trạng thái \texttt{500} độc nhất được tìm thấy như là các lỗi của dịch vụ.
+    \end{itemize}
+
+RESTful API được xây dựng dựa trên giao thức HTTP, nên mang theo đặc tính quan trọng là phi trạng thái. Điều này có nghĩa là mỗi yêu cầu từ người dùng chỉ cần cung cấp đầy đủ thông tin để máy chủ hiểu và xử lý, mà không phụ thuộc vào bất kỳ trạng thái nội bộ nào trên máy chủ. Đặc tính phi trạng thái này giúp đơn giản hóa và nâng cao hiệu quả cho giao thức RESTful API, do máy chủ không cần quản lý trạng thái, từ đó giảm thiểu độ phức tạp của hệ thống. Bên cạnh đó, việc tận dụng tính chất phi trạng thái cũng góp phần tăng khả năng mở rộng và tương thích cho các hệ thống sử dụng RESTful API. Nhờ những ưu điểm này, RESTful API ngày càng được ưa chuộng và thường được triển khai trong các ứng dụng web, di động, hệ thống phân tán và Internet of Things (IoT) \cite{maurya2021application,biehl2016restful}.
+
+\usemintedstyle[python]{xcode}
+\begin{minted}
+[
+frame=lines,
+framesep=2mm,
+baselinestretch=1.2,
+fontsize=\footnotesize,
+linenos
+]
+{python}
+import numpy as np
+
+def incmatrix(genl1, genl2):
+    m = len(genl1)
+    n = len(genl2)
+    M = None  # to become the incidence matrix
+    VT = np.zeros((n*m, 1), int)  # dummy variable
+
+    # compute the bitwise xor matrix
+    M1 = bitxormatrix(genl1)
+    M2 = np.triu(bitxormatrix(genl2), 1)
+
+    for i in range(m-1):
+        for j in range(i+1, m):
+            [r, c] = np.where(M2 == M1[i, j])
+            for k in range(len(r)):
+                VT[(i)*n + r[k]] = 1
+                VT[(i)*n + c[k]] = 1
+                VT[(j)*n + r[k]] = 1
+                VT[(j)*n + c[k]] = 1
+
+            if M is None:
+                M = np.copy(VT)
+            else:
+                M = np.concatenate((M, VT), 1)
+
+            VT = np.zeros((n*m, 1), int)
+
+    return M
+\end{minted}
+
+\begin{lstlisting}[language=Python,frame=topline,frame=topline]
+import numpy as np
+
+def incmatrix(genl1, genl2):
+    m = len(genl1)
+    n = len(genl2)
+    M = None  # to become the incidence matrix
+    VT = np.zeros((n*m, 1), int)  # dummy variable
+
+    # compute the bitwise xor matrix
+    M1 = bitxormatrix(genl1)
+    M2 = np.triu(bitxormatrix(genl2), 1)
+
+    for i in range(m-1):
+        for j in range(i+1, m):
+            [r, c] = np.where(M2 == M1[i, j])
+            for k in range(len(r)):
+                VT[(i)*n + r[k]] = 1
+                VT[(i)*n + c[k]] = 1
+                VT[(j)*n + r[k]] = 1
+                VT[(j)*n + c[k]] = 1
+
+            if M is None:
+                M = np.copy(VT)
+            else:
+                M = np.concatenate((M, VT), 1)
+
+            VT = np.zeros((n*m, 1), int)
+
+    return M
+\end{lstlisting}
+
+
+
+\section{Đặc tả OpenAPI}
+
+\begin{lstlisting}[language=HTML,firstnumber=1,caption={Đặc tả OpenAPI},label={lst:openapi_example}]
+openapi: 3.0.0
+info:
+  title: Simple Pet API
+  version: 1.0.0
+  description: A simple API for managing pets
+servers:
+  - url: https://petstore.swagger.io/v2
+paths:
+  /pets/{id}:
+    get:
+      summary: Get a pet by id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: The pet object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pet'
+        '404':
+          description: Pet not found
+components:
+  schemas:
+    Pet:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        tag:
+          type: string
+
+\end{lstlisting}
+
+% Đặc tả OpenAPI (còn được gọi là đặc tả Swagger) hay OAS là một tài liệu hướng dẫn để định nghĩa và lập tài liệu cho các RESTful API \cite{OpenAPI}. Thông thường, nó được viết bằng YAML hoặc JSON, cho phép dễ dàng chia sẻ và sử dụng đặc tả. Hình \ref{lst:openapi_example} cho ta một ví dụ về đặc tả OpenAPI rút gọn từ đặc tả có tên là \hyperlink{https://petstore3.swagger.io/api/v3/openapi.json}{Petstore} trên trang chủ của OpenAPI, được dùng để mô tả các khía cạnh sau của một API:
+
+\begin{itemize}
+\item \textbf{Điểm truy cập:} Địa chỉ truy cập của API.
+\item \textbf{Thao tác:} Các hành động có thể thực hiện trên API (ví dụ: GET, POST, PUT, DELETE).
+\item \textbf{Định dạng yêu cầu và phản hồi:} Cấu trúc dữ liệu của yêu cầu gửi lên API và dữ liệu trả về từ API.
+\item \textbf{Tham số:} Các biến số được sử dụng trong yêu cầu gửi lên API.
+\item \textbf{Phương thức xác thực:} Cách thức xác minh người dùng khi truy cập API.
+
+\end{itemize}
+Mục tiêu chính của OAS là xác định một định dạng chuẩn, không phụ thuộc ngôn ngữ để mô tả RESTful API, cho phép cả con người và máy tính khám phá và hiểu các khả năng của dịch vụ mà không cần truy cập vào mã nguồn. Đặc tả OAS sau đó có thể được sử dụng bởi các công cụ tạo tài liệu để hiển thị API, các công cụ kiểm thử và nhiều trường hợp sử dụng khác.
+
+
+\section{Kiểm thử API}
+Để đảm bảo độ tin cậy của API, kiểm thử là một phương pháp thông thường và quan trọng trong quy trình phát triển API \cite{9034254}. Đây là một loại kĩ thuật kiểm tra tính hợp lệ của API. Mục đích của kĩ thuật này là kiểm tra chức năng, độ tin cậy, hiệu suất và bảo mật của các API.
+
+Với sự phát triển của lĩnh vực này, việc tự động hóa cho kiểm thử API đang trở thành một chủ đề nghiên cứu ngày càng được quan tâm. Kĩ thuật này thay vì sử dụng đầu vào và đầu ra tiêu chuẩn như bàn phím, người dùng sẽ sử dụng công cụ để tự động hóa quá trình gửi các lời gọi API, xử lý đầu ra và phản hồi của hệ thống. Kĩ thuật chủ yếu tập trung vào lớp logic nghiệp vụ của kiến trúc phần mềm.
+
+Nghiên cứu về kiểm thử tự động API có thể được chia thành hai phương pháp: kiểm thử hộp đen và kiểm thử hộp trắng. Phương pháp kiểm thử hộp đen sinh dữ liệu kiểm thử dựa trên thông tin từ  đặc tả API, thường ở dạng OpenAPI \cite{OpenAPI}. Phương pháp kiểm hộp trắng sử dụng cả đặc tả API và mã nguồn chương trình để tạo các ca kiểm thử bao phủ tốt nhất có thể, cố gắng giảm thiểu khối lượng công việc thủ công từ người dùng. Cả hai phương pháp đều cố gắng tự động xác định lỗi máy chủ (ví dụ: mã trạng thái HTTP \texttt{5xx}) và các sự mâu thuẫn của phản hồi so với đặc tả API. Với mục tiêu này, quá trình kiểm thử tự động không chỉ giúp đảm bảo tính đúng đắn và ổn định của API mà còn giúp tăng hiệu suất và giảm thiểu chi phí con người trong quá trình phát triển phần mềm.
+
+\subsection{Mục tiêu độ phủ}
+
+Trong kiểm thử phần mềm nói chung và cụ thể kiểm thử API, để đánh giá chất lượng của các ca kiểm thử được tạo, ta có 3 thang đo phổ biến sau: độ phủ đầu vào, độ phủ đầu ra và độ phủ mã nguồn. Mỗi thang đo sẽ đánh giá một khía cạnh khác nhau của bộ kiểm thử.
+
+Độ phủ đầu vào thể hiện cho mức độ đa dạng mà tập các ca kiểm thử có thể kiểm thử trên tập đầu vào của chương trình máy tính. Tiêu chí này đóng vai trò quan trọng trong lĩnh vực kiểm thử, thể hiện trong cả lĩnh vực kiểm thử API. Các API dựa vào các đầu vào để có thể hoạt động chính xác. Việc không kiểm thử các đầu vào có thể xảy ra, hợp lệ hoặc bất thường, có thể để lại lỗ hổng bảo mật nghiêm trọng. Độ phủ đầu vào giúp đảm bảo API phản hồi như mong đợi đối với dữ liệu chuẩn và xử lý các trường hợp bất thường một cách chắc chắn.
+
+Độ phủ đầu ra tập trung vào khả năng của bộ kiểm thử có thể phủ tất cả các phản hồi có thể có của API. Nói cách khác, phản hồi càng đa dạng thì độ phủ đầu ra càng cao. Trong kiểm thử API, độ phủ đầu ra liên quan đến độ phủ mã trạng thái. Ngoài ra, các phản hồi cũng được phân biệt theo nội dung đi kèm. Độ phủ đầu ra giúp đánh giá tính đầy đủ và tính chính xác của chức năng của hệ thống bằng cách đánh giá các dạng đầu ra khác nhau mà hệ thống trả về.
+
+Độ phủ mã nguồn đo lường mức độ  mã nguồn của API được thực thi trong quá trình kiểm thử. Nó chỉ ra tỷ lệ các dòng mã, nhánh, câu lệnh hoặc điều kiện đã được bộ kiểm thử thực thi. Theo đó, có một số loại độ phủ mã nguồn. Độ phủ dòng có nhiệm vụ đo lường tỷ lệ các dòng mã đã được thực thi so với tổng số dòng mã trong mã nguồn. Độ phủ câu lệnh đo lường tỷ lệ các dòng mã đã được thực thi so với tổng số dòng mã trong mã nguồn. Độ phủ câu lệnh đo lường tỷ lệ các dòng mã đã được thực thi so với tổng số dòng mã trong mã nguồn. Độ phủ điều kiện đo lường tỷ lệ các điều kiện logic trong câu lệnh đã được thực thi.
+
+Trong quá trình kiểm thử, việc đạt độ phủ cao là một trong những mục tiêu của các bộ kiểm thử. Điều này thể hiện rằng, nó đã bao quát được nhiều phần của hệ thống được kiểm thử, có thể giúp tìm ra được nhiều lỗi tiềm ẩn của hệ thống. Tuy nhiên, việc tập trung quá mức vào việc tối ưu hóa độ phủ có thể dẫn đến việc tạo ra các bài kiểm thử không hiệu quả, bỏ sót các lỗi tiềm ẩn nằm trong các phần đã được phủ. Do đó, mục tiêu độ phủ chỉ nên được xem như một khía cạnh trong quá trình kiểm thử, cần kết hợp với các phương pháp kiểm thử khác để đảm bảo hiệu quả và tính toàn diện của quá trình kiểm thử.
+
+\subsection{Thách thức trong kiểm thử  API}
+
+Kiểm thử API đóng vai trò quan trọng trong việc đảm bảo tính nhất quán và chức năng của các dịch vụ web. Tuy nhiên, quá trình này gặp phải nhiều thách thức lớn. Đầu tiên, phạm vi kiểm thử rất rộng và phức tạp do API cung cấp nhiều điểm truy cập với các chức năng khác nhau, đòi hỏi phải kiểm tra kỹ lưỡng từng điểm để đảm bảo API hoạt động đúng yêu cầu. Hơn nữa, việc xử lý dữ liệu đầu vào và đầu ra là một thách thức khác, bởi API thường phải xử lý nhiều loại dữ liệu khác nhau như JSON, XML... Điều này yêu cầu sự hiểu biết về cấu trúc dữ liệu và các tình huống sử dụng. Tính ổn định của môi trường kiểm thử cũng là một vấn đề, bởi các yếu tố như sập máy chủ, cơ sở dữ liệu thay đổi, hoặc dịch vụ phụ thuộc không hoạt động có thể gây khó khăn cho việc kiểm thử chính xác. Mặt khác, vấn đề bảo mật cần được chú trọng đặc biệt để đảm bảo API không bị tấn công bởi các phương pháp như SQL Injection, XSS, và DDoS. Kiểm thử hiệu suất và chịu tải cũng rất quan trọng để đảm bảo API có thể xử lý lượng lớn yêu cầu trong thời gian ngắn. Cuối cùng, các API thường phụ thuộc vào dịch vụ bên thứ ba hoặc các API khác, do đó việc kiểm thử phải đảm bảo tất cả các tích hợp hoạt động mượt mà. Những thách thức này đòi hỏi các kỹ sư kiểm thử phải có kỹ năng kỹ thuật cao, hiểu biết sâu rộng về hệ thống và khả năng sử dụng các công cụ kiểm thử tự động một cách hiệu quả.
+
+
+
+\section{Kiểm thử mờ}
+Kiểm thử mờ là một kỹ thuật kiểm thử tự động nhằm bao phủ nhiều trường hợp biên bằng cách sử dụng dữ liệu không hợp lệ (từ tệp, giao thức mạng, các API) làm đầu vào của ứng dụng để đảm bảo phủ tốt nhất các lỗi có thể \cite{8371326}. Ý tưởng chính đằng sau kĩ thuật là tạo ra và kiểm thử nhiều ca kiểm thử nhằm tìm ra các lỗi phần mềm khó gặp. Các phương pháp tạo dữ liệu đầu vào có thể được chia thành hai loại chính: kiểm thử mờ hộp đen và kiểm thử mờ hộp trắng.
+
+Kiểm thử mờ hộp đen sở hữu những đặc tính quan trọng của kiểm thử hộp đen truyền thống. Các dữ liệu đầu vào được sinh ra mà không cần thông tin về cấu trúc bên trong của ứng dụng. Phương pháp này đơn giản và dễ triển khai, nhưng có thể bỏ sót các lỗi phức tạp do không khai thác được kiến trúc nội bộ của ứng dụng. Để hạn chế những điểm yếu này, kỹ thuật kiểm thử mờ sử dụng những kỹ thuật kiểm thử hộp đen tiên tiến hơn như nhóm các thuật toán di truyền (genetic algorithms). Các thuật toán này mô phỏng quá trình chọn lọc tự nhiên để phát triển dữ liệu đầu vào tốt hơn theo thời gian. Bằng cách lai ghép và đột biến dữ liệu đầu vào hiện có, chúng giúp    tạo ra các đầu vào mới có khả năng cao gây ra lỗi.
+
+% Phân tích taint theo dõi sự lan truyền của dữ liệu không tin cậy trong suốt quá trình thực thi của hệ thống để xác định các vị trí dễ bị tấn công. Từ đó, các ca kiểm thử sẽ tập trung vào kiểm thử những vị trí này.
+
+Kiểm thử mờ hộp trắng tận dụng thông tin về mã nguồn để tạo ra các ca kiểm thử. Kỹ thuật này thường kết hợp với các phương pháp phân tích mã nguồn để tối ưu hóa dữ liệu đầu vào và nâng cao độ phủ kiểm thử. Nhờ vậy, kiểm thử mờ hộp trắng có thể tìm ra nhiều lỗi hơn và chính xác hơn so với kiểm thử mờ hộp đen. Một trong những chiến lược chính của kỹ thuật này là chiến lược sinh dữ liệu được định hướng bởi mục tiêu độ phủ mã nguồn. Chiến lược này sử dụng thông tin về độ phủ mã nguồn để định hướng việc tạo ra dữ liệu đầu vào mới với mục tiêu là tăng độ phủ của kiểm thử. Bằng cách này, kỹ thuật kiểm thử mờ hộp trắng giúp phát hiện ra nhiều lỗi hơn, cải thiện chất lượng và độ tin cậy của phần mềm.
+
+Mục tiêu quan trọng nhất của kiểm thử mờ là cách tạo ra các ca kiểm thử phù hợp, khai thác các phương pháp được trình bày ở trên để giúp tìm ra các lỗi ẩn trong hệ thống. Đây là một phương pháp kiểm thử hiện đại, đẩy mạnh khả năng tự động hóa, giúp giảm thiểu sự can thiệp của con người và tăng hiệu quả kiểm thử.
+
+
+
+\section{Học tăng cường}
+
+\label{sec:rnn}
+
+% \begin{figure}[H]
+% 	\includegraphics[width=0.7\columnwidth]{figures/c2/RL.drawio (2).png}
+% 	\centering
+% 	\caption{Luồng hoạt động tổng quát của học tăng cường}
+% 	\label{img:RL_Workflow}
+% \end{figure}
+Học tăng cường là một nhánh của học máy tập trung vào việc huấn luyện một tác nhân để đưa ra các quyết định tối ưu bằng cách tương tác với môi trường \cite{RL}. Hình \ref{img:arat-rl-workflow} cho ta thấy luồng hoạt động tổng quát của học tăng cường \cite{spiceworks_rl}. Tác nhân lựa chọn hành động trong các tình huống khác nhau (trạng thái), quan sát kết quả và học cách chọn hành động tốt nhất để tối đa hóa tổng điểm thưởng theo thời gian. Quá trình học trong học tăng cường dựa trên phương pháp thử nghiệm và sai sót (trial and error), nghĩa là tác nhân học được hành động tốt nhất bằng cách thử nghiệm với các lựa chọn khác nhau và cập nhật chiến lược của mình dựa trên phản hồi. Tác nhân cũng phải cân bằng giữa việc khám phá các hành động mới để có thêm thông tin hoặc khai thác các hành động đã biết mang lại điểm thưởng tốt nhất dựa trên kiến thức hiện tại của nó. Sự thay đổi giữa khám phá thông tin mới và khai thác những thông tin đã có thường được kiểm soát bởi các tham số, chẳng hạn như $\epsilon$ trong chiến lược $\epsilon$-greedy \cite{RL}.
+
+Q-learning là một thuật toán phổ biến trong học tăng cường để tác nhân học cách đưa ra hành động tối ưu trong một môi trường. Nó tính xấp xỉ hàm Q-function (Q (s, a)), tính toán điểm thưởng dài hạn dự kiến khi thực hiện một hành động trong một trạng thái nhất định và sau đó lựa chọn chính sách (policy) tốt nhất. Q-learning sử dụng một bảng 2 chiều Q-table để lưu trữ và cập nhật các giá trị Q-value dựa trên sự tương tác của tác nhân với môi trường. Tác nhân khám phá môi trường, nhận phản hồi và cập nhật các giá trị Q-value theo quy tắc cập nhật Q-learning, được bắt nguồn từ phương trình Bellman \cite{RL}:
+
+% \begin{equation}
+% \label{equation:bellman}
+%     Q(s, a) \leftarrow Q(s, a) + \alpha[r + \gamma max_{a'}Q(s', a') − Q(s, a)]
+% \end{equation}
+
+trong đó $\alpha$ là tốc độ học, $\gamma$ là hệ số chiết khấu (discount factor), $s^{'}$ là trạng thái mới sau khi thực hiện hành động $\alpha$ và $r$ là điểm thưởng tức thời nhận được. Tác nhân cập nhật các giá trị Q-value để hội tụ về các giá trị tối ưu của chúng, đại diện cho điểm thưởng dài hạn dự kiến của việc thực hiện từng hành động trong từng trạng thái.
+
+\section{Các công cụ kiểm thử hiện thời}
+
+\subsection{Evomaster}
+EvoMaster là một công cụ mã nguồn mở được biết đến là công cụ kiểm thử  đầu tiên sử dụng trí tuệ nhân tạo để tự động sinh các ca kiểm thử cho ứng dụng mạng. Công cụ có thể sinh các ca kiểm thử API cho REST, GraphQL và RPC \cite{graphql,xmlrpc}. Hơn nữa, EvoMaster cung cấp hai chế độ kiểm thử: kiểm thử hộp trắng  hoặc kiểm thử hộp đen. Cả hai chế độ đều bắt đầu bằng việc xử lý đặc tả OpenAPI đầu vào để lấy thông tin cho quá trình kiểm thử.
+
+Đối với kiểm thử hộp trắng, chế độ này yêu cầu quyền truy cập vào mã nguồn chương trình và cũng là chế độ mang lại hiệu quả vượt trội của Evomaster. Nó sử dụng giải thuật tiến hóa (theo mặc định là thuật toán MIO) để tạo ra các ca kiểm thử với mục tiêu tối đa hóa độ phủ mã nguồn \cite{Arcuri_2017}.  Cụ thể, đối với mỗi nhánh chưa được phủ, công cụ phát triển các ca kiểm thử  bằng cách liên tục tạo ra ca kiểm thử mới đồng thời loại bỏ những ca kiểm thử ít khả quan nhất  để thực hiện kiểm thử trên nhánh đó lặp lại cho đến khi đạt đến một mốc giới hạn thời gian. Kĩ thuật trong chế độ này tạo các kiểm thử mới thông qua việc lấy mẫu (sampling) hoặc biến đổi từ các ca kiểm thử trước đó (mutation). Ngược lại, trong chế độ kiểm thử hộp đen, Evomaster tập trung vào kĩ thuật kiểm thử mờ, cung cấp đầu vào cho việc kiểm thử bằng cách sinh ngẫu nhiên các trường hợp không hợp lệ hoặc hiếm gặp. Tuy nhiên, kết quả kiểm thử hộp đen có thể không hiệu quả bằng kiểm thử hộp trắng do thiếu phân tích mã nguồn. Điểm chung của hai phương pháp này là đều xem xét việc tìm kiếm các lỗi \texttt{5xx} bên phía máy chủ.
+\subsection{RESTler}
+% \begin{figure}[H]
+% 	\includegraphics[width=1\columnwidth]{figures/c3/restler-workflow.png}
+% 	\centering
+% 	\caption{Luồng hoạt động cơ bản của RESTler \cite{microsoft_restler}}
+% 	\label{img:restler-workflow}
+% \end{figure}
+RESTler là công cụ kiểm thử mờ REST API có trạng thái đầu tiên được phát triển bởi Microsoft \cite{atlidakis2019restler}. Trong ngữ cảnh này, thuật ngữ "trạng thái" đề cập đến khả năng khám phá các trạng thái của dịch vụ mà chỉ có thể truy cập được thông qua chuỗi các lời gọi API được gửi đến hệ thống.
+% \begin{figure}[H]
+% 	\includegraphics[width=0.8\columnwidth]{figures/c3/restler-grammar.png}
+% 	\centering
+% 	\caption{Minh họa về ngữ pháp RESTler (RESTler Grammar) \cite{atlidakis2019restler}}
+% 	\label{img:restler-grammar}
+% \end{figure}
+Hình \ref{img:restler-workflow} mô tả luồng hoạt động cơ bản của RESTler. Công cụ nhận đầu vào là một đặc tả OpenAPI (với tên gọi cũ là đặc tả Swagger), tiến hành xử lý đặc tả và dịch sang "RESTler Grammar", tạm dịch là ngữ pháp RESTler. Hình \ref{img:restler-grammar} cho ta một ví dụ, với bên trái là đặc tả OpenAPI mô tả về một thao tác và bên phải là ngữ pháp RESTler tương ứng được tự động sinh bởi công cụ. Dựa trên ngữ pháp này, RESTler tạo ra các chuỗi yêu cầu bằng cách suy luận các phụ thuộc giữa các thao tác trong đặc tả API và phân tích các phản hồi được ghi lại trong các lần thực hiện các chuỗi trước đó để tạo các chuỗi mới. Công cụ này tính toán tất cả các chuỗi yêu cầu hợp lệ với độ dài tăng dần, cho đến khi các chuỗi đạt đến độ dài được xác định trước. Một chuỗi được coi là hợp lệ khi tất cả các yêu cầu trong chuỗi đó thành công và nhận mã trả về dạng \texttt{2xx} (thành công).
+
+
+
+
+ Tuy nhiên, vì RESTler chỉ tập trung vào việc sinh các chuỗi, các giá trị đầu vào của công cụ có thể không bao quát được nhiều các tình huống kiểm thử khả thi hoặc các trường hợp ngoại lệ, dẫn đến một số khía cạnh của API không được kiểm thử. Ngoài ra, mặc dù đã phân tích các phản hồi, nhưng nó không sử dụng thông tin này để tạo các ca kiểm thử nhằm ưu tiên tìm ra lỗi. Những hạn chế này khiến bộ kiểm thử của nó không đạt được độ phủ đầu ra và độ phủ mã nguồn mong muốn.
+\subsection{Morest}
+% \begin{figure}[H]
+% 	\includegraphics[width=1.1\columnwidth]{figures/c3/morest.png}
+% 	\centering
+% 	\caption{Luồng hoạt động của Morest \cite{liu2022morest}}
+% 	\label{img:morest-workflow}
+% \end{figure}
+Morest là một công cụ kiểm thử API có trạng thái, dựa trên việc tạo ra đồ thị Thuộc tính Dịch vụ RESTful (RPG) với các phụ thuộc được trích xuất giữa các API \cite{liu2022morest}. Đồ thị RPG mô tả chi tiết các phụ thuộc của API và cho phép tinh chỉnh các phụ thuộc đã được ghi lại được một cách linh hoạt trong quá trình kiểm thử. Trong RPG, mỗi nút biểu thị một thao tác hoặc một lược đồ, và cạnh biểu thị các phụ thuộc dữ liệu giữa chúng.
+
+Hình \ref{img:morest-workflow} cho thấy luồng hoạt động chi tiết của Morest. Để kiểm thử một dịch vụ RESTful, đầu tiền, công cụ nhận đầu vào là đặc tả OpenAPI của dịch vụ đó làm đầu vào để xây dựng RPG. Sau khi khởi tạo RPG, Morest sử dụng nó để tạo ra các chuỗi lời gọi API được gửi đến dịch vụ RESTful mục tiêu và thu thập các phản hồi.
+Bằng cách phân tích các phản hồi đã thu thập, Morest lưu lại các yêu cầu thất bại nhằm mục đích phân loại lỗi. Hơn nữa, công cụ cũng sử dụng các phản hồi để tinh chỉnh RPG bằng cách thêm các cạnh còn thiếu và loại bỏ các cạnh không khả thi. RPG đã được tinh chỉnh sau đó tiếp tục được sử dụng để tạo ra nhiều chuỗi kiểm thử hơn. Đó là điểm đánh dấu kết thúc của một vòng lặp và Morest sẽ tiếp tục kiểm thử và tinh chỉnh RPG cho đến khi đạt đến giới hạn thời gian.
+
+
+Tuy nhiên, tương tự như RESTler, Morest không chú trọng đến tính đa dạng của đầu vào và đầu ra. Các điều chỉnh động dựa trên RPG của nó chỉ tìm ra các lỗi do sự kết hợp giữa các thao tác, trong khi các tham số cũng có thể gây lỗi theo những cách khác nhau. Morest có thể bỏ sót các tình huống kiểm thử tiềm năng, đặc biệt là các giá trị biên và các trường hợp ngoại lệ. Hơn nữa, việc thiếu tập trung vào đa dạng hóa các giá trị đầu vào làm giảm khả năng phát hiện các lỗi bảo mật hoặc hiệu suất. Những hạn chế này khiến
+công cụ không tối ưu được hiệu quả kiểm thử.
+\subsection{ARAT-RL}
+
+
+ARAT-RL là một công cụ kiểm thử tự động REST API mới nhất hiện nay, ứng dụng Học tăng cường (Reinforcement Learning). Công cụ này được giới thiệu trong bài báo "Adaptive REST API Testing with Reinforcement Learning" được trình bày tại hội nghị ASE 2023. Trước đó, việc kiểm thử REST API có thể trở nên khó khăn do không gian tìm kiếm rộng lớn cần khám phá. Điều này xuất phát từ nhiều yếu tố như số lượng lớn các thao tác, thứ tự thực thi tiềm năng, sự phụ thuộc giữa các tham số và các ràng buộc giá trị đầu vào của tham số. Các kỹ thuật trước đó thường gặp khó khăn khi khám phá không gian này do thiếu các chiến lược khám phá hiệu quả cho các thao tác và tham số của chúng.
+
+Trên thực tế, trước ARAT-RL, các công cụ kiểm thử hiện có thường đổi xử tất cả các thao tác và tham số một cách ngang nhau, bỏ qua việc đánh giá tầm quan trọng hoặc mức độ phức tạp của chúng, dẫn đến các chiến lược kiểm thử không tối ưu và phạm vi phủ sóng không đủ đối với các kết hợp thao tác và tham số quan trọng. Hơn nữa, các công cụ này dựa vào việc khám phá mối quan hệ giữa các lược đồ phản hồi (response schema) và tham số của yêu cầu (resquest parameter). Cách tiếp cận này hoạt động tốt khi các lược đồ tham số và phản hồi được mô tả chi tiết trong lược đồ, nhưng lại không hiệu quả trong trường hợp phổ biến là các đặc tả không đầy đủ hoặc không chính xác.
+
+Để giải quyết vấn về trên, ARAT-RL gán các trọng số cho các thao tác và tham số, ứng dụng học tăng cường để ưu tiên lựa chọn các thao tác và tham số, nhằm tối ưu không gian được kiểm thử. Bên cạnh đó, công cụ cung cấp kĩ thuật phân tích động để xác định mối quan hệ giữa các tham số và giới thiệu các chiến thuật để xử lý các phản hồi API trước đó để làm dữ liệu cho các ca kiểm thử tiếp theo. Kết quả bài báo cũng cho thấy ARAT-RL đạt kết quả tốt hơn so với các công cụ kiểm thử đối thủ, tạo ra nhiều yêu cầu hợp lệ và gây lỗi hơn, bao phủ nhiều thao tác hơn, đạt được độ phủ mã nguồn cao hơn và tìm được nhiều lỗi dịch vụ hơn.
+
+\subsubsection{Luồng hoạt động}
+
+Hình \ref{img:arat-rl-workflow} cung cấp tổng quan về phương pháp tiếp cận của ARAT-RL, bao gồm hai giai đoạn. Giai đoạn đầu tiên khởi tạo các biến và bảng cần thiết cho quá trình học Q-learning. Giai đoạn tiếp theo liên quan đến việc thực thi thuật toán Q-learning và thu thập thông tin gọi API sau mỗi lần lặp lại từ hệ thống đang thử nghiệm (SUT). Khi hoàn thành, công cụ phân tích bộ sưu tập các cuộc gọi API được tạo ra để xác định các lỗi tiềm ẩn.
+
+
+\textbf{Giai đoạn khởi tạo bảng Q-table} đóng vai trò quan trọng trong việc thiết lập các cấu trúc thông tin định hướng việc ra quyết định trong suốt quá trình kiểm thử. Cách tiếp cận của ARAT-RL xây dựng trạng thái ban đầu của bảng Q-table liên quan đến việc phân tích tần suất sử dụng các tham số của mỗi thao tác trong đặc tả. Công cụ ưu tiên các tham số xuất hiện thường xuyên vì chúng dường như mang sự quan trọng hơn. Cách tiếp cận này đảm bảo các thao tác cấu thành từ các tham số đó sẽ được ưu tiên kiểm thử đầu tiên. Để tăng sự linh hoạt trong các ca kiểm thử, ARAT-RL cũng đã kết hợp các nguồn đầu vào đa dạng cho các thao tác. Trong giai đoạn khởi tạo, công cụ tạo ra một bảng Q-table để theo dõi điểm hiệu suất của từng nguồn. Điều này giúp ARAT-RL chọn nguồn đầu vào hiệu quả nhất cho các lượt kiểm thử tiếp theo.
+
+% \begin{figure}[H]
+% 	\includegraphics[width=1\columnwidth]{figures/c2/Workflow_ARAT-rl.drawio.png}
+% 	\centering
+% 	\caption{Luồng hoạt động của ARAT-RL}
+% 	\label{img:arat-rl-workflow}
+% \end{figure}
+
+\textbf{Giai đoạn thực thi} chịu trách nhiệm triển khai thuật toán Q-Learning. Cách tiếp cận gồm hai chiến lược then chốt: chiến lược ưu tiên dựa trên Q-Learning và chiến lược cập nhật Q-Learning. Mỗi chiến lược sẽ đảm nhiệm từng phần nhỏ trong quá trình này. Chiến lược ưu tiên dựa trên Q-Learning mô tả cách công cụ chọn các thao tác để tiến hành kiểm thử, cùng với các tham số và nguồn đầu vào tương ứng của chúng. Chiến lược cập nhật Q-Learning mô tả cả cơ chế cập nhật bảng Q-table và thúc đẩy quá trình học trong thuật toán Q-Learning.
+
+
+\begin{table}[h]
+\caption{Bảng so sánh 2 công cụ EvoMaster và RESTler}
+\label{table:compare2tool}
+\begin{tabularx}{\textwidth}{|l|X|X|}
+\hline
+\textbf{Loại kiểm thử} & \textbf{EvoMaster} & \textbf{RESTler Fuzzer} \\
+\hline
+Loại kiểm thử & Hộp đen, hộp trắng & Hộp đen \\
+\hline
+Giao diện & Giao diện dòng lệnh & Giao diện dòng lệnh \\
+\hline
+Đầu vào & OpenAPI, GraphQL & OpenAPI \\
+\hline
+Đầu ra & Java Junit 4, 5 & File log dạng TXT + JSON \\
+\hline
+Thời gian chạy & Tùy chỉnh theo giờ
+(Thời gian chạy thường lâu) & Tùy chỉnh theo giờ (Thời gian chạy thường lâu) \\
+\hline
+Tái hiện lỗi & Dựa vào file Java Junit để tái hiện thủ công & Đầu ra khó đọc, giảm khả năng tái hiện lỗi \\
+\hline
+Hạn chế khác & Kết quả không trả về tất cả các ca kiểm thử được thực hiện, mà chỉ có 1 số ca kiểm thử mà công cụ cho là \textbf{BUG} & Kết quả khó đọc nên cản trở việc tái hiện lỗi và không hỗ trợ chuyển tiếp yêu cầu \\
+\hline
+\end{tabularx}
+\end{table}
+
+
+
+Trong chiến lược ưu tiên, để tạo đầu vào cho một ca kiểm thử trong kiểm thử RESTful API, có ba thành phần cơ bản cần được xác định: thao tác, tham số của thao tác và giá trị đầu vào.
+Những yếu tố này đóng vai trò then chốt trong việc xác định lỗi trong thao tác API đang được kiểm thử. Việc lựa chọn chúng được hướng dẫn bởi tỷ lệ khám phá ($\epsilon$) được duy trì trong suốt giai đoạn học hỏi để đạt được sự cân bằng giữa khai thác và khám phá:
+
+\begin{itemize}
+    \item \textbf{Lựa chọn thao tác: }Thao tác API tối ưu được xác định bằng cách lặp qua từng thao tác và tính toán giá trị Q-value trung bình cho các tham số của thao tác đó. Thuật toán chọn thao tác sử dụng một số ngẫu nhiên, được ký hiệu là $\epsilon$, để quyết định liệu thao tác được chọn tiếp theo sẽ nhằm khám phá mới hay khai thác sâu những thông tin đã có.
+    \item \textbf{Lựa chọn tham số: }Một thao tác thường bao gồm hai loại tham số: bắt buộc và không bắt buộc (tùy chọn). Chiến lược được xác định để chọn một tập con các tham số tùy chọn cho một thao tác API đã chọn. Tương tự, thuật toán chọn tham số sinh một số ngẫu nhiên để xác định xem những tham số được chọn sẽ nhằm khám phá mới hay khai thác sâu những thông tin đã có. Nếu giá trị được tạo ngẫu nhiên vượt quá $\epsilon$, thuật toán sẽ ưu tiên $n$ các tham số  hàng đầu, được xếp hạng theo thứ tự giảm dần dựa trên các giá trị Q-value tương ứng của chúng, phù hợp với việc ưu tiên đạt được các mục tiêu đã xác định (như đã đề cập trước đó). Ngược lại, một giá trị tùy ý sẽ được sử dụng để chọn ngẫu nhiên $n$ các tham số hàng đầu từ toàn bộ tập tham số của thao tác nếu giá trị đó thấp hơn $\epsilon$. Sự ngẫu nhiên này đảm bảo rằng thuật toán đa dạng hóa các kết hợp tham số, do đó giúp xác định các đầu ra API chưa được kiểm thử trước đó. Cuối cùng, tập tham số được chọn sẽ được trả về.
+    \item \textbf{Lựa chọn đầu vào: } Việc lựa chọn các giá trị đầu vào đóng vai trò quan trọng trong việc xác định kết quả của một trường hợp kiểm thử. Giá trị đầu vào của ARAT-RL được chọn dựa trên năm nguồn sau:
+    \begin{itemize}
+\item \textit{Giá trị ví dụ trong tài liệu:} Các giá trị mẫu được cung cấp trong tài liệu hướng dẫn của API.
+    \item \textit{Giá trị được xây dựng dựa trên phản hồi trước đó:} Sử dụng dữ liệu trả về từ một yêu cầu trước đó để tạo thành giá trị đầu vào cho yêu cầu tiếp theo.
+    \item \textit{Giá trị được xây dựng dựa trên yêu cầu trước đó:} Sử dụng dữ liệu từ một yêu cầu trước đó để tạo thành giá trị đầu vào cho yêu cầu tiếp theo.
+    \item \textit{Giá trị mặc định (nếu có):} Sử dụng giá trị mặc định được cung cấp bởi API nếu có.
+    \item \textit{Giá trị ngẫu nhiên dựa trên các ràng buộc của tài liệu:} Giá trị được tạo ngẫu nhiên nhưng vẫn nằm trong phạm vi cho phép của đặc tả kỹ thuật.
+\end{itemize}
+
+
+\end{itemize}
+
+
+
+
+
+
+
+
+
+ Sau khi hoàn thành việc lựa chọn các thành phần của các ca kiểm thử và thực thi ca kiểm thử đó, ARAT-RL cập nhật bảng Q-table dựa trên phản hồi từ hệ thống, cụ thể là cập nhật các giá trị Q-value dựa trên mã trạng thái của phản hồi. Nếu mã trạng thái trả về thành công (\texttt{2xx}), ARAT-RL gán điểm thưởng là -1 và cập nhật các giá trị Q-value theo hướng tiêu cực. Nếu mã trạng thái phản hồi cho thấy yêu cầu không thành công (\texttt{4xx} hoặc \texttt{500}), thuật toán sẽ gán điểm thưởng là 1 và cập nhật các giá trị Q-value theo hướng tích cực. Các giá trị Q-value được cập nhật cho từng tham số trong các tham số được chọn bằng cách sử dụng quy tắc cập nhật Q-learning, và các giá trị Q-value được cập nhật sẽ được trả về.
+
+\subsubsection{Các vấn đề tồn đọng}
+
+
+Mặc dù ARAT-RL là một công cụ kiểm thử RESTful API ứng dụng học tăng cường để mô hình hóa bài toán một cách hiệu quả và thể hiện tiềm năng nhất định, chiến lược cập nhật Q-learning hiện tại (hay còn gọi là chiến lược đánh giá điểm thưởng) vẫn còn bộc lộ nhiều hạn chế trong việc khai thác tối ưu thông tin phản hồi từ hệ thống. Chiến lược này chủ yếu dựa vào thông tin mã trạng thái phản hồi từ API, nhưng lại bỏ qua nhiều dữ liệu hữu ích khác có thể giúp cải thiện quá trình học và tối ưu hóa. Ví dụ, các thông tin chi tiết về cấu trúc phản hồi, tính mới của phản hồi,... đều có thể cung cấp những thông tin quý giá để điều chỉnh và nâng cao hiệu quả của chiến lược học tăng cường. Việc chỉ sử dụng mã trạng thái phản hồi dẫn đến một tầm nhìn hạn hẹp và có thể bỏ qua việc tối ưu hóa độ phủ đầu ra, làm giảm khả năng phát hiện các lỗi tiềm ẩn trong API.
+
+Hơn nữa, hiện tại, ARAT-RL hỗ trợ năm nguồn sinh đầu vào được cài đặt song song. Mặc dù vậy, ARAT-RL có thể được mở rộng và tinh chỉnh các nguồn sinh dữ liệu để gia tăng sự đa dạng cho đầu vào, giúp hệ thống trở nên linh hoạt và hiệu quả hơn trong việc kiểm thử API. Việc mở rộng này có thể bao gồm việc tích hợp thêm các thuật toán sinh ngẫu nhiên tiên tiến, sử dụng dữ liệu từ các nguồn thực tế hơn, hoặc thậm chí là áp dụng các kỹ thuật học máy để tạo ra các mẫu dữ liệu đầu vào phức tạp và có ý nghĩa hơn.
+
+Bằng cách cải tiến chiến lược cập nhật Q-learning và mở rộng các nguồn sinh dữ liệu đầu vào, ARAT-RL không chỉ có thể nâng cao khả năng khai thác thông tin phản hồi mà còn tăng cường khả năng kiểm thử và tối ưu hóa API một cách toàn diện. Điều này sẽ giúp công cụ trở nên mạnh mẽ hơn, đáp ứng được các yêu cầu ngày càng cao trong việc phát triển và duy trì các dịch vụ web phức tạp trong môi trường công nghệ ngày nay.
+
+% \section{Tổng kết chương}
+% Trong chương này, các kiến thức cơ sở được trình bày nhằm cung cấp nền tảng để hiểu rõ hơn về bài toán. Trước tiên, một số kiến thức chung về RESTful API đã được giới thiệu. Tiếp theo, các kiến thức về kiểm thử API sẽ được đề cập để làm nền tảng cho giải pháp được đề xuất trong khóa luận này. Phần tiếp theo tập trung vào học tăng cường và thuật toán Q-learning, một thuật toán được sử dụng rộng rãi trong lĩnh vực này. Cuối cùng, ARAT-RL, công cụ kiểm thử API tiên tiến ứng dụng học tăng cường được giới thiệu. Trong chương tiếp theo, tôi sẽ trình bày về phương pháp đánh giá điểm thưởng cải tiến cùng với lý thuyết nền tảng và cách mở rộng và tinh chỉnh các nguồn sinh dữ liệu đầu vào.
+
+
+
+
+
+
+
+
+
+
+
+
+

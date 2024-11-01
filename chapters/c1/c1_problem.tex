@@ -1,0 +1,25 @@
+% \section{Giới thiệu bài toán}
+Trong thế giới kỹ thuật hiện đại, việc trao đổi dữ liệu giữa các ứng dụng và hệ thống là một phần không thể thiếu của cuộc sống hàng ngày. Từ việc gửi tin nhắn qua các ứng dụng trò chuyện cho đến việc truy vấn thông tin từ cơ sở dữ liệu trực tuyến, mọi thứ đều dựa vào giao tiếp hiệu quả giữa các phần mềm.
+Trong đó, Application Programming Interface, viết tắt là API, tạm dịch là "Giao diện lập trình ứng dụng", là một kĩ thuật cho phép liên lạc và trao đổi dữ liệu giữa hai hệ thống phần mềm riêng biệt. API đóng vai trò như một cầu nối, cho phép các ứng dụng và dịch vụ khác nhau giao tiếp và làm việc cùng nhau một cách hiệu quả. Nó là tập hợp các quy tắc, cách thức cho phép hai phần mềm có thể trao đổi thông tin. Cụ thể hơn, API định nghĩa cách các yêu cầu được khởi tạo, cách các yêu cầu hoạt động và định dạng dữ liệu đi kèm để tạo lập kết nối giữa các thành phần trong hệ thống.
+
+Trong số các kiến trúc thiết kế API, REST (Representational State Transfer) là một kiến trúc phổ biến được sử dụng, đã được giới thiệu lần đầu vào năm 2000 \cite{RESTAPI}. REST được tạo ra với mục đích cung cấp khả năng tương tác với các nguồn tài nguyên mạng một cách đơn giản và hiệu quả. Kiến trúc này dựa trên các giao thức chuẩn như HTTP, URL, và JSON. REST đã trở thành một tiêu chuẩn quan trọng trong phát triển các ứng dụng web hiện đại, giúp tạo ra các API linh hoạt, dễ bảo trì và dễ mở rộng.
+
+Với ngữ cảnh phát triển ứng dụng web, RESTful API được định nghĩa là một API được xây dựng dựa trên kiến trúc REST. Theo Alberto Martin-Lopez và các cộng sự, RESTful API đang phát triển nhanh chóng như một chìa khóa cho việc tái sử dụng mã nguồn, tích hợp và phát triển phần mềm \cite{9700203}. Các công ty như Facebook, Twitter, Google, eBay hoặc Netflix nhận được hàng tỷ lời gọi API mỗi ngày từ hàng nghìn ứng dụng và thiết bị của bên thứ ba khác nhau, chiếm hơn một nửa tổng lưu lượng của họ \cite{jacobson2012apis}. Nói chung, với xu hướng các hệ thống được xây dựng trên kiến trúc microservices, việc sử dụng RESTful API ngày càng trở nên phổ biến \cite{8385157}.
+
+Đi kèm với sự phát triển của
+ RESTful API, việc đảm bảo chất lượng cho RESTful API cũng là một lĩnh vực nhận được sự quan tâm lớn đến từ các doanh nghiệp \cite{app12094369}. Đây là quy trình để chắc chắn rằng RESTful API sẽ thỏa mãn các tiêu chí về chất lượng và chức năng. Điều này bao gồm các khía cạnh như: độ chính xác, hiệu suất, bảo mật và khả năng sử dụng. Thông qua những ca kiểm thử, nhà phát triển phần mềm có thể xác định và ngăn chặn các lỗi trước khi phát hành sản phẩm. Một trong những phương pháp phổ biến hiện nay đó là kết hợp giữa kiểm thử thủ công và kiểm thử tự động. Kiểm thử thủ công là loại kiểm thử phần mềm trong đó các ca kiểm thử được thực hiện thủ công bởi con người, trong khi kiểm thử tự động là quá trình sử dụng các công cụ để tự động hóa quá trình kiểm thử \cite{9034254}.
+
+
+Việc nghiên cứu về các kĩ thuật trong kiểm thử tự động RESTful API luôn là chủ đề được sự quan tâm đến từ các nhà nghiên cứu. Bằng chứng là sự ra đời của nhiều kỹ thuật tự động mới trong những năm gần đây \cite{app12094369}. Xu hướng nghiên cứu gần đây tập trung vào việc phát triển các phương pháp kiểm thử tự động mới, nhằm nâng cao hiệu quả và tính toàn diện của quá trình kiểm thử phần mềm. Các phương pháp này được kỳ vọng sẽ giúp phát hiện những lỗi tiềm ẩn và khó tìm thấy mà con người có thể bỏ sót.
+
+EvoMaster là công cụ mã nguồn mở tiên phong ứng dụng trí tuệ nhân tạo để tự động tạo ca kiểm thứ cho ứng dụng web \cite{arcuri2019restful}. Nó cung cấp hai chế độ kiểm thử: hộp trắng và hộp đen, trong đó chế độ hộp trắng nổi bật hơn nhờ khả năng ứng dụng trí tuệ nhân tạo nhằm tối ưu hóa độ phủ mã nguồn. RESTler là công cụ kiểm thử mờ RESTful API theo hướng kiểm thử hộp đen có trạng thái đầu tiên được phát triển
+\cite{atlidakis2019restler}. Trong ngữ cảnh này, thuật ngữ "trạng thái" đề cập đến khả năng khám phá
+các trạng thái của dịch vụ thông qua việc sinh chuỗi các lời gọi API. Tương tự với RESTler, Morest là một công cụ kiểm thử API hộp đen có trạng thái, hướng tới việc sinh ra các chuỗi yêu cầu \cite{liu2022morest}. Mới nhất hiện nay, ARAT-RL là một công cụ kiểm thử tự động API được phát triển mới đây, tận dụng học
+tăng cường để tạo ra các ca kiểm thử một cách thích nghi \cite{kim2023adaptive}. Khác với các
+phương pháp khác, ARAT-RL sáng tạo ở chỗ, đã xác định trọng số của các tham
+số và thao tác (operation), đồng thời điều chỉnh các trọng số này dựa trên thông
+tin nhận được từ phản hồi xuyên suốt quá trình kiểm thử. Dựa trên những trọng
+số đó, công cụ sẽ lựa chọn thứ tự kiểm thử các thao tác và tham
+số, nhằm nâng cao hiệu suất kiểm thử.
+
+Tuy nhiên, các công cụ hiện có thường tập trung vào việc tạo ra các yêu cầu kiểm thử mà chưa chú trọng việc phân tích và đánh giá phản hồi trả về. Lấy ví dụ, ARAT-RL chỉ sử dụng thông tin mã trạng thái phản hồi, bỏ qua các dữ liệu hữu ích khác. Tương tự, Morest và RESTler chỉ tập trung vào việc tạo chuỗi yêu cầu mà chưa quan tâm đến việc nâng cao hiệu quả phủ đầu ra.
