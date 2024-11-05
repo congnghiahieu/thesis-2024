@@ -10,5 +10,6 @@
 **/*.lof
 **/*.nav
 **/*.snm
+**/*.lol
 **/*.synctex.gz
 _minted

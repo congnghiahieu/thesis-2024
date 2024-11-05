@@ -6,7 +6,7 @@
 \usepackage{amssymb}
 \usepackage{graphicx}
 \usepackage{xspace}
-\usepackage{caption}
+
 \usepackage{array}
 \usepackage[font=small]{caption}
 \usepackage{booktabs}
@@ -30,9 +30,13 @@
 \usepackage{natbib}
 \usepackage{algorithm}
 \usepackage{subcaption}
-\usepackage{minted}
-\usepackage{listings}
 \usepackage{xcolor}
+
+\usepackage{listings}
+\usepackage[newfloat]{minted}
+\usepackage{caption}
+\SetupFloatingEnvironment{listing}{name=Đoạn mã}
+
 \usetikzlibrary{calc}
 % \usepackage[perpage]{footmisc}
 \usepackage[flushleft]{threeparttable}
@@ -165,7 +169,12 @@
 
 \newpage
 \addcontentsline{toc}{chapter}{\listtablename}
-\listoftables
+\listoftables\cleardoublepage
+
+\newpage
+\renewcommand*{\listlistingname}{Danh sách đoạn mã}
+\addcontentsline{toc}{chapter}{\listlistingname}
+\listoflistings
 
 \newpage
 \input{chapters/glossary}\newpage\cleardoublepage

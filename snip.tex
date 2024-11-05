@@ -1,0 +1,74 @@
+% Unordered Itemize
+
+\noindent\textbf{Vòng 1: Đánh giá điểm thưởng Dựa trên Mã Trạng thái}
+
+\begin{itemize}
+  \item \textbf{Không phản hồi (No response):} Đây là trường hợp không mong muốn của một lời gọi API. Việc không nhận được phản hồi có nghĩa là không có thông tin để xác định liệu SUT (hệ thống đang được kiểm thử) đang chạy chính xác hay gặp vấn đề với môi trường mạng.
+\end{itemize}
+
+% Ordered Itemize
+
+\begin{enumerate}
+  \item One
+  \item Two
+  \item Three
+\end{enumerate}
+
+% Ảnh minh họa
+
+% \begin{figure}[H]
+% 	\includegraphics[width=1\columnwidth]{figures/c3/ppdanhgia.drawio (1).png}
+% 	\centering
+% 	\caption{Tổng quan về phương pháp đánh giá}
+% 	\label{img:rewarding_workflow}
+% \end{figure}
+
+Hình \ref{img:rewarding_workflow}  trình bày tổng quan về giải pháp đánh giá điểm thưởng. Đầu vào của quá trình này là thông tin về phản hồi nhận từ hệ thống, là kết quả của một yêu cầu. Trong đó, mã trạng thái của phản hồi cho biết hoạt động đó thành công hay không. Mỗi mã trạng thái phản hồi có ý nghĩa riêng, được phân loại thành 4 nhóm, mỗi nhóm có ý nghĩa riêng và đóng góp khác nhau vào quá trình kiểm thử:
+
+% Equation
+
+\begin{equation}
+  \label{eq:reward}
+      reward_{r2} = reward_{r1} \times d
+  \end{equation}
+
+
+% Table
+
+\begin{table}[h]
+\caption{Bảng so sánh 2 công cụ EvoMaster và RESTler}
+\label{table:compare2tool}
+\begin{tabularx}{\textwidth}{|l|X|X|}
+\hline
+\textbf{Loại kiểm thử} & \textbf{EvoMaster} & \textbf{RESTler Fuzzer} \\
+\hline
+Loại kiểm thử & Hộp đen, hộp trắng & Hộp đen \\
+\hline
+Giao diện & Giao diện dòng lệnh & Giao diện dòng lệnh \\
+\hline
+Đầu vào & OpenAPI, GraphQL & OpenAPI \\
+\hline
+Đầu ra & Java Junit 4, 5 & File log dạng TXT + JSON \\
+\hline
+Thời gian chạy & Tùy chỉnh theo giờ
+(Thời gian chạy thường lâu) & Tùy chỉnh theo giờ (Thời gian chạy thường lâu) \\
+\hline
+Tái hiện lỗi & Dựa vào file Java Junit để tái hiện thủ công & Đầu ra khó đọc, giảm khả năng tái hiện lỗi \\
+\hline
+Hạn chế khác & Kết quả không trả về tất cả các ca kiểm thử được thực hiện, mà chỉ có 1 số ca kiểm thử mà công cụ cho là \textbf{BUG} & Kết quả khó đọc nên cản trở việc tái hiện lỗi và không hỗ trợ chuyển tiếp yêu cầu \\
+\hline
+\end{tabularx}
+\end{table}
+
+
+% Code
+
+\begin{listing}[H]
+\begin{minted}[mathescape, breaklines, frame=lines, framesep=2mm, baselinestretch=1.2, fontsize=\footnotesize, linenos]{rust}
+fn main() {
+  let x = 5;  // Immutable variable
+}
+\end{minted}
+\caption{Classification model and layers}
+\label{fp:immutable}
+\end{listing}

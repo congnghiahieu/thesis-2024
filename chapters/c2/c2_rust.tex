@@ -1,0 +1,187 @@
+\section{Ngôn ngữ lập trình Rust}
+
+\subsection{Giới thiệu tổng quan}
+
+Bổ sung thêm vào đoạn văn phía trước vừa trả lời
+Rust là một ngôn ngữ lập trình được phát triển bởi Mozilla và chính thức ra mắt vào năm 2010. Một trong những chức năng nổi bật của Rust là khả năng quản lý bộ nhớ an toàn mà không cần sử dụng garbage collection, giúp ngăn chặn các lỗi tràn bộ nhớ (memory leaks) và các lỗi truy cập vùng nhớ sai (segmentation faults). Rust cũng được biết đến với hiệu suất cao và khả năng biên dịch nhanh chóng. Những đặc điểm này làm cho Rust trở thành lựa chọn lý tưởng cho các ứng dụng low-level như hệ điều hành, trình biên dịch, và các hệ thống nhúng (embedded systems). Bên cạnh đó, Rust còn được sử dụng trong lĩnh vực Internet of Things (IoT), nơi mà sự an toàn và hiệu suất là yếu tố quyết định.
+
+Ngoài ra, Rust cũng đang dần trở thành một ngôn ngữ phổ biến trong phát triển web, với các framework như Rocket và Actix giúp dễ dàng xây dựng các ứng dụng web hiệu suất cao. Rust không chỉ thu hút sự chú ý của các lập trình viên cá nhân mà còn được các cộng đồng lập trình và các doanh nghiệp lớn quan tâm. Ví dụ, Microsoft đã sử dụng Rust để phát triển một số thành phần trong Windows, trong khi Amazon Web Services (AWS) cũng đã tích hợp Rust trong các dịch vụ của mình.
+
+Dự án Servo của Mozilla là một minh chứng rõ ràng cho sức mạnh của Rust trong việc phát triển các ứng dụng lớn. Servo là một trình duyệt web engine được viết hoàn toàn bằng Rust, nhằm cung cấp hiệu suất và độ an toàn cao. Ngoài ra, Rust cũng được sử dụng trong các dự án nguồn mở lớn khác trên GitHub, cho thấy sự tin tưởng của cộng đồng lập trình vào khả năng của ngôn ngữ này. Với sự phổ biến ngày càng tăng, Rust đang chứng tỏ mình là một công cụ mạnh mẽ và linh hoạt, phù hợp cho nhiều lĩnh vực phát triển phần mềm hiện đại.
+
+Việc sử dụng Rust trong các dự án lớn không chỉ giới hạn ở các công ty công nghệ mà còn mở rộng ra các lĩnh vực khác như tài chính, game, và khoa học dữ liệu. Khả năng của Rust trong việc đảm bảo an toàn và hiệu suất làm cho nó trở thành lựa chọn lý tưởng cho các hệ thống đòi hỏi độ tin cậy cao. Với sự hỗ trợ mạnh mẽ từ cộng đồng và các tổ chức lớn, Rust đang ngày càng khẳng định vị thế của mình trong làng lập trình quốc tế.
+
+Cộng đồng Rust đã phát triển mạnh mẽ và đa dạng trong những năm gần đây. Sự gia tăng đáng kể số lượng lập trình viên sử dụng Rust trong công việc, từ 16\% vào năm 2020 và 2021 lên tới 18\% vào năm 2022, cho thấy sự chấp nhận và ứng dụng của Rust trong các dự án thực tế đang tăng lên. Cộng đồng Rust cũng đã mở rộng ra nhiều ngôn ngữ khác nhau, với việc tổ chức các bản dịch tự động của khảo sát hàng năm, giúp người dùng từ các quốc gia khác nhau có thể tham gia và cung cấp phản hồi.
+
+Cộng đồng Rust không chỉ phát triển mạnh mẽ mà còn đa dạng hóa, với sự tham gia của cả lập trình viên cá nhân và các nhóm phát triển công ty. Các lập trình viên mới cũng đang gia nhập cộng đồng, và có sự tăng trưởng về số lượng lập trình viên có kinh nghiệm dài hạn. Điều này cho thấy sự phát triển tự nhiên và bền vững của cộng đồng Rust, cũng như sự quan tâm và đầu tư vào việc đào tạo và hỗ trợ cho các nhóm phát triển.
+
+Tóm lại, cộng đồng Rust đã và đang phát triển mạnh mẽ và đa dạng trong những năm gần đây, với sự tham gia của cả lập trình viên cá nhân và các công ty lớn, tạo điều kiện cho sự phát triển và ứng dụng của ngôn ngữ này trong nhiều lĩnh vực khác nhau.
+
+\subsection{Đặc trưng}
+
+\textbf{NOTE:} Highlight đầu dòng các đặc trưng khác biệt của Rust so với các ngôn ngữ khác (lấy ví dụ với C++). Rust là low-level, không coi trọng OOP (sử dụng đan xen FP), không có garbage collection (sử dụng borrow checker). Sử dụng lifetime, macro, borrow checker đảm bảo an toàn bộ nhớ cho cả single thread và multithread programming
+
+Rust là một ngôn ngữ lập trình nổi bật với nhiều đặc trưng tiêu biểu, trong đó nổi bật nhất là khả năng đảm bảo an toàn bộ nhớ, hỗ trợ lập trình song song và cú pháp hiện đại.
+
+Đầu tiên, Rust được thiết kế với mục tiêu chính là đảm bảo an toàn bộ nhớ. Điều này được thực hiện thông qua mô hình sở hữu (ownership model) nghiêm ngặt, giúp quản lý bộ nhớ mà không cần sử dụng bộ thu gom rác (garbage collector). Hệ thống sở hữu của Rust bao gồm các khái niệm như mượn (borrowing) và vòng đời (lifetimes), cho phép tham chiếu đến dữ liệu mà không cần sở hữu nó, giúp ngăn chặn các cuộc đua dữ liệu (data races). Thêm vào đó, vòng đời đảm bảo rằng các tham chiếu luôn hợp lệ trong suốt thời gian chúng được sử dụng, giảm thiểu nguy cơ xảy ra các con trỏ treo (dangling pointers). Trong khi đó, các ngôn ngữ như C/C++ thiếu các tính năng đảm bảo an toàn bộ nhớ tích hợp, dẫn đến những vấn đề phổ biến như tràn bộ đệm (buffer overflows) và sử dụng sau khi giải phóng (use-after-free).
+
+Thứ hai, Rust nổi bật với khả năng hỗ trợ lập trình song song một cách an toàn và hiệu quả. Lập trình song song trong Rust được đảm bảo an toàn nhờ mô hình sở hữu, ngăn chặn các cuộc đua dữ liệu ngay từ khi biên dịch, làm cho việc lập trình song song trở nên an toàn và đáng tin cậy hơn. Ngôn ngữ này cung cấp các luồng nhẹ (lightweight threads) được gọi là "tasks" có thể chạy song song mà không tốn nhiều tài nguyên như các luồng truyền thống, giúp tối ưu hóa việc sử dụng tài nguyên. Thư viện chuẩn của Rust còn bao gồm các tính năng như kênh truyền thông điệp (channels) để hỗ trợ việc truyền thông giữa các task, nâng cao hiệu suất tổng thể của ứng dụng. Thêm vào đó, các từ khóa async và await cho phép lập trình không đồng bộ, giúp viết mã không bị khóa khi xử lý các hoạt động I/O một cách hiệu quả, cải thiện khả năng phản hồi của ứng dụng. Mô hình song song của Rust khuyến khích các nhà phát triển suy nghĩ về quyền sở hữu và mượn dữ liệu, dẫn đến mã nguồn bền vững và dễ bảo trì hơn, cuối cùng giảm chi phí bảo trì dài hạn.
+
+Cuối cùng, cú pháp hiện đại của Rust mang lại nhiều lợi ích cho lập trình viên. Rust có cú pháp hiện đại và biểu cảm hơn so với C++, một ngôn ngữ có cú pháp phức tạp hơn. Rust có bộ tính năng nhỏ hơn so với C++, giúp tăng năng suất của lập trình viên. Trong khi C++ có thể mang lại sự linh hoạt nhờ vào nhiều tính năng, điều này cũng làm tăng độ phức tạp của mã nguồn. Rust, với cú pháp hiện đại và bộ tính năng tối giản, giúp lập trình viên tập trung vào việc viết mã hiệu quả và dễ hiểu hơn\cite{2022research}.
+
+Tóm lại, Rust nổi bật với các đặc trưng tiêu biểu như đảm bảo an toàn bộ nhớ, hỗ trợ lập trình song song an toàn và cú pháp hiện đại, làm cho nó trở thành lựa chọn lý tưởng cho nhiều ứng dụng từ hệ thống nhúng, Internet of Things, đến phát triển web và các dự án phần mềm lớn. Rust không chỉ giúp lập trình viên viết mã an toàn và hiệu quả mà còn đóng góp vào việc xây dựng các ứng dụng hiệu suất cao và đáng tin cậy.
+
+\subsection{Tính hướng hàm}
+
+\textbf{NOTE:} Highlight đầu dòng các tính năng của Functional Programming trong Rust
+
+Rust là một ngôn ngữ lập trình nổi bật với nhiều tính năng hỗ trợ lập trình hướng hàm (Functional Programming), giúp cải thiện đáng kể độ an toàn và hiệu quả của mã nguồn. Expresion over Statement
+
+Một trong những nguyên tắc cốt lõi của Rust là tính bất biến (immutability). Rust khuyến khích việc sử dụng các biến không thể thay đổi sau khi đã gán giá trị. Cách tiếp cận này giúp tăng cường độ tin cậy của mã nguồn bằng cách ngăn chặn các hiệu ứng phụ ngoài ý muốn và giúp dễ dàng suy luận về hành vi của chương trình.
+
+\begin{listing}[H]
+\begin{minted}[mathescape, breaklines, frame=lines, framesep=2mm, baselinestretch=1.2, fontsize=\footnotesize, linenos]{rust}
+fn main() {
+  let x = 5;  // Immutable variable
+}
+\end{minted}
+\caption{Ví dụ tính immutability trong Rust}
+\label{fp:immutable}
+\end{listing}
+
+Tiếp theo, một tính năng mạnh mẽ của Rust là pattern matching. Tính năng này cho phép lập trình viên phân rã và khớp các cấu trúc dữ liệu phức tạp một cách dễ dàng. Pattern matching nâng cao khả năng biểu đạt và đọc hiểu mã nguồn, làm cho việc lập trình trở nên trực quan và rõ ràng hơn, đặc biệt có giá trị trong lập trình hướng hàm.
+
+\begin{listing}[H]
+\begin{minted}[mathescape, breaklines, frame=lines, framesep=2mm, baselinestretch=1.2, fontsize=\footnotesize, linenos]{rust}
+fn match_example(value: Option<i32>) {
+  match value {
+      Some(x) => println!("Received a value: {}", x),
+      None => println!("Received None"),
+  }
+}
+\end{minted}
+\caption{Ví dụ pattern matching  trong Rust}
+\label{fp:patternmatching}
+\end{listing}
+
+Rust cũng hỗ trợ các hàm bậc cao (higher-order functions HOC), cho phép các hàm được xem như những thực thể hạng nhất. Điều này có nghĩa là các hàm có thể được truyền làm tham số cho các hàm khác và được trả về như những giá trị. Các hàm bậc cao thúc đẩy phong cách lập trình hướng hàm, cho phép tạo ra mã nguồn trừu tượng và tái sử dụng được nhiều lần.
+
+\begin{listing}[H]
+\begin{minted}[mathescape, breaklines, frame=lines, framesep=2mm, baselinestretch=1.2, fontsize=\footnotesize, linenos]{rust}
+fn apply_operation<F>(value: i32, operation: F) -> i32
+where
+    F: Fn(i32) -> i32,
+{
+    operation(value)
+}
+
+fn main() {
+    let result = apply_operation(5, |x| x * 2);  // 10
+}
+\end{minted}
+\caption{Ví dụ Higher-order Function trong Rust}
+\label{fp:hoc}
+\end{listing}
+
+Closure, còn được biết đến là các biểu thức lambda, cho phép tạo ra các hàm ẩn danh. Closure của Rust rất linh hoạt và có thể nắm bắt các biến từ môi trường xung quanh, cung cấp một công cụ mạnh mẽ cho lập trình hướng hàm.
+
+\begin{listing}[H]
+\begin{minted}[mathescape, breaklines, frame=lines, framesep=2mm, baselinestretch=1.2, fontsize=\footnotesize, linenos]{rust}
+fn main() {
+  let multiplier = |x| x * 3;
+  let result = multiplier(4);  // 12
+}
+\end{minted}
+\caption{Ví dụ Closure trong Rust}
+\label{fp:closure}
+\end{listing}
+
+Loại dữ liệu Option và Result trong Rust rất quan trọng để xử lý sự vắng mặt của giá trị và lỗi tương ứng. Những loại này phù hợp với các nguyên tắc của lập trình hướng hàm, nơi việc xử lý sự vắng mặt hoặc thất bại là một kịch bản phổ biến.
+
+\begin{listing}[H]
+\begin{minted}[mathescape, breaklines, frame=lines, framesep=2mm, baselinestretch=1.2, fontsize=\footnotesize, linenos]{rust}
+fn safe_divide(dividend: i32, divisor: i32) -> Option<i32> {
+  if divisor != 0 {
+      Some(dividend / divisor)
+  } else {
+      None
+  }
+}
+
+fn main() {
+  let result = safe_divide(10, 2);
+  match result {
+      Some(value) => println!("Result: {}", value),
+      None => println!("Cannot divide by zero"),
+  }
+}
+\end{minted}
+\caption{Ví dụ Monad Design pattern trong Rust}
+\label{fp:monad}
+\end{listing}
+
+Hệ thống đặc điểm (traits) của Rust cung cấp một cơ chế mạnh mẽ để định nghĩa các hành vi chung giữa các loại, thúc đẩy tổ chức mã nguồn và tái sử dụng. Các đặc điểm trong Rust tương tự như các lớp kiểu (type classes) trong các ngôn ngữ lập trình hướng hàm, cho phép lập trình viên đóng gói chức năng và đạt được tính đa hình.
+
+\begin{listing}[H]
+\begin{minted}[mathescape, breaklines, frame=lines, framesep=2mm, baselinestretch=1.2, fontsize=\footnotesize, linenos]{rust}
+trait Printable {
+  fn print(&self);
+}
+
+struct Book {
+  title: String,
+  author: String,
+}
+
+impl Printable for Book {
+  fn print(&self) {
+      println!("Book: {} by {}", self.title, self.author);
+  }
+}
+\end{minted}
+\caption{Ví dụ Trait trong Rust}
+\label{fp:trait}
+\end{listing}
+
+Hệ thống kiểu của Rust kết hợp các loại dữ liệu đại số, cho phép lập trình viên mô hình hóa dữ liệu một cách biểu đạt hơn. Các kiểu liệt kê (enum) trong Rust, đặc biệt khi kết hợp với pattern matching, giống như các loại dữ liệu đại số được tìm thấy trong các ngôn ngữ lập trình hướng hàm. Điều này cho phép biểu diễn các cấu trúc dữ liệu một cách ngắn gọn và rõ ràng.
+
+\begin{listing}[H]
+\begin{minted}[mathescape, breaklines, frame=lines, framesep=2mm, baselinestretch=1.2, fontsize=\footnotesize, linenos]{rust}
+enum Option<T> {
+  Some(T),
+  None,
+}
+
+fn main() {
+  let some_value: Option<i32> = Option::Some(42);
+  let no_value: Option<i32> = Option::None;
+
+  match some_value { // Pattern matching
+      Option::Some(value) => println!("Got a value: {}", value),
+      Option::None => println!("No value"),
+  }
+}
+\end{minted}
+\caption{Ví dụ ADT trong Rust}
+\label{fp:adt}
+\end{listing}
+
+Cuối cùng, trong Rust, hầu hết mọi thứ đều là biểu thức, điều này giúp tạo ra mã nguồn sạch hơn và có thể kết hợp dễ dàng hơn. Ví dụ đơn giản về biểu thức if-else minh họa rõ ràng cho đặc điểm này của Rust.
+
+\begin{listing}[H]
+\begin{minted}[mathescape, breaklines, frame=lines, framesep=2mm, baselinestretch=1.2, fontsize=\footnotesize, linenos]{rust}
+fn main() {
+  let x = 5;
+  let value = if x < 0 {
+      -1
+  } else {
+      1
+  }
+}
+
+\end{minted}
+\caption{Ví dụ Expression trong Rust}
+\label{fp:expression}
+\end{listing}
+
+Tất cả các tính năng liên quan đến lập trình hướng hàm của Rust tạo nên sự khác biệt so với các ngôn ngữ như C/C++ và Java. Trong khi C/C++ và Java thiên về lập trình hướng đối tượng và quản lý bộ nhớ thủ công, Rust nổi bật với hệ thống kiểu an toàn và mô hình sở hữu, giúp ngăn chặn các lỗi bộ nhớ và tăng cường độ an toàn của mã nguồn. Những tính năng này không chỉ giúp lập trình viên viết mã dễ bảo trì hơn mà còn cải thiện hiệu quả phân tích mã nguồn, giúp phát hiện sớm các lỗi tiềm ẩn và tối ưu hóa hiệu suất chương trình. Rust không chỉ mang lại lợi ích về mặt kỹ thuật mà còn thúc đẩy tư duy lập trình hướng hàm, làm cho mã nguồn trở nên rõ ràng và dễ hiểu hơn.
