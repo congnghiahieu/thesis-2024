@@ -1,10 +1,17 @@
 \section{Quy trình tổng quan}
 
-Mục tiêu của công cụ là phân tích mã nguồn Go và xây dựng đồ thị thuộc tính mã
+Mục tiêu của công cụ là phân tích mã nguồn Rust và xây dựng đồ thị thuộc tính mã
 nguồn (CPG) biểu diễn mã nguồn đó. Hình 3.1 thể hiện các bước xây dựng cây CPG từ
-các tệp mã nguồn Go.
+các tệp mã nguồn Rust.
 
-Mã nguồn Go sẽ được trình phân tích go/parser phân tích và sinh ra cây AST tương
+\begin{figure}[H]
+	\includegraphics[width=1\columnwidth]{figures/c3/c3_flow.drawio.pdf}
+	\centering
+	\caption{Quy trình phân tích mã nguồn Rust}
+	\label{img:method_flow}
+\end{figure}
+
+Mã nguồn Rust sẽ được trình phân tích go/parser phân tích và sinh ra cây AST tương
 ứng với từng tệp mã nguồn. Sau đó, công cụ go/package sẽ phân tích các tệp mã nguồn
 và sinh ra các thông tin về kiểu dữ liệu và ta sẽ thực hiện bổ sung các thông tin về kiểu dữ
 liệu và một số thông tin khác như chữ ký (signature), tên đầy đủ (fullyQualifiedName) và kiểu dữ liệu vào các nút tương ứng trong cây cú pháp trừu tượng. Ở bước thứ ba, cây

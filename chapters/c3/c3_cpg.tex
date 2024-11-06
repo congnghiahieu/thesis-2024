@@ -11,39 +11,71 @@ thành cây đồ thị thuộc tính mã nguồn.
 
 Đồ thị thuộc tính mã nguồn là dạng cấu trúc dữ liệu được kết hợp giữa cây cú pháp trừu tượng, đồ thị luồng điều khiển và đồ thị phụ thuộc chương trình. Đồ thị này biểu diễn các đỉnh là các nút trong cây cú pháp trừu tượng và các cạnh của đồ thị biểu diễn mối quan hệ giữa chúng. Đồ thị này giúp theo dõi các luồng điều khiển, các phụ thuộc trong mã nguồn.
 
-\begin{table}[h]
+\footnotesize
+\begin{longtable}{| p{.07\textwidth} | p{.30\textwidth} | p{.63\textwidth} |}
+\hline
+\textbf{STT} & \textbf{Tên nút} & \textbf{Mô tả} \\ \hline
+1   & META\_DATA         & Nút này chứa siêu dữ liệu (metadata) của đồ thị. Một đồ thị CPG phải có và chỉ có duy nhất một nút META\_DATA.                                                   \\ \hline
+2   & FILE              & Nút biểu diễn một tệp mã nguồn. Với mỗi tệp tin trong mã nguồn, đồ thị sẽ có chính xác một nút FILE để biểu diễn tệp mã nguồn đó.                               \\ \hline
+3   & NAMESPACE         & Nút này biểu diễn một không gian tên (namespace) hoặc một gói (package), đối với Go, nút này biểu diễn các gói trong mã nguồn.                                  \\ \hline
+4   & NAMESPACE\_BLOCK   & Nút này biểu diễn một tham chiếu đến không gian tên (namespace) tương ứng. Nó chứa các khối mã nguồn được định nghĩa dưới không gian tên (namespace) tương ứng. \\ \hline
+5   & METHOD            & Biểu diễn các hàm, phương thức hoặc biểu thức lambda.                                                                                                           \\ \hline
+6   & PARAMETER\_IN      & Nút đại diện cho một tham số đầu vào của hàm.                                                                                                                   \\ \hline
+7   & PARAMETER\_OUT     & Nút đại diện cho một tham số đầu ra của hàm.                                                                                                                    \\ \hline
+8   & METHOD\_RETURN     & Nút này biểu diễn kiểu trả về của một hàm.                                                                                                                      \\ \hline
+9   & MEMBER            & Biểu diễn thuộc tính của một kiểu cấu trúc (struct).                                                                                                            \\ \hline
+10  & TYPE              & Nút đại diện cho một thể hiện (instance) của một kiểu dữ liệu.                                                                                                  \\ \hline
+11  & TYPE\_ARGUMENT     & Biểu diễn đối số của một kiểu dữ liệu, có thể hình dung giống như các kiểu dữ liệu generic trong JAVA.                                                          \\ \hline
+12  & TYPE\_DECL         & Biểu diễn một khai báo kiểu dữ liệu ví dụ như khai báo một kiểu cấu trúc (struct) hay khai báo một giao diện (interface).                                       \\ \hline
+13  & BLOCK             & Biểu diễn một khối mã nguồn.                                                                                                                                    \\ \hline
+14  & CALL              & Biểu diễn một lời gọi hàm.                                                                                                                                      \\ \hline
+15  & CONTROL\_STRUCTURE & Biểu diễn một cấu trúc điều khiển ví dụ như câu lệnh if else, vòng lặp for, cấu trúc switch case.                                                               \\ \hline
+16  & IDENTIFIER        & Nút định danh biểu diễn tham chiếu đến một biến.                                                                                                                \\ \hline
+17  & JUMP\_LABEL        & Biểu diễn các cấu trúc nhảy như BREAK, CONTINUE, GOTO.                                                                                                          \\ \hline
+18  & LITERAL           & Biểu diễn một hằng số như số nguyên hoặc chuỗi.                                                                                                                 \\ \hline
+19  & LOCAL             & Biểu diễn một biến cục bộ.                                                                                                                                      \\ \hline
+20  & METHOD\_REF        & Biểu diễn một tham chiếu đến hàm khi hàm đó được dùng làm tham số cho một lời gọi.                                                                              \\ \hline
+21  & MODIFIER          & Biểu diễn một bộ chỉnh sửa (modifier) như static, public hay private.                                                                                           \\ \hline
+22  & RETURN            & Biểu diễn một chỉ thị trả về (return instruction).                                                                                                              \\ \hline
+23  & TYPE\_REF          & Biểu diễn tham chiếu đến một kiểu dữ liệu.                                                                                                                      \\ \hline
 \caption{Các đỉnh trong đồ thị thuộc tính mã nguồn (CPG)}
-\label{table:nodecpgjoern}
-  \begin{tabularx}{\textwidth}{|l|l|X|}
-\hline
-\textbf{STT} & \textbf{Tên nút} & \textbf{Mô tả} \\
-\hline
-1 & Comment & Nút biểu diễn một bình luận (comment) đơn bằng bằng cú pháp // hoặc /* */ \\
-\hline
-\end{tabularx}
-\end{table}
+\label{table:method_nodecpgjoern}
+\end{longtable}
+\medskip
 
-\begin{table}[h]
-\caption{Các cạnh trong đồ thị thuộc tính mã nguồn (CPG)}
-\label{table:edgecpgjoern}
-  \begin{tabularx}{\textwidth}{|l|l|X|}
+\footnotesize
+\begin{longtable}{| p{.07\textwidth} | p{.30\textwidth} | p{.63\textwidth} |}
 \hline
-\textbf{STT} & \textbf{Tên nút} & \textbf{Mô tả} \\
-\hline
-1 & Comment & Nút biểu diễn một bình luận (comment) đơn bằng bằng cú pháp // hoặc /* */ \\
-\hline
-\end{tabularx}
-\end{table}
+\textbf{STT} & \textbf{Tên nút} & \textbf{Mô tả} \\ \hline
+1  & SOURCE\_FILE    & Quan hệ biểu diễn một nút là tệp gốc của một nút khác. Quan hệ cha con (biểu diễn quan hệ trong cây cú pháp mã nguồn (AST)).                                                                                 \\ \hline
+2  & AST            & Cây cú pháp trừu tượng (Abstract Syntax Tree).                                                                                                                                                               \\ \hline
+3  & CALL           & Quan hệ gọi, dùng để biểu diễn quan hệ giữa hàm/phương thức với nút gọi hàm/phương thức đó.                                                                                                                  \\ \hline
+4  & CONTAINS       & Quan hệ bao gồm.                                                                                                                                                                                             \\ \hline
+5  & CONDITION      & Quan hệ điều kiện, dùng để biểu diễn quan hệ giữa khối điều khiển như if else, switch hay for với biểu thức điều kiện của chúng.                                                                             \\ \hline
+6  & ARGUMENT       & Quan hệ đối số kết nối các điểm gọi (kiểu nút CALL) với các đối số của chúng, cũng như các nút RETURN với các biểu thức trả về.                                                                              \\ \hline
+7  & RECEIVER       & Quan hệ kết nối các điểm gọi (CALL) tới đối số nhận (receiver argument) của chúng. Một đối số nhận là một đối tượng mà phương thức đó thuộc về (có thể hiểu đối số nhận ở đây là con trỏ 'this' trong Java). \\ \hline
+8  & CFG            & Quan hệ này biểu diễn luồng điều khiển từ nút nguồn đến nút đích.                                                                                                                                            \\ \hline
+9  & DOMINATE       & Quan hệ biểu diễn tính kiểm soát (dominate) ngay lập tức từ nút nguồn đến nút đích.                                                                                                                          \\ \hline
+10 & POST\_DOMINATE  & Quan hệ biểu diễn nút nguồn kiểm soát (dominate) ngay lập tức sau nút đích.                                                                                                                                  \\ \hline
+11 & CDG            & Quan hệ biểu diễn nút đích phụ thuộc điều khiển vào nút nguồn.                                                                                                                                               \\ \hline
+12 & REACHING\_DEF   & Quan hệ biểu diễn một biến được tạo ra từ nút nguồn và không bị gán lại giá trị trên đường đi tới nút đích.                                                                                                  \\ \hline
+13 & CONTAINS       & Quan hệ này kết nối một nút tới hàm/phương thức chứa nó.                                                                                                                                                     \\ \hline
+14 & EVAL\_TYPE      & Quan hệ kết nối một nút tới nút kiểu dữ liệu của nút đó.                                                                                                                                                     \\ \hline
+15 & PARAMETER\_LINK & Quan hệ kết nối một nút tham số đầu vào với nút tham số đầu ra tương ứng của hàm/phương thức đó.                                                                                                             \\ \hline
+\caption{Các cạnh trong đồ thị thuộc tín  h mã nguồn (CPG)}
+\label{table:method_edgecpgjoern}
+\end{longtable}
+\medskip
 
 \subsection{Chuyển hóa cây cú pháp trừu trượng sang đồ thị thuộc tính mã nguồn}
 
 Với các thông tin có được về cây cú pháp mã nguồn được lưu trong các tệp JSON,
 đồ thị thuộc tính mã nguồn sẽ được dựng lên từ những thông tin đó. Sau đây tôi sẽ mô
-tả việc ánh xạ các thành phần mã nguồn chính của Go từ cây cú pháp mã nguồn sang đồ
+tả việc ánh xạ các thành phần mã nguồn chính của Rust từ cây cú pháp mã nguồn sang đồ
 thị thuộc tính mã nguồn.
 
 \textbf{Ánh xạ tệp (file) và gói (package)}
 
-Hình 3.5 biểu diễn ánh xạ từ mã nguồn sang cây cú pháp trừu tượng và ánh xạ sang đồ thị thuộc tính mã nguồn. Cây cú pháp trừu tượng của Go không có nút biểu diễn gói, thông tin về gói sẽ được lưu trong nút tệp định nghĩa gói đó. Khi ánh xạ nút tệp sang đồ thị thuộc tính mã nguồn sẽ biểu diễn được nút FILE và NAMESPACE tương ứng.
+Hình 3.5 biểu diễn ánh xạ từ mã nguồn sang cây cú pháp trừu tượng và ánh xạ sang đồ thị thuộc tính mã nguồn. Cây cú pháp trừu tượng của Rust không có nút biểu diễn gói, thông tin về gói sẽ được lưu trong nút tệp định nghĩa gói đó. Khi ánh xạ nút tệp sang đồ thị thuộc tính mã nguồn sẽ biểu diễn được nút FILE và NAMESPACE tương ứng.
 
 Nút NAMESPACE\_BLOCK biểu diễn thân của gói, nút này đóng vai trò làm nút cha của các định nghĩa bên trong thân của gói.

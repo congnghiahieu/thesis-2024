@@ -1,0 +1,58 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36 Edg/130.0.0.0" version="24.8.4">
+  <diagram id="UqtiB_08HVFXYnvLfDx0" name="Page-1">
+    <mxGraphModel dx="1225" dy="862" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="kxU1eR2FY8rgbBVHpL4p-171" value="" style="shape=note2;boundedLbl=1;whiteSpace=wrap;html=1;size=19;verticalAlign=top;align=center;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="120" y="280" width="60" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="kxU1eR2FY8rgbBVHpL4p-179" value="Sinh cây AST từ mã nguồn" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="380" y="280" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="kxU1eR2FY8rgbBVHpL4p-180" value="Chuyển cây AST thành dạng dữ liệu trung gian (JSON)" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="540" y="280" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="kxU1eR2FY8rgbBVHpL4p-183" value="" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" parent="1" source="kxU1eR2FY8rgbBVHpL4p-179" target="kxU1eR2FY8rgbBVHpL4p-180" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="510" y="570" as="sourcePoint" />
+            <mxPoint x="560" y="520" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="kxU1eR2FY8rgbBVHpL4p-184" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="kxU1eR2FY8rgbBVHpL4p-180" target="nHqGZG6YFUttt1BYUiey-1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="520" y="330" as="sourcePoint" />
+            <mxPoint x="700" y="320" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="nHqGZG6YFUttt1BYUiey-1" value="" style="shape=note2;boundedLbl=1;whiteSpace=wrap;html=1;size=19;verticalAlign=top;align=center;" parent="1" vertex="1">
+          <mxGeometry x="700" y="280" width="60" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="nHqGZG6YFUttt1BYUiey-2" value="JSON (.json)" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="730" y="320" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="nHqGZG6YFUttt1BYUiey-3" value="Lọc file mã nguồn Rust (.rs)" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="220" y="280" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="nHqGZG6YFUttt1BYUiey-4" value="" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=0.99;exitY=0.502;exitDx=0;exitDy=0;exitPerimeter=0;" parent="1" source="kxU1eR2FY8rgbBVHpL4p-171" target="nHqGZG6YFUttt1BYUiey-3" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="380" y="440" as="sourcePoint" />
+            <mxPoint x="425" y="440" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="nHqGZG6YFUttt1BYUiey-5" value="" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" target="kxU1eR2FY8rgbBVHpL4p-179" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="340" y="320" as="sourcePoint" />
+            <mxPoint x="230" y="330" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="S4qEE7WVF3xSV7HFCpG6-1" value="Mã nguồn" style="text;strokeColor=none;align=center;fillColor=none;html=1;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="120" y="360" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="S4qEE7WVF3xSV7HFCpG6-2" value="AST" style="text;strokeColor=none;align=center;fillColor=none;html=1;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="700" y="360" width="60" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

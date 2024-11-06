@@ -5,13 +5,20 @@ Chương này sẽ tập trung trình bày về quá trình thực nghiệm và 
 
 \section{Cài đặt công cụ}
 
-Công cụ phân tích mã nguồn Go được phát triển từ mã nguồn của công cụ Joern.
-Công cụ được cài đặt bằng ngôn ngữ Go và Scala. Kiến trúc tổng quan của công cụ được
+Công cụ phân tích mã nguồn Rust được phát triển từ mã nguồn của công cụ Joern.
+Công cụ được cài đặt bằng ngôn ngữ Rust và Scala. Kiến trúc tổng quan của công cụ được
 mô tả ở Hình 4.1
 
+\begin{figure}[H]
+	\includegraphics[width=1\columnwidth]{figures/c4/c4_install_flow.drawio.pdf}
+	\centering
+	\caption{Kiến trúc công cụ}
+	\label{img:experimental_install_flow}
+\end{figure}
+
 Công cụ gồm hai mô-đun là GoParser và JoernParse trong đó JoernParse là mô-đun
-chính. Mô-đun GoParse được cài đặt bằng ngôn ngữ Go. Mô-đun này sẽ nhận đầu vào là
-đường dẫn đến thư mục dự án chứa mã nguồn Go và thực hiện việc phân tích mã nguồn
+chính. Mô-đun GoParse được cài đặt bằng      ngôn ngữ Rust. Mô-đun này sẽ nhận đầu vào là
+đường dẫn đến thư mục dự án chứa mã nguồn Rust và thực hiện việc phân tích mã nguồn
 thành cây cú pháp mã nguồn, xử lý kiểu dữ liệu và lưu cây cú pháp mã nguồn vào các
 tệp JSON. JoernParse được cài đặt bằng ngôn ngữ Scala và được phát triển từ mã nguồn
 của công cụ Joern. Mô-đun thực hiện nhận mã nguồn đầu vào, gọi mô-đun GoParser để
@@ -25,18 +32,18 @@ lỗ hổng trong mã nguồn bằng công cụ JoernScan.
 \subsection{Mô-đun xây dựng cây cú pháp trừu tượng Rust Parser}
 
 Chức năng chính của GoParser là nhận thông tin đường dẫn đến mã nguồn, lọc các
-tệp mã nguồn Go, sinh cây cú pháp trừu tượng, xử lý kiểu dữ liệu cho các nút định danh
+tệp mã nguồn Rust, sinh cây cú pháp trừu tượng, xử lý kiểu dữ liệu cho các nút định danh
 (identifier) và lưu kết quả vào các tệp JSON. Các thành phần trong mô-đun này bao gồm
 cli, parser, resolver, ast và util. Chức năng chi tiết của từng thành phần được mô tả như
 sau:
 
 \begin{itemize}
 \item Thành phần cli làm nhiệm vụ xử lý và cung cấp giao diện dòng lệnh (CLI), nhận
-đầu vào là đường dẫn đến dự án Go, nhận các cấu hình (ví dụ như đường dẫn lưu
+đầu vào là đường dẫn đến dự án Rust, nhận các cấu hình (ví dụ như đường dẫn lưu
 các tệp đầu ra hoặc danh sách các tệp mã nguồn cần bỏ qua) và gọi các chức năng
 phân tích.
 \item Thành phần parser thực hiện nhận thông tin từ thành phần cli, từ đó đọc các tệp mã
-nguồn của Go có đuôi là ".go" từ dự án đầu vào, phân tích các tệp tin này và sinh
+nguồn của Rust có đuôi là ".rs" từ dự án đầu vào, phân tích các tệp tin này và sinh
 cây cú pháp trừu tượng.
 \item Thành phần resolver cung cấp các API phục vụ việc xử lý kiểu dữ liệu.
 \item Thành phần ast chứa các cấu trúc định nghĩa các loại nút và thuộc tính của từng
@@ -58,7 +65,7 @@ và x2cpg. Dưới đây tôi sẽ mô tả chức năng của từng thành ph�
 \begin{itemize}
 \item Thành phần console thực hiện chức năng tương tự như thành phần cli của mô-đun
 GoParser.
-\item Thành phần go-language-frontend đảm nhận nhiệm vụ nhận đường dẫn đến mã nguồn từ thành phần console, gọi mô-đun GoParser để sinh cây cú pháp trừu tượng sau đó đọc các tệp JSON được sinh ra và xây dựng thành đồ thị thuộc tính mã nguồn.
+\item Thành phần rust-language-frontend đảm nhận nhiệm vụ nhận đường dẫn đến mã nguồn từ thành phần console, gọi mô-đun GoParser để sinh cây cú pháp trừu tượng sau đó đọc các tệp JSON được sinh ra và xây dựng thành đồ thị thuộc tính mã nguồn.
 \item Thành phần codepropertygraph chứa các lớp định nghĩa các đỉnh và cạnh của đồ thị thuộc tính mã nguồn.
 \item Thành phần x2cpg cung cấp các tiện ích để ánh xạ các thuộc tính từ các nút của cây cú pháp trừu tượng sang thuộc tính của các đỉnh trong đồ thị thuộc tính mã nguồn.
 \item Thành phần semanticcpg chứa các tiện ích cho phép vấn đồ thị thuộc tính mã nguồn. Thành phần này được sử để thực hiện các tác vụ hậu xử lý sau khi đồ thị thuộc tính mã nguồn được xây dựng (ví dụ như bổ sung thông tin hoặc tạo các đỉnh liên kết).
@@ -69,16 +76,20 @@ quan hệ sử dụng giữa các thành phần này.
 
 \section{Thực nghiệm trên các tính năng đã hỗ trợ}
 
-\subsection{Tính năng 1}
+\subsection{fn}
 
-\subsection{Tính năng 2}
+\subsection{if let}
 
-\subsection{Tính năng 3}
+\subsection{let else}
+
+\subsection{life time}
 
 \section{Nhược điểm}
 
-\subsection{Nhược điểm 1}
+\subsection{Macro}
 
-\subsection{Nhược điểm 2}
+\subsection{Qself}
 
-\subsection{Nhược điểm 3}
+\subsection{Path}
+
+\subsection{Proxy}

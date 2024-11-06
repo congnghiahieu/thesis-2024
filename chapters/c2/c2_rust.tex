@@ -46,7 +46,7 @@ fn main() {
 }
 \end{minted}
 \caption{Ví dụ tính immutability trong Rust}
-\label{fp:immutable}
+\label{code:fp_immutable}
 \end{listing}
 
 Tiếp theo, một tính năng mạnh mẽ của Rust là pattern matching. Tính năng này cho phép lập trình viên phân rã và khớp các cấu trúc dữ liệu phức tạp một cách dễ dàng. Pattern matching nâng cao khả năng biểu đạt và đọc hiểu mã nguồn, làm cho việc lập trình trở nên trực quan và rõ ràng hơn, đặc biệt có giá trị trong lập trình hướng hàm.
@@ -61,7 +61,7 @@ fn match_example(value: Option<i32>) {
 }
 \end{minted}
 \caption{Ví dụ pattern matching  trong Rust}
-\label{fp:patternmatching}
+\label{code:fp_patternmatching}
 \end{listing}
 
 Rust cũng hỗ trợ các hàm bậc cao (higher-order functions HOC), cho phép các hàm được xem như những thực thể hạng nhất. Điều này có nghĩa là các hàm có thể được truyền làm tham số cho các hàm khác và được trả về như những giá trị. Các hàm bậc cao thúc đẩy phong cách lập trình hướng hàm, cho phép tạo ra mã nguồn trừu tượng và tái sử dụng được nhiều lần.
@@ -80,7 +80,7 @@ fn main() {
 }
 \end{minted}
 \caption{Ví dụ Higher-order Function trong Rust}
-\label{fp:hoc}
+\label{code:fp_hoc}
 \end{listing}
 
 Closure, còn được biết đến là các biểu thức lambda, cho phép tạo ra các hàm ẩn danh. Closure của Rust rất linh hoạt và có thể nắm bắt các biến từ môi trường xung quanh, cung cấp một công cụ mạnh mẽ cho lập trình hướng hàm.
@@ -93,7 +93,7 @@ fn main() {
 }
 \end{minted}
 \caption{Ví dụ Closure trong Rust}
-\label{fp:closure}
+\label{code:fp_closure}
 \end{listing}
 
 Loại dữ liệu Option và Result trong Rust rất quan trọng để xử lý sự vắng mặt của giá trị và lỗi tương ứng. Những loại này phù hợp với các nguyên tắc của lập trình hướng hàm, nơi việc xử lý sự vắng mặt hoặc thất bại là một kịch bản phổ biến.
@@ -117,7 +117,7 @@ fn main() {
 }
 \end{minted}
 \caption{Ví dụ Monad Design pattern trong Rust}
-\label{fp:monad}
+\label{code:fp_monad}
 \end{listing}
 
 Hệ thống đặc điểm (traits) của Rust cung cấp một cơ chế mạnh mẽ để định nghĩa các hành vi chung giữa các loại, thúc đẩy tổ chức mã nguồn và tái sử dụng. Các đặc điểm trong Rust tương tự như các lớp kiểu (type classes) trong các ngôn ngữ lập trình hướng hàm, cho phép lập trình viên đóng gói chức năng và đạt được tính đa hình.
@@ -140,7 +140,7 @@ impl Printable for Book {
 }
 \end{minted}
 \caption{Ví dụ Trait trong Rust}
-\label{fp:trait}
+\label{code:fp_trait}
 \end{listing}
 
 Hệ thống kiểu của Rust kết hợp các loại dữ liệu đại số, cho phép lập trình viên mô hình hóa dữ liệu một cách biểu đạt hơn. Các kiểu liệt kê (enum) trong Rust, đặc biệt khi kết hợp với pattern matching, giống như các loại dữ liệu đại số được tìm thấy trong các ngôn ngữ lập trình hướng hàm. Điều này cho phép biểu diễn các cấu trúc dữ liệu một cách ngắn gọn và rõ ràng.
@@ -163,7 +163,7 @@ fn main() {
 }
 \end{minted}
 \caption{Ví dụ ADT trong Rust}
-\label{fp:adt}
+\label{code:fp_adt}
 \end{listing}
 
 Cuối cùng, trong Rust, hầu hết mọi thứ đều là biểu thức, điều này giúp tạo ra mã nguồn sạch hơn và có thể kết hợp dễ dàng hơn. Ví dụ đơn giản về biểu thức if-else minh họa rõ ràng cho đặc điểm này của Rust.
@@ -181,7 +181,7 @@ fn main() {
 
 \end{minted}
 \caption{Ví dụ Expression trong Rust}
-\label{fp:expression}
+\label{code:fp_expression}
 \end{listing}
 
 Tất cả các tính năng liên quan đến lập trình hướng hàm của Rust tạo nên sự khác biệt so với các ngôn ngữ như C/C++ và Java. Trong khi C/C++ và Java thiên về lập trình hướng đối tượng và quản lý bộ nhớ thủ công, Rust nổi bật với hệ thống kiểu an toàn và mô hình sở hữu, giúp ngăn chặn các lỗi bộ nhớ và tăng cường độ an toàn của mã nguồn. Những tính năng này không chỉ giúp lập trình viên viết mã dễ bảo trì hơn mà còn cải thiện hiệu quả phân tích mã nguồn, giúp phát hiện sớm các lỗi tiềm ẩn và tối ưu hóa hiệu suất chương trình. Rust không chỉ mang lại lợi ích về mặt kỹ thuật mà còn thúc đẩy tư duy lập trình hướng hàm, làm cho mã nguồn trở nên rõ ràng và dễ hiểu hơn.

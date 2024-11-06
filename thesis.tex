@@ -25,7 +25,7 @@
 \usepackage{sectsty}
 \usepackage{longtable}
 \usepackage{tocloft,calc}
-\usepackage{makecell}
+
 \usepackage[square,sort,comma,numbers]{natbib}
 \usepackage{natbib}
 \usepackage{algorithm}
@@ -36,6 +36,10 @@
 \usepackage[newfloat]{minted}
 \usepackage{caption}
 \SetupFloatingEnvironment{listing}{name=Đoạn mã}
+
+\usepackage{makecell}
+\renewcommand{\cellalign}{tl}
+% \renewcommand{\theadalign}{vh}
 
 \usetikzlibrary{calc}
 % \usepackage[perpage]{footmisc}

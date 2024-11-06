@@ -18,9 +18,9 @@ Hiện tại, trên thị trường đã có nhiều công cụ cung cấp khả
 như SonarQube, ReSharper hay CodeClimate. Những công cụ này cung cấp khả năng
 phân tích mã nguồn cho nhiều ngôn ngữ lập trình khác nhau như C/C++, Java, Javascript,
 C... Bên cạnh đó, mỗi ngôn ngữ lập trình lại có thêm nhiều công cụ phân tích mã nguồn
-khác nhau, nếu xét riêng cho ngôn ngữ lập trình Go, ta có một số công cụ tiêu biểu như
+khác nhau, nếu xét riêng cho ngôn ngữ lập trình Rust, ta có một số công cụ tiêu biểu như
 gosec1 , staticcheck2 hay govulncheck3 . Đây là các công cụ cung cấp khả năng phân tích
-cú pháp và tìm lỗ hổng trong mã nguồn. Điểm chung của các công cụ này là đều sử dụng dạng cây cú pháp trừu tượng được định nghĩa sẵn của Go nên chúng chỉ dừng lại ở tìm
+cú pháp và tìm lỗ hổng trong mã nguồn. Điểm chung của các công cụ này là đều sử dụng dạng cây cú pháp trừu tượng được định nghĩa sẵn của Rust nên chúng chỉ dừng lại ở tìm
 các lỗi dựa trên cú pháp mã nguồn mà không khai thác sâu hơn về luồng điều khiển hay
 luồng dữ liệu của mã nguồn. Do vậy, những công cụ này thường cung cấp nhiều cảnh
 báo giả và bỏ qua nhưng lỗi nghiêm trọng khi phân tích mã nguồn.
@@ -41,11 +41,11 @@ này đem đến khả năng phân tích đa ngôn ngữ, giúp giảm thiểu v
 từng ngôn ngữ khi chúng ta tìm kiếm lỗi trong mã nguồn hay khi xây dựng các trình
 phân tích tĩnh dựa trên Joern.
 
-Mặc dù Joern đã cung cấp khả năng phân tích mã nguồn đối với ngôn ngữ Go tuy
+Mặc dù Joern đã cung cấp khả năng phân tích mã nguồn đối với ngôn ngữ Rust tuy
 nhiên vẫn còn rất hạn chế do chưa xử lý hết toàn bộ các thành phần mã nguồn có trong
-Go và thiếu các thông tin về kiểu dữ liệu. Vì vậy khóa luận này xây dựng một công cụ
-phân tích mã nguồn dành cho ngôn ngữ lập trình Go dựa trên mã nguồn của Joern. Công
-cụ này sẽ xử lý các thành mã nguồn mà Go cung cấp một cách chi tiết và đầy đủ hơn,
+Rust và thiếu các thông tin về kiểu dữ liệu. Vì vậy khóa luận này xây dựng một công cụ
+phân tích mã nguồn dành cho ngôn ngữ lập trình Rust dựa trên mã nguồn của Joern. Công
+cụ này sẽ xử lý các thành mã nguồn mà Rust cung cấp một cách chi tiết và đầy đủ hơn,
 đồng thời cũng xử lý triệt để kiểu dữ liệu để cung cấp đồ thị mã nguồn chi tiết nhất có
 thể.
 

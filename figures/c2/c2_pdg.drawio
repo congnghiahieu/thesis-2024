@@ -1,0 +1,49 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36 Edg/130.0.0.0" version="24.8.4">
+  <diagram id="UqtiB_08HVFXYnvLfDx0" name="Page-1">
+    <mxGraphModel dx="1225" dy="862" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="kxU1eR2FY8rgbBVHpL4p-171" value="" style="shape=note2;boundedLbl=1;whiteSpace=wrap;html=1;size=19;verticalAlign=top;align=center;" vertex="1" parent="1">
+          <mxGeometry x="80" y="280" width="60" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="kxU1eR2FY8rgbBVHpL4p-172" value="Rust (.rs)" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="320" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="kxU1eR2FY8rgbBVHpL4p-173" value="Mã nguồn" style="text;strokeColor=none;align=center;fillColor=none;html=1;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="80" y="360" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="kxU1eR2FY8rgbBVHpL4p-175" value="" style="shape=image;html=1;verticalAlign=top;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;imageAspect=0;aspect=fixed;image=https://cdn1.iconfinder.com/data/icons/seo-and-web-development-6/32/development_setting_gear_cogwheel-71-128.png" vertex="1" parent="1">
+          <mxGeometry x="80" y="420" width="60" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="kxU1eR2FY8rgbBVHpL4p-176" value="Cấu hình" style="text;strokeColor=none;align=center;fillColor=none;html=1;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="80" y="480" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="kxU1eR2FY8rgbBVHpL4p-178" value="" style="shape=curlyBracket;whiteSpace=wrap;html=1;rounded=1;flipH=1;labelPosition=right;verticalLabelPosition=middle;align=left;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="160" y="280" width="40" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="kxU1eR2FY8rgbBVHpL4p-179" value="Phân tích mã nguồn thành cây AST" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="220" y="360" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="kxU1eR2FY8rgbBVHpL4p-180" value="Ánh xạ AST sang CPG" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="400" y="360" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="kxU1eR2FY8rgbBVHpL4p-182" value="&lt;b&gt;CPG&lt;/b&gt;" style="shape=note2;boundedLbl=1;whiteSpace=wrap;html=1;size=19;verticalAlign=middle;align=center;" vertex="1" parent="1">
+          <mxGeometry x="580" y="360" width="60" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="kxU1eR2FY8rgbBVHpL4p-183" value="" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="kxU1eR2FY8rgbBVHpL4p-179" target="kxU1eR2FY8rgbBVHpL4p-180">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="340" y="650" as="sourcePoint" />
+            <mxPoint x="390" y="600" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="kxU1eR2FY8rgbBVHpL4p-184" value="" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryPerimeter=0;" edge="1" parent="1" source="kxU1eR2FY8rgbBVHpL4p-180" target="kxU1eR2FY8rgbBVHpL4p-182">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="350" y="410" as="sourcePoint" />
+            <mxPoint x="410" y="410" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

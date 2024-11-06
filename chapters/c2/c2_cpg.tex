@@ -37,6 +37,20 @@ hướng thể hiện thứ tự thực hiện của câu lệnh/nhóm câu lệ
 các thành phần chính là điểm xuất phát, khối xử lý, điểm quyết định, điểm nối và điểm
 kết thúc được mô tả trong Hình 2.1.
 
+\begin{figure}[H]
+	\includegraphics[width=1\columnwidth]{figures/c2/c2_cfg_point.drawio.pdf}
+	\centering
+	\caption{Các thành phần cơ bản trong đồ thị dòng điều khiển.}
+	\label{img:background_cfg_point}
+\end{figure}
+
+\begin{figure}[H]
+	\includegraphics[width=1\columnwidth]{figures/c2/c2_cfg_line.drawio.pdf}
+	\centering
+	\caption{Các cấu trúc điều khiển phổ biến trong các ngôn ngữ lập trình.}
+	\label{img:background_cfg_line}
+\end{figure}
+
 \begin{itemize}
   \item \textbf{Điểm xuất phát:} Đánh dấu thời điểm xuất phát của chương trình, được thể hiện bằng
   hình tròn đặc
@@ -61,11 +75,43 @@ dependence) và điều kiện điều khiển (control condition) mà việc th
 thuộc vào hay có thể hiểu đơn giản hơn là phụ thuộc điều khiển (control dependence)
 [2].
 
+\begin{figure}[H]
+	\includegraphics[width=1\columnwidth]{figures/c2/c2_pdg.drawio.pdf}
+	\centering
+	\caption{Ví dụ về đồ thị phụ thuộc chương trình}
+	\label{img:background_pdg}
+\end{figure}
+
 Hình 2.4 biểu diễn ví dụ về một đồ thị phụ thuộc chương trình với nút ENTRY là
 điểm bắt đầu của chương trình, các cạnh nét đứt biểu diễn phụ thuộc điều khiển và các
 cạnh nét liền biểu diễn phụ thuộc dữ liệu.
 
 \section{Đồ thị thuộc tính mã nguồn}
+
+\textbf{NOTE:} Tự chạy 1 đoạn code sinh ra CPG rồi paste ảnh và đoạn code vào đây (thay cho ảnh và đoạn code bên dưới)
+
+\begin{figure}[H]
+	\includegraphics[width=1\columnwidth]{figures/c2/c2_pdg.drawio.pdf}
+	\centering
+	\caption{Đồ thị thuộc tính mã nguồn biểu diễn đoạn mã nguồn \ref{code:background_cpg}}
+	\label{img:background_cpg}
+\end{figure}
+
+\begin{listing}[H]
+\begin{minted}[mathescape, breaklines, frame=lines, framesep=2mm, baselinestretch=1.2, fontsize=\footnotesize, linenos]{rust}
+fn main() {
+  let x = input();
+  let y = input();
+  if x > y {
+    return x;
+  } else {
+    return y;
+  }
+}
+\end{minted}
+\caption{Mã nguồn đầy đủ cho đồ thị thuộc tính mã nguồn \ref{img:background_cpg}}
+\label{code:background_cpg}
+\end{listing}
 
 Đồ thị thuộc tính mã nguồn (Code Property Graph) là dạng đồ thị biểu diễn mã
 nguồn của chương trình. Nó được hợp thành cây cú pháp trừu tượng, đồ thị dòng điều khiển và đồ thị phụ thuộc chương trình. Đồ thị chứa các thông tin về cấu trúc cú pháp,
