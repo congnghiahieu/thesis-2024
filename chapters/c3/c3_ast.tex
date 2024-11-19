@@ -1,36 +1,51 @@
 \section{Xây dựng cây cú pháp trừu tượng}
 
-\textbf{NOTE:} Nhắc đến việc sử dụng thư viện Syn, Rust chưa có đặc tả chính thức mà có reference. Thư viện syn có ngữ pháp tuân theo reference này. Tất cả các loại AST sẽ tuân theo định nghĩa của thư viện Syn.
-
 \begin{figure}[H]
-	\includegraphics[width=1\columnwidth]{figures/c3/c3_flow_ast.drawio.pdf}
-	\centering
-	\caption{Quy trình xây dựng cây cú pháp trừu tượng}
-	\label{img:method_flow_ast}
+  \includegraphics[width=1\columnwidth]{figures/c3/c3_flow_ast.drawio.pdf}
+  \centering
+  \caption{Quy trình xây dựng cây cú pháp trừu tượng.}
+  \label{img:c3_flow_ast}
 \end{figure}
 
-Quy trình xây dựng cây cú pháp trừu tượng bao gồm ba bước được thể hiện trong
-Hình 3.2, chi tiết các bước được tiến hành như sau:
+Quy trình xây dựng cây cú pháp trừu tượng bao gồm ba bước được thể hiện trong Hình 3.2, chi tiết các bước được tiến hành như sau.
 
 \begin{enumerate}
-  \item Từ thư mục của dự án, lọc lấy các tệp mã nguồn Rust (các tệp có đuôi là .rs)
-  \item Với mỗi tệp mã nguồn, sử dụng thư viện syn để phân tích thành cây cú pháp trừu tượng (AST) ứng với tệp đó.
-  \item Chuyển đổi cây cú phá p trừu tượng thu được sang dạng cây tự định nghĩa. Về bản chất dạng cây tự định nghĩa này hoàn toàn giống với dạng cây gốc, tuy nhiên cây chỉ lưu các thông tin cần thiết cũng như bổ sung thêm một số thông tin để xác định nút cha, chữ ký nút và một số thông tin khác để phục vụ pha phân tích tiếp theo.
+  \item Từ thư mục của dự án, lọc lấy các tệp mã nguồn Rust (các tệp có đuôi là .rs).
+  \item Với mỗi tệp mã nguồn, sử dụng thư viện $syn$ \cite{synRust} để phân tích thành cây cú pháp trừu tượng (AST) ứng với tệp đó.
+  $syn$ là 1 thư viện phân tích mã nguồn thành cây cú pháp được sử dụng trong cộng đồng Rust và kể cả tính năng $procedural\ macro$ \cite{rustlangProceduralMacros} của Rust cũng cần thư viện này để cài đặt.
+  Tính tới thời điểm hiện tại Rust không có đặc tả ngôn ngữ chính thức, cộng đồng sang sử dụng $Rust\ Reference$ \cite{rustReference} coi như phiên bản sát nhất so với một đặc tả ngữ chính thức.
+  Thư viện $syn$ xây dựng các cây cú pháp trừu tượng dựa trên $Rust\ Reference$.
+  \item Chuyển đổi cây cú pháp trừu tượng từ ngôn ngữ Rust sang định dạng JSON.
+  Do Joern có thể được sử dụng cho nhiều ngôn ngữ và Joern Frontend không phụ thuộc vào một công cụ Language Parser của một ngôn ngữ nhất định, do vậy cần có định dạng dữ liệu trung gian để chuyển đổi cây AST của Language Parser sang ngôn ngữ Scala của Joern Frontend. Các kiểu dữ liệu trung gian phổ biến như JSON, XML, YAML, trong đó JSON được lựa chọn bởi tính đơn giản, dễ chuyển đổi.
 \end{enumerate}
 
-Trong quá trình xây dựng cây cú pháp trừu tượng, các thành phần mã nguồn trong
-Rust sẽ được phân tích thành dạng cây tương ứng. Dưới đây là một số hình ảnh ví dụ về
-cây cú pháp trừu tượng ứng với các thành phần mã nguồn này.
+Trong quá trình xây dựng cây cú pháp trừu tượng, các thành phần mã nguồn trong Rust sẽ được phân tích thành dạng cây tương ứng.
+Dưới đây là một số hình ảnh ví dụ về cây cú pháp trừu tượng ứng với các thành phần mã nguồn này.
 
-Hình 3.3 biểu diễn một hàm được phân tích thành một nút định nghĩa hàm (Func-
-tionDeclaration), nút này có các thuộc tính là chữ ký (signature), kiểu trả về (returnType)
-và tên đầy đủ (fullName). Nút có các nút con gồm nút định danh (Identifier) biểu diễn
-định danh của hàm, nút kiểu hàm (FunctionType) biểu diễn kiểu dữ liệu của hàm và nút
-thân hàm (BlockStatement).
+\begin{figure}[H]
+  \includegraphics[width=1\columnwidth]{figures/c2/c2_cpg.png}
+  \centering
+  \caption{Ví dụ đồ thị thuộc tính mã nguồn.}
+  \label{img:c3_temp1}
+\end{figure}
 
-Ví dụ về biểu diễn một kiểu cấu trúc được thể hiện trong Hình 3.4. Nút TypeSpeci-
-fication đại diện cho định nghĩa kiểu. Nút Identifier là nút định danh biểu diễn tên kiểu.
-Nút StructType biểu diễn kiểu cấu trúc. Nút FieldList có các nút con là Field biểu diễn các thuộc tính của kiểu này.
+Hình \ref{img:c3_temp1} biểu diễn một hàm được phân tích thành một nút định nghĩa hàm (FunctionDeclaration), nút này có các thuộc tính là chữ ký (signature), kiểu trả về (returnType) và tên đầy đủ (fullName).
+Nút có các nút con gồm nút định danh (Identifier) biểu diễn định danh của hàm, nút kiểu hàm (FunctionType) biểu diễn kiểu dữ liệu của hàm và nút thân hàm (BlockStatement).
+
+\begin{figure}[H]
+  \includegraphics[width=1\columnwidth]{figures/c2/c2_cpg.png}
+  \centering
+  \caption{Ví dụ đồ thị thuộc tính mã nguồn.}
+  \label{img:c3_temp2}
+\end{figure}
+
+Ví dụ về biểu diễn một kiểu cấu trúc được thể hiện trong hình \ref{img:c3_temp2}.
+Nút TypeSpecification đại diện cho định nghĩa kiểu.
+Nút Identifier là nút định danh biểu diễn tên kiểu.
+Nút StructType biểu diễn kiểu cấu trúc.
+Nút FieldList có các nút con là Field biểu diễn các thuộc tính của kiểu này.
+
+Các nút trong cây cú pháp mã nguồn của Go được liệt kê trong bảng \ref{table:c3s_nodeastrust} dưới đây.
 
 \footnotesize
 \begin{longtable}{| p{.07\textwidth} | p{.30\textwidth} | p{.63\textwidth} |}
@@ -198,7 +213,7 @@ Nút StructType biểu diễn kiểu cấu trúc. Nút FieldList có các nút c
 186   & Variant                        & An enum variant.                                                                                               \\ \hline
 187   & VisRestricted                  & A visibility level restricted to some path: pub (self) or pub (super) or pub (crate) or pub (in some::module). \\ \hline
 188   & WhereClause                    & A where clause in a definition: where T: Deserialize<'de>, D: 'static.                                         \\ \hline
-\caption{Các nút trong cú pháp mã nguồn của Rust}
-\label{table:method_nodeastrust}
+\caption{Các nút trong cú pháp mã nguồn của Rust.}
+\label{table:c3s_nodeastrust}
 \end{longtable}
 \medskip

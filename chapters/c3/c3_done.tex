@@ -1,0 +1,104 @@
+\section{Thực nghiệm trên các tính năng đã hỗ trợ}
+
+\subsection{if let}
+
+\begin{listing}[H]
+\begin{minted}[mathescape, breaklines, frame=lines, framesep=2mm, baselinestretch=1.2, fontsize=\footnotesize, linenos]{rust}
+fn basic() {
+    let number: Option<i32> = None;
+    let i_like_letters = false;
+
+    if let Some(i) = number {
+        println!("Matched {:?}!", i);
+    } else if i_like_letters {
+        println!("Didn't match a number. It's a letter!");
+    } else {
+        println!("I don't like numbers and letters");
+    }
+}
+\end{minted}
+\caption{Ví dụ mã nguồn cho}
+\label{code:c3_iflet}
+\end{listing}
+
+\subsection{while let}
+
+\begin{listing}[H]
+\begin{minted}[mathescape, breaklines, frame=lines, framesep=2mm, baselinestretch=1.2, fontsize=\footnotesize, linenos]{rust}
+fn main() {
+  let mut optional = Some(0);
+
+  while let Some(i) = optional {
+      if i > 9 {
+          println!("Greater than 9, quit!");
+          optional = None;
+      } else {
+          println!("`i` is `{:?}`. Try again.", i);
+          optional = Some(i + 1);
+      }
+  }
+}
+\end{minted}
+\caption{Ví dụ mã nguồn cho}
+\label{code:c3_fn}
+\end{listing}
+
+
+
+\subsection{match}
+
+\begin{listing}[H]
+\begin{minted}[mathescape, breaklines, frame=lines, framesep=2mm, baselinestretch=1.2, fontsize=\footnotesize, linenos]{rust}
+enum Color {
+    Red,
+    Blue(u32, u32, u32),
+    Green {
+      red: u32,
+      green: u32,
+      blue: u32,
+    },
+}
+
+fn main() {
+    let color = Color::Blue(0, 0, 255);
+
+    match color {
+        Color::Red =>
+            println!("The color is Red!")
+        Color::Blue(r, g, b) =>
+            println!("Red: {}, green: {}, and blue: {}!", r, g, b)
+        Color::Green {red, green, blue} =>
+            println!(
+              "Red: {}, green: {}, and blue: {}!",
+              red, green, blue
+            ),
+    }
+}
+\end{minted}
+\caption{Ví dụ mã nguồn cho}
+\label{code:c3_letelse}
+\end{listing}
+
+\subsection{lifetime}
+
+\begin{listing}[H]
+\begin{minted}[mathescape, breaklines, frame=lines, framesep=2mm, baselinestretch=1.2, fontsize=\footnotesize, linenos]{rust}
+fn f<'a, 'b, 'c, 'd: 'c>(x: &'a i32, mut y: &'b i32, z: &'c i32)
+where
+    'a: 'b,
+{
+    // ...
+}
+
+fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
+    if x.len() > y.len() {
+        x
+    } else {
+        y
+    }
+}
+\end{minted}
+\caption{Ví dụ mã nguồn cho}
+\label{code:c3_lifetime}
+\end{listing}
+

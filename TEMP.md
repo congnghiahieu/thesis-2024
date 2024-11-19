@@ -206,3 +206,7 @@
 | 13  | CONTAINS       | Quan hệ này kết nối một nút tới hàm/phương thức chứa nó.                                                                                                                                                     |
 | 14  | EVAL_TYPE      | Quan hệ kết nối một nút tới nút kiểu dữ liệu của nút đó.                                                                                                                                                     |
 | 15  | PARAMETER_LINK | Quan hệ kết nối một nút tham số đầu vào với nút tham số đầu ra tương ứng của hàm/phương thức đó.                                                                                                             |
+
+# Prompt
+
+1. seperate each sentences into 1 line

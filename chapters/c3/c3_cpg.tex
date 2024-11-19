@@ -1,15 +1,15 @@
 \section{Xây dựng đồ thị thuộc tính mã nguồn (CPG)}
 
-\textbf{NOTE:} Nói về lý do lựa chọn sử dụng Joern (Joern Backend và Joern Frontend) để xây dựng đồ thị thuộc tính mã nguồn.
-
 Mục này sẽ trình bày quá trình công cụ phân tích ánh xạ cây cú pháp trừu tượng
 thành cây đồ thị thuộc tính mã nguồn.
 
-\subsection{Joern Frontend và Joern Backend}
-
 \subsection{Các loại đỉnh và cạnh của đồ thị thuộc tính mã nguồn CPG}
 
-Đồ thị thuộc tính mã nguồn là dạng cấu trúc dữ liệu được kết hợp giữa cây cú pháp trừu tượng, đồ thị luồng điều khiển và đồ thị phụ thuộc chương trình. Đồ thị này biểu diễn các đỉnh là các nút trong cây cú pháp trừu tượng và các cạnh của đồ thị biểu diễn mối quan hệ giữa chúng. Đồ thị này giúp theo dõi các luồng điều khiển, các phụ thuộc trong mã nguồn.
+Đồ thị thuộc tính mã nguồn là dạng cấu trúc dữ liệu được kết hợp giữa cây cú pháp trừu tượng, đồ thị luồng điều khiển và đồ thị phụ thuộc chương trình.
+Đồ thị này biểu diễn các đỉnh là các nút trong cây cú pháp trừu tượng và các cạnh của đồ thị biểu diễn mối quan hệ giữa chúng.
+Đồ thị này giúp theo dõi các luồng điều khiển, các phụ thuộc trong mã nguồn.
+
+Bảng \ref{table:c3_nodecpgjoern} dưới đây mô tả các đỉnh trong đồ thị thuộc tính mã nguồn
 
 \footnotesize
 \begin{longtable}{| p{.07\textwidth} | p{.30\textwidth} | p{.63\textwidth} |}
@@ -39,9 +39,11 @@ thành cây đồ thị thuộc tính mã nguồn.
 22  & RETURN            & Biểu diễn một chỉ thị trả về (return instruction).                                                                                                              \\ \hline
 23  & TYPE\_REF          & Biểu diễn tham chiếu đến một kiểu dữ liệu.                                                                                                                      \\ \hline
 \caption{Các đỉnh trong đồ thị thuộc tính mã nguồn (CPG)}
-\label{table:method_nodecpgjoern}
+\label{table:c3_nodecpgjoern}
 \end{longtable}
 \medskip
+
+Bảng \ref{table:c3_edgecpgjoern} liệt kê các quan hệ trong đồ thị thuộc tính mã nguồn (CPG)
 
 \footnotesize
 \begin{longtable}{| p{.07\textwidth} | p{.30\textwidth} | p{.63\textwidth} |}
@@ -62,20 +64,20 @@ thành cây đồ thị thuộc tính mã nguồn.
 13 & CONTAINS       & Quan hệ này kết nối một nút tới hàm/phương thức chứa nó.                                                                                                                                                     \\ \hline
 14 & EVAL\_TYPE      & Quan hệ kết nối một nút tới nút kiểu dữ liệu của nút đó.                                                                                                                                                     \\ \hline
 15 & PARAMETER\_LINK & Quan hệ kết nối một nút tham số đầu vào với nút tham số đầu ra tương ứng của hàm/phương thức đó.                                                                                                             \\ \hline
-\caption{Các cạnh trong đồ thị thuộc tín  h mã nguồn (CPG)}
-\label{table:method_edgecpgjoern}
+\caption{Các cạnh trong đồ thị thuộc tính mã nguồn (CPG).}
+\label{table:c3_edgecpgjoern}
 \end{longtable}
 \medskip
 
 \subsection{Chuyển hóa cây cú pháp trừu trượng sang đồ thị thuộc tính mã nguồn}
 
 Với các thông tin có được về cây cú pháp mã nguồn được lưu trong các tệp JSON,
-đồ thị thuộc tính mã nguồn sẽ được dựng lên từ những thông tin đó. Sau đây tôi sẽ mô
-tả việc ánh xạ các thành phần mã nguồn chính của Rust từ cây cú pháp mã nguồn sang đồ
-thị thuộc tính mã nguồn.
+đồ thị thuộc tính mã nguồn sẽ được dựng lên từ những thông tin đó.
+Sau đây tôi sẽ mô tả việc ánh xạ các thành phần mã nguồn chính của Rust từ cây cú pháp mã nguồn sang đồ thị thuộc tính mã nguồn.
 
 \textbf{Ánh xạ tệp (file) và gói (package)}
 
-Hình 3.5 biểu diễn ánh xạ từ mã nguồn sang cây cú pháp trừu tượng và ánh xạ sang đồ thị thuộc tính mã nguồn. Cây cú pháp trừu tượng của Rust không có nút biểu diễn gói, thông tin về gói sẽ được lưu trong nút tệp định nghĩa gói đó. Khi ánh xạ nút tệp sang đồ thị thuộc tính mã nguồn sẽ biểu diễn được nút FILE và NAMESPACE tương ứng.
-
+Hình 3.5 biểu diễn ánh xạ từ mã nguồn sang cây cú pháp trừu tượng và ánh xạ sang đồ thị thuộc tính mã nguồn.
+Cây cú pháp trừu tượng của Rust không có nút biểu diễn gói, thông tin về gói sẽ được lưu trong nút tệp định nghĩa gói đó.
+Khi ánh xạ nút tệp sang đồ thị thuộc tính mã nguồn sẽ biểu diễn được nút FILE và NAMESPACE tương ứng.
 Nút NAMESPACE\_BLOCK biểu diễn thân của gói, nút này đóng vai trò làm nút cha của các định nghĩa bên trong thân của gói.
