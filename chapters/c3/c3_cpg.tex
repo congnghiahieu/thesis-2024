@@ -12,12 +12,12 @@ thành cây đồ thị thuộc tính mã nguồn.
 Bảng \ref{table:c3_nodecpgjoern} dưới đây mô tả các đỉnh trong đồ thị thuộc tính mã nguồn
 
 \footnotesize
-\begin{longtable}{| p{.07\textwidth} | p{.30\textwidth} | p{.63\textwidth} |}
+\begin{longtable}{| p{.06\textwidth} | p{.31\textwidth} | p{.63\textwidth} |}
 \hline
 \textbf{STT} & \textbf{Tên nút} & \textbf{Mô tả} \\ \hline
 1   & META\_DATA         & Nút này chứa siêu dữ liệu (metadata) của đồ thị. Một đồ thị CPG phải có và chỉ có duy nhất một nút META\_DATA.                                                   \\ \hline
 2   & FILE              & Nút biểu diễn một tệp mã nguồn. Với mỗi tệp tin trong mã nguồn, đồ thị sẽ có chính xác một nút FILE để biểu diễn tệp mã nguồn đó.                               \\ \hline
-3   & NAMESPACE         & Nút này biểu diễn một không gian tên (namespace) hoặc một gói (package), đối với Go, nút này biểu diễn các gói trong mã nguồn.                                  \\ \hline
+3   & NAMESPACE         & Nút này biểu diễn một không gian tên (namespace) hoặc một gói (package), đối với Rust, nút này biểu diễn các gói trong mã nguồn.                                  \\ \hline
 4   & NAMESPACE\_BLOCK   & Nút này biểu diễn một tham chiếu đến không gian tên (namespace) tương ứng. Nó chứa các khối mã nguồn được định nghĩa dưới không gian tên (namespace) tương ứng. \\ \hline
 5   & METHOD            & Biểu diễn các hàm, phương thức hoặc biểu thức lambda.                                                                                                           \\ \hline
 6   & PARAMETER\_IN      & Nút đại diện cho một tham số đầu vào của hàm.                                                                                                                   \\ \hline
@@ -46,7 +46,7 @@ Bảng \ref{table:c3_nodecpgjoern} dưới đây mô tả các đỉnh trong đ�
 Bảng \ref{table:c3_edgecpgjoern} liệt kê các quan hệ trong đồ thị thuộc tính mã nguồn (CPG)
 
 \footnotesize
-\begin{longtable}{| p{.07\textwidth} | p{.30\textwidth} | p{.63\textwidth} |}
+\begin{longtable}{| p{.06\textwidth} | p{.31\textwidth} | p{.63\textwidth} |}
 \hline
 \textbf{STT} & \textbf{Tên nút} & \textbf{Mô tả} \\ \hline
 1  & SOURCE\_FILE    & Quan hệ biểu diễn một nút là tệp gốc của một nút khác. Quan hệ cha con (biểu diễn quan hệ trong cây cú pháp mã nguồn (AST)).                                                                                 \\ \hline

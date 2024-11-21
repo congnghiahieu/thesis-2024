@@ -2,8 +2,6 @@
 
 \subsection{Đặc tả đồ thị thuộc tính mã nguồn của Joern}
 
-\textbf{NOTE:} Thêm ý đặc tả CPG Joern ban đầu được viết cho ngôn ngữ C, sau đó mở rộng cho các ngôn ngữ khác như Java, PHP, ... Tuy nhiên đa phần các ngôn ngữ này đều là ngôn ngữ có cú pháp C-like và chủ yếu được code dưới OOP. Do vậy đối với ngôn ngữ có sự đan xen của các tính năng Functional Programming, thì bản đặc tả này tỏ ra có sự hạn chế. Vẽ biểu đồ luồng hoạt động của Joern Frontend, Joern Backend, Joern Backend cung cấp lợi thế gì (tính tái sử dụng)
-
 Đồ thị thuộc tính mã nguồn đã được nghiên cứu rộng rãi, có rất nhiều phiên bản cài đặt được xây dựng dành cho các mục đích khác nhau \cite{yamaguchi2014modeling, xiaomeng2018cpgva, kuchler2022representing, githubGitHubWimkeirgraft, githubGitHubPlumeossplume, joernJoernHunteraposs, fraunhoferaisecHomeCode, banse2021cloud, weiss2022language, keirsgieter2020graft}.
 Tuy nhiên có một phiên bản mã nguồn mở được do chính tác giả của đồ thị thuộc tính mã nguồn, Fabian Yamaguchi, đích thân phát triển và duy trì có tên Joern \cite{joernJoernHunteraposs}.
 
@@ -46,6 +44,13 @@ Các thành phần cấu thành đồ thị thuộc tính mã nguồn bao gồm:
 Tóm lại, đồ thị thuộc tính mã nguồn là các đồ thị có hướng, được gán nhãn cạnh, và chứa các thuộc tính, và chúng tôi khẳng định rằng mỗi nút mang ít nhất một thuộc tính chỉ ra loại của nó.
 Điều này giúp cho việc phân tích mã nguồn trở nên dễ dàng và hiệu quả hơn, đồng thời mở ra nhiều khả năng cho việc tìm kiếm và phát hiện các mẫu lập trình trong các cơ sở mã nguồn lớn.
 
+\begin{itemize}
+  \item Đặc tả CPG của Joern được thiết kết chủ yếu cho ngôn ngữ C/C++ và Java, đưa ra các chuẩn chung như (if else, swtich case, while, for, ...) mà nhiều ngôn ngữ khác có điểm tương đồng như Python, Go, TypeScript, ... có thể tuân thủ.
+  \item Tuy nhiên chuẩn chung này không thể đáp ứng được nhu cầu của tất cả các ngôn ngữ. Joern tập trung cho 2 ngôn ngữ lớn là C/C++ và Java do vậy sẽ đặc tả có sẵn (hiện có) sẽ phù hợp với các ngôn ngữ có cú pháp C-like và hướng đối tượng (OOP)
+  \item Trong khi đó Rust là một ngôn ngữ lập trình mới, có cú pháp dựa trên C-Like nhưng vẫn có đôi chút sự khác biệt vì đây là ngôn ngữ hiện đại, hỗ trợ đan xen cả hướng đối tượng và hướng hàm. Đặc biệt với tính hướng hàm, Rust có nhiều cú pháp mới mà Joern chưa hỗ trợ, hay những biểu thức, mệnh đề trong C/C++ hay Java là không hợp lệ nhưng trong Rust thì hoàn toàn có thể
+  \item Nhìn chung bản đặc tả CPG của Joern cung cấp 1 baseline bao phủ các tính năng phổ biến mà ngôn ngữ lập trình nào cũng có (cùng ý nghĩa nhưng có thể sử dụng cú pháp, keyword khác nhau) như $if\ else$, ... nhưng không thể đáp ứng được tất cả các ngôn ngữ lập trình hiện đại. Do vậy đối với từng ngôn ngữ riêng biệt vẫn phải bổ sung thêm các đặc tả mới cho phù hợp với từng ngôn ngữ, đặc biệt là Rust có cơ chế quản lý bộ nhớ an toàn thể hiện qua các tính năng $ownership$, $borrowing$, $lifetime$ mà Joern chưa hỗ trợ, và cả tính năng hướng hàm
+\end{itemize}
+
 \textbf{Joern Backend, Joern Frontend}
 
 \begin{figure}[H]
@@ -55,35 +60,14 @@ Tóm lại, đồ thị thuộc tính mã nguồn là các đồ thị có hư�
   \label{img:c2_frontend_backend}
 \end{figure}
 
+\begin{itemize}
+  \item Ngoài phần đặc tả CPG dùng chung cho nhiều ngôn ngữ trên lý thuyết, Joern còn cung cấp 1 kiến trúc cài đặt thực tế có tính mở rộng cao, tương ứng với đặc tả CPG. Joern hiển tại hỗ trợ rất nhiều ngôn ngữ C/C++, Java, Python, Go, TypeScript, ... Để có thể hỗ trợ được nhiều ngôn ngữ như vậy thì Joern sử dụng 2 thành phần chính là Joern Frontend và Joern Backend, đây là 2 thành phần có tính tái sử dụng cao, không phụ thuộc vào ngôn ngữ
+  \item Luồng hoạt động của kiến trúc Joern như sau. Mỗi ngôn ngữ có tập các cú pháp khác nhau, tương ứng cũng sẽ có định nghĩa về cây AST khác nhau, đây là phần người dùng muốn mở rộng Joern cho 1 ngôn ngữ mới cần phải tự đảm nhiệm. Mã nguồn của 1 ngôn ngữ sau được được công cụ Language Parser chuyển thành cây $AST*$. Cây $AST*$ ở đây không nhất thiết chỉ dừng ở đúng mức độ thông tin là 1 cây AST mà có thể bổ sung thêm thông tin khác như kiểu dữ liệu, vị trí trong mã nguồn, ... nhưng tối thiểu đảm bảo đủ thông tin là 1 cây AST tối thiểu. Ví dụ như các ngôn ngữ có sự phát triển lâu dài như C/C++ hay Java sử dụng CDT/ JDT để làm Language Parser. CDT/JDT là công cụ rất mạnh, được dùng trong các IDE nên số lượng thông tin rất đáng kể. Còn những ngôn ngữ hiện đại như Rust, Go thì các công cụ như này chưa được phát triển toàn diện nên thông tin của cây $AST*$ chưa được đầy đủ. \item Sau khi có cây $AST*$, cây này sẽ được biến đổi thành đồ thị thuộc tính mã nguồn (CPG) theo định nghĩa đặc tả CPG. Đây là công việc của Joern Frontend. Joern Frontend sẽ đọc cây $AST*$ và chuyển đổi thành đồ thị thuộc tính mã nguồn (CPG) theo đặc tả CPG. Joern Frontend đối với từng ngôn ngữ cũng là công việc cần thực hiện, do công việc thực tế cần làm là chuyển đổi cấu trúc dữ liệu của cây $AST*$ sang cấu trúc dữ liệu tương ứng của định nghĩa $CPG$. Joern Frontend đóng vai trò chuyển đổi cây $AST*$ sang cây $CPG$, $CPG$ bổ sung thông tin thành đồ thị $CPG$
+  \item Sau khi được Joern Frontend xử lý, ta sẽ có được đồ thị $CPG*$ nhưng đồ thị $CPG*$ này là đồ thị không hoàn chỉnh. Để hoàn thiện được đồ thị $CPG$ thì ta cần phải sử dụng đến Joern Backend. Ở bước Joern Frontend, ta thực hiện bước chuyển đổi 1 node AST thành 1 node CPG, tạo thêm các cạnh để thể hiện các mối quan hệ giữa các node, tuy nhiên các cạnh này chưa thể hiện được đầy đủ đồ thị CPG bao gồm AST, CFG, PDG. Với cấu trúc dữ liệu CPG của Joern, ta chỉ cần định nghĩa 1 phần số cạnh, node cần thiết của đồ thị CPG, phần còn lại sẽ được Joern Backend thực hiện các thuật toán logic để có thể tự động suy diễn các mối quan hệ còn lại. Ví dụ trong cây AST có nút thể hiện vòng lặp $for$, ta chuyển thành nút $for$ của CPG kèm thêm 1 số thông tin như mệnh đề điều kiện, biến chỉ số vòng lặp (index). Joern Backend nắm được thông tin này thì có thể tự động suy diễn ra các mối quan hệ như $REACHING_DEF$ (du pair), $DOMINATOR$, $POST\ DOMINATOR$, $CONTROL\ DEPENDENCY$, $DATA\ DEPENDENCY$, $CONTROL\ FLOW$, $DATA\ FLOW$, ... từ đó tạo ra đồ thị CPG hoàn chỉnh. Chú ý CPG được cấu tạo từ 3 thành phần AST, CPG, PDG. Trong Joern thông tin của 3 thành phần này được chia thành 3 lớp, 1 đồ thị CPG được cấu tạo từ nhiều lớp trồng lên nhau, có thể sinh ra CPG chỉ có lớp AST, hoặc AST + CPG, hoặc AST + CPG + PDG. Hoàn toàn có thể mở rộng viết thêm các lớp khác nếu cần thiết, ví dụ như bổ sung 1 lớp thông tin về bảo mật, an toàn bộ nhớ, hay cụ thể trong Rust là lớp chứa thông tin $ownership$, $borrowing$, $lifetime$
+  \item Sau khi toàn bộ thông tin của CPG được hoàn chỉnh dựa trên các lớp, dữ liệu CPG được xuất ra thành file binary, cấu trúc dữ liệu đồ thị. Dữ liệu này có thể được sử dụng để truy vấn thông qua các engine cơ sở dữ liệu đồ thị như neo4j, OrientDB, JanusGraph, ... hoặc có thể được sử dụng để phân tích, tìm kiếm thông qua các công cụ khác như Joern CLI, Joern Scan, Joern Slice, Joern Flow, Joern Export, Joern Vectors
+\end{itemize}
+
 \subsection{Bộ công cụ của Joern}
-
-\textbf{NOTE:} Nhấn mạnh Joern hiện tại chưa hỗ trợ Rust, chủ yếu hỗ trợ cho C/C++, Java là cực mạnh.
-Vẽ biểu đồ đầu vào cpg.bin cho các công cụ khác của joern như
-
-% JoernExport:
-% https://docs.joern.io/export/
-% Dump intermediate graph representations (or entire graph) of code in a given export format
-% Joern is used in academic research as a source for intermediate graph representations of code, particularly in machine learning and vulnerability discovery applications [e.g., 1,2,3,4,5]. To support this use-case, Joern provides both plotting capabilities in the interactive console as well as the joern-export command line utility.
-% You can also export the entire graph into a neo4j csv format (along with instructions on how to import it into a running neo4j instance), graphml, graphson or graphviz dot:
-
-% JoernFlow: Find flows
-
-% JoernParse: parse ra output ngay lập tức hoặc lưu vào cơ sở dữ liệu, không traverl
-
-% JoernCLI: REPL for Joern
-
-% JoernSlice: Extract various slices from the CPG.
-% https://docs.joern.io/cpg-slicing/
-% joern-slice is the entrypoint for Joern’s CPG slicing mechanism and specifies ways to extract useful subsets of information from the CPG. Two modes are available:
-% Data-flow: This is a pretty standard backwards data-flow slicing command that starts at call arguments and slices backwards to create a graph of slices.
-% Usages: This targets locals and parameters and traces what calls they make and in which calls they are used. This is useful for describing how a variable interacts in a procedure.
-
-% JoernScan: Creates a code property graph and scans it with queries from installed bundles.
-% https://docs.joern.io/scan/
-% Joern Scan ships with a default set of queries, the Joern Query Database. This set of queries is constantly updated, and contributions are highly encouraged https://github.com/joernio/joern/tree/master/querydb.
-% QueryDB
-
-% JoernVectors: Extract vector representations of code from CPG
 
 \begin{figure}[H]
   \includegraphics[width=1\columnwidth]{figures/c2/c2_joern_tools.drawio.pdf}
@@ -91,6 +75,24 @@ Vẽ biểu đồ đầu vào cpg.bin cho các công cụ khác của joern như
   \caption{Các công cụ xung quanh Joern.}
   \label{img:c2_joern_tools}
 \end{figure}
+
+\begin{itemize}
+  \item Không chỉ cung cấp kiến trúc để có thể biến đổi mã nguồn từ một ngôn ngữ sang đồ thị thuộc tính mã nguồn. Joern cần cung cấp 1 loạt các cung cấp để khai thác thông tin từ đồ thị thuộc tính mã nguồn sinh ra. Các công cụ này bao gồm: Joern Scan, Joern Slice, Joern Flow, Joern Export, Joern Vectors
+  \item \textbf{JoernExport}: https://docs.joern.io/export/
+  Dump intermediate graph representations (or entire graph) of code in a given export format
+  Joern is used in academic research as a source for intermediate graph representations of code, particularly in machine learning and vulnerability discovery applications [e.g., 1,2,3,4,5]. To support this use-case, Joern provides both plotting capabilities in the interactive console as well as the joern-export command line utility.
+  You can also export the entire graph into a neo4j csv format (along with instructions on how to import it into a running neo4j instance), graphml, graphson or graphviz dot:
+  \item \textbf{JoernParse}: parse ra output ngay lập tức hoặc lưu vào cơ sở dữ liệu, không traverl
+  \item \textbf{JoernSlice}: Extract various slices from the CPG.
+  https://docs.joern.io/cpg-slicing/
+  joern-slice is the entrypoint for Joern’s CPG slicing mechanism and specifies ways to extract useful subsets of information from the CPG. Two modes are available:
+  Data-flow: This is a pretty standard backwards data-flow slicing command that starts at call arguments and slices backwards to create a graph of slices.
+  Usages: This targets locals and parameters and traces what calls they make and in which calls they are used. This is useful for describing how a variable interacts in a procedure.
+  \item \textbf{JoernScan}: Creates a code property graph and scans it with queries from installed bundles. QueryDB
+  https://docs.joern.io/scan/
+  Joern Scan ships with a default set of queries, the Joern Query Database. This set of queries is constantly updated, and contributions are highly encouraged https://github.com/joernio/joern/tree/master/querydb.
+  \item \textbf{JoernVectors}: Extract vector representations of code from CPG, JoernFlow: Find flows, JoernCLI: REPL for Joern
+\end{itemize}
 
 Joern là một nền tảng mạnh mẽ dành cho việc phân tích mã nguồn, bytecode và mã nhị phân.
 Công cụ này tạo ra các đồ thị thuộc tính mã nguồn (code property graphs), một cách biểu diễn đồ thị của mã giúp cho việc phân tích mã nguồn đa ngôn ngữ trở nên dễ dàng hơn.

@@ -6,7 +6,7 @@
 
 Rust lần đầu tiên được giới thiệu vào năm 2006 bởi Mozilla, với phiên bản 1.0 được công bố vào năm 2015 và nhanh chóng được đem vào sử dụng trong nhiều dự án.
 Với điểm mạnh tập trung vào sự an toàn và hiệu suất cao, có thể so sánh với C/C++, là những lý do chính cho sự thành công của Rust \cite{je2020scientists,stackoverflowStackOverflow}.
-Rust là ngôn ngữ định kiểu mạnh tương tự như C/C++ hay Java và áp đặt các cơ chế đảm bảo về an toàn bộ nhớ, bổ sung cho sự an toàn của ngôn ngữ này \cite{rustlangRustProgramming}.
+Rust là ngôn ngữ định kiểu mạnh tương tự như C/C++ hay Java và áp đặt các cơ chế đảm bảo về an toàn bộ nhớ \cite{rustlangRustProgramming}.
 Một số tính năng an toàn có thể kể đến như đảm bảo chỉ có một tham chiếu có thể ghi (mutable) tới một đối tượng hoặc nhiều tham chiếu chỉ đọc, nhưng không thể cỏ ghi và đọc cùng 1 lúc.
 Cơ chế quản lý bộ nhớ $ownership$ được áp dụng vào thời điểm biên dịch, do đó loại bỏ được một lớp lớn các lỗi bộ nhớ mà C/C++ gặp phải.
 Các lỗi về an toàn bộ nhớ cổ điển có thể được tránh bởi việc sử dụng Rust bao gồm tràn bộ đệm (stack-overflow), sử dụng sau khi giải phóng bộ nhớ (use-after-free) và tham chiếu null \cite{googleblogMemorySafe}.
@@ -50,7 +50,7 @@ fn aliasing_xor_mutability() {
   mut_ref.push(4);
 }
 \end{minted}
-\caption{Ví dụ các khái niệm an toàn trong Rust: (1) ownership, (2) borrowing, and (3) Exclusive mutability.}
+\caption{Ví dụ các khái niệm an toàn trong Rust: (1) ownership, (2) borrowing, (3) Exclusive mutability, (4) Lifetime, (5) Thread safe.}
 \label{code:c2_safe_rust}
 \end{listing}
 Rust là một ngôn ngữ an toàn về kiểu,

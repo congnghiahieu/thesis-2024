@@ -210,3 +210,21 @@
 # Prompt
 
 1. seperate each sentences into 1 line
+
+# Representing LLVM-IR in a Code Property Graph
+
+# Modeling and Discovering Vulnerabilities with Code Property Graphs
+
+# A Closer Look at the Security Risks in the Rust Ecosystem
+
+# YUGA: Automatically Detecting Lifetime Annotation Bugs in the Rust Language
+
+# RUDRA: Finding Memory Safety Bugs in Rust at the Ecosystem Scale
+
+# RustBelt: Securing the Foundations of the Rust Programming Language
+
+# Stacked Borrows: An Aliasing Model for Rust (Miri)
+
+# Rust for Embedded Systems: Current State and Open Problems (Extended Report)
+
+# Bringing Rust to Safety-Critical Systems in Space

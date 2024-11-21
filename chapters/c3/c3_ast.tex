@@ -7,7 +7,7 @@
   \label{img:c3_flow_ast}
 \end{figure}
 
-Quy trình xây dựng cây cú pháp trừu tượng bao gồm ba bước được thể hiện trong Hình 3.2, chi tiết các bước được tiến hành như sau.
+Quy trình xây dựng cây cú pháp trừu tượng bao gồm ba bước được thể hiện trong Hình \ref{img:c3_flow_ast}, chi tiết các bước được tiến hành như sau.
 
 \begin{enumerate}
   \item Từ thư mục của dự án, lọc lấy các tệp mã nguồn Rust (các tệp có đuôi là .rs).
@@ -16,7 +16,7 @@ Quy trình xây dựng cây cú pháp trừu tượng bao gồm ba bước đư�
   Tính tới thời điểm hiện tại Rust không có đặc tả ngôn ngữ chính thức, cộng đồng sang sử dụng $Rust\ Reference$ \cite{rustReference} coi như phiên bản sát nhất so với một đặc tả ngữ chính thức.
   Thư viện $syn$ xây dựng các cây cú pháp trừu tượng dựa trên $Rust\ Reference$.
   \item Chuyển đổi cây cú pháp trừu tượng từ ngôn ngữ Rust sang định dạng JSON.
-  Do Joern có thể được sử dụng cho nhiều ngôn ngữ và Joern Frontend không phụ thuộc vào một công cụ Language Parser của một ngôn ngữ nhất định, do vậy cần có định dạng dữ liệu trung gian để chuyển đổi cây AST của Language Parser sang ngôn ngữ Scala của Joern Frontend. Các kiểu dữ liệu trung gian phổ biến như JSON, XML, YAML, trong đó JSON được lựa chọn bởi tính đơn giản, dễ chuyển đổi.
+  Do Joern có thể được sử dụng cho nhiều ngôn ngữ và Joern Frontend không phụ thuộc vào công cụ Language Parser của một ngôn ngữ nhất định, do vậy cần có định dạng dữ liệu trung gian để chuyển đổi cây AST của Language Parser sang ngôn ngữ Scala của Joern Frontend. Các kiểu dữ liệu trung gian phổ biến như JSON, XML, YAML, trong đó JSON được lựa chọn bởi tính đơn giản, dễ chuyển đổi.
 \end{enumerate}
 
 Trong quá trình xây dựng cây cú pháp trừu tượng, các thành phần mã nguồn trong Rust sẽ được phân tích thành dạng cây tương ứng.
@@ -45,10 +45,10 @@ Nút Identifier là nút định danh biểu diễn tên kiểu.
 Nút StructType biểu diễn kiểu cấu trúc.
 Nút FieldList có các nút con là Field biểu diễn các thuộc tính của kiểu này.
 
-Các nút trong cây cú pháp mã nguồn của Go được liệt kê trong bảng \ref{table:c3s_nodeastrust} dưới đây.
+Các nút trong cây cú pháp mã nguồn của Rust được liệt kê trong bảng \ref{table:c3s_nodeastrust}.
 
 \footnotesize
-\begin{longtable}{| p{.07\textwidth} | p{.30\textwidth} | p{.63\textwidth} |}
+\begin{longtable}{| p{.06\textwidth} | p{.31\textwidth} | p{.63\textwidth} |}
 \hline
 \textbf{STT} & \textbf{Tên nút} & \textbf{Mô tả} \\ \hline
 1     & Abi                            & The binary interface of a function: `extern "C"`.                                                              \\ \hline
