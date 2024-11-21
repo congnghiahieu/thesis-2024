@@ -12,4 +12,7 @@
 **/*.snm
 **/*.lol
 **/*.synctex.gz
+**/*.pdf
+**/*.drawio
+!**/*.drawio.pdf
 _minted
