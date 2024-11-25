@@ -213,18 +213,129 @@
 
 # Representing LLVM-IR in a Code Property Graph
 
+# A Language-Independent Analysis Platform for Source Code
+
 # Modeling and Discovering Vulnerabilities with Code Property Graphs
 
 # A Closer Look at the Security Risks in the Rust Ecosystem
 
+- We find that memory safety and concurrency issues account for nearly two thirds of the vulnerabilities in the Rust ecosystem
+
+## RQ1: What are the characteristics of the vulnerabilities in the Rust ecosystem?
+
+- Our study identified 17 types of vulnerabilities disclosed in the Rust ecosystem, among which memory safety and concurrency issues account for two-thirds of the categorized vulnerabilities and demonstrate the fastest growth rates over time.
+
+## RQ2: What are the characteristics of the vulnerable packages in the Rust ecosystem?
+
+- The memory management package category has the greatest number of vulnerabilities per package among different Rust package categories, and tends to have more memory access, memory management, and synchronization vulnerabilities as compared to other package categories
+
+- In the vulnerable packages, vulnerable code has statistically significantly higher ratios of unsafe functions and unsafe blocks compared to complete code, implying the potential higher security risks in unsafe functions and unsafe blocks.
+
+## 3.3 Characterizing Vulnerabilities, Vulnerable Packages, and Fixes
+
+- The vulnerabilities from the four sources use two classification schemes, i.e., Common Weakness Enumeration (CWE) and RustSec categorization.
+
+- As shown in Table 1, we identified 17 vulnerability types in our dataset
+
+| Vulnerability Type        | RustSec Category     |
+| ------------------------- | -------------------- |
+| Memory Access             | memory-exposure      |
+| Memory Management         | memory-corruption    |
+| Synchronization           | thread-safety        |
+| Tainted Input             | format-injection     |
+| Resource Management       | denial-of-service    |
+| Exception Management      | -                    |
+| Cryptography              | cryptography         |
+| Risky Values              | -                    |
+| Path Resolution           | file-disclosure      |
+| Information Leak          | -                    |
+| Privilege                 | privilege-escalation |
+| Predictability            | -                    |
+| Authentication            | -                    |
+| API                       | -                    |
+| Access Control            | -                    |
+| Failure to Release Memory | -                    |
+| Other                     | code-execution       |
+
+## 4 RESULTS
+
+### 4.1 RQ1: Vulnerabilities in the Rust Ecosystem
+
+- Types of vulnerabilities. We collected a total of 433 unique vulnerabilities in the Rust ecosystem, out of which 73 have not been categorized, leaving 360 vulnerabilities that are categorized with a median of 1 vulnerability type (min: 1, max: 4, mean: 1.65, std: 0.76). Table 3 presents the overall distribution of vulnerabilities across 17 vulnerability types. Memory safety and concurrency issues account for 63.6% of the 360 categorized vulnerabilities. Memory safety issues involve memory access (39.17%) and memory management (40.00%) vulnerability types, accounting for 59.7% of the categorized vulnerabilities. The memory access vulnerabilities usually arise from buffer or pointer access problems, e.g., buffer overflow, use after free, and null pointer deference. We take the RUSTSEC-2021-0128 in the rusqlite package as an example of memory access vulnerability. In the vulnerable code of the rusqlite package affected by RUSTSEC-2021-0128, the lifetime bounds on several closure-accepting functions are so loose that allow the access to dropped objects on the stack thus cause use after free error. The memory management vulnerabilities are due to problems in memory allocation or deallocation, e.g., double free. RUSTSEC-2021-0033 in the stack_dst package is an example of memory management vulnerabilities. Specifically, the push_cloned function in the vulnerable code of stack_dst package deallocates uninitialized memory thus cause double free error. Concurrency issues involve synchronization vulnerabilities, which rank the third in the frequency of occurrence across different types of vulnerabilities (20.56%). The Synchronization vulnerabilities occur when multiple processes or threads share resources, including race condition and misuse of locks. For instance, the unsafe Send trait implementation in the atom package involved in RUSTSEC-2020-0044 causes data race error.
+
+- Summary for RQ1: The top three vulnerability types in the Rust ecosystem are memory access, memory management, and synchronization, accounting for 63.6% of categorized vulnerabilities and exhibiting the fastest growth rates
+
+### 4.3 RQ3: Vulnerability Fixes in the Rust Ecosystem
+
+- Observation 1: Developers tend to add safe functions, or add lines in safe functions to
+  fix vulnerable safe functions.
+
+- Observation 2: Developers tend to remove unsafe blocks to fix vulnerable unsafe blocks.
+
+- Observation 3: Developers tend to modify unsafe trait implementations to fix vulnerable
+  unsafe functions.
+
 # YUGA: Automatically Detecting Lifetime Annotation Bugs in the Rust Language
+
+## 3.2 Algorithm Design
+
+- Step-I. YUGA extracts lifetimes from each type of a function signature.
+- Step-II. Next, YUGA uses these lifetimes to check for the LA bug patterns identified in Section 3.1 and marks potential buggy functions.
+- Step-III. The potential buggy functions are then sent to an alias analyzer to check whether values are actually transferred between the locations with LAs
+- Step-IV. Finally, YUGA filters out some common patterns of false positives that arise due to intra-procedural alias analysis.
+
+## 4.1 Implementation
+
+- When Rust code is compiled, it goes through several intermediate representations (IRs), two of which are the High level IR (HIR) and the Mid-level IR (MIR). The HIR is a tree representation of the program that is similar to an Abstract Syntax Tree (AST). The MIR represents each function as a control-flow graph of basic blocks, with each basic block consisting of a number of statements. MIR boils the different kind of statements occurring in a program down to a core set of statement types like assignments, memory allocation, and memory de-allocation. We use a hybrid approach that combines information from the HIR and the MIR. We use the HIR to get struct definitions and function signatures, and use the MIR to perform alias analysis
+
+## 5.1 RQ1: Effectiveness of our Tool
+
+## 5.3 RQ3: Comparison with existing tools
+
+- Rudra is a static analysis tool that identifies three types of potential memory and thread safety violations - panic safety, higher order safety invariant, and Send/Sync variance. It is not explicitly designed to detect LA bugs;
+
+- MirChecker is a static analysis tool for the Rust MIR based on the theory of Abstract Interpretation. It forms a control flow graph (CFG) of the program, defines a transfer function for each value and statement, and propagates these values across the CFG to reach a fixed point. It then uses these values to detect potential vulnerabilities in Rust code.
+
+- Miri is an interpreter for the Rust MIR. It emulates the execution of each line of code using a virtual address space, and can detect memory leaks, out of bounds accesses, and other potential vulnerabilities. This is a dynamic tool, and deals with actual vulnerabilities that arise when Rust code is run. In contrast, YUGA deals with potential vulnerabilities that could arise when a function is called in a certain context. So we expect Miri to detect LA bugs if and only if the exploit code is also provided
+
+## 7 RELATED WORK
+
+- Dynamic testing of Rust code: Miri [16] is an interpreter to detect invalid memory accesses or memory leaks (see Section 5.3). Stacked Borrows[26] (incorporated into Miri) develops a “stack” model to reason about borrows without explicitly using lifetimes.
+
+- Static analysis for detecting bugs in Rust: MirChecker [13] and SafeDrop [14] are static analyzers on the Rust MIR that detect certain memory safety errors. However, much like dynamic approaches, these approaches tend to have high false negatives. Rudra [12] identifies three categories of bugs arising from unsafe code, and scans the entire Rust crate ecosystem for these bug patterns. Rudra is the closest work to ours in the sense that it uses static analysis to identify potential memory safety violations. However, Rudra can handle only three specific kinds of errors, and cannot detect memory safety bugs caused by incorrect lifetime annotations
+
+- There have also been attempts to model the semantics of unsafe Rust. RustBelt [34] develops a comprehensive formal semantics based on lifetimes for a realistic subset of Rust including unsafe code. However, this cannot scale to larger codebases and crates. Verifying the safety of a given library with RustBelt involves writing proofs with the Coq proof assistant [35], which requires considerable expertise and effort. In contrast, our approach aims to be a lightweight automatic error detector that can aid developers.
 
 # RUDRA: Finding Memory Safety Bugs in Rust at the Ecosystem Scale
 
-# RustBelt: Securing the Foundations of the Rust Programming Language
+## 2.3 Defining Memory Safety Bugs in Rust
+
+- Các definition, example là các pattern, luật
+
+## 4 Design
+
+- Generic type awareness. RUDRA should be able to reason about generic types without knowing the concrete forms of their type parameters. This means that low-level analysis (e.g., using LLVM IR) is not an option. Low-level representations only contain a specific instantiation of generic code, and Rust’s high-level abstractions such as trait variance do not exist at these levels. Instead, RUDRA implements algorithms by combining two internal IRs of the Rust compiler, namely, HIR and MIR.
+
+- Scalability. As our primary goal is to check all the packages in the Rust package registry, it is critical to strike a balance between the precision of analysis and the execution time—expensive whole-program analyses and dynamic analyses like fuzzing are not feasible options for RUDRA. In addition, RUDRA aims to be a push-button solution that requires no manual annotation and effort from the original package developers.
+
+## 4.1 Hybrid Analysis with HIR and MIR
+
+## 6.2 Comparison with Other Approaches
+
+## 8 Related work
 
 # Stacked Borrows: An Aliasing Model for Rust (Miri)
 
-# Rust for Embedded Systems: Current State and Open Problems (Extended Report)
+# RustBelt: Securing the Foundations of the Rust Programming Language
 
 # Bringing Rust to Safety-Critical Systems in Space
+
+- Rust was first introduced in 2006 by the Mozilla Foundation with its version 1.0 release announced in 2015
+
+# Rust for Embedded Systems: Current State and Open Problems (Extended Report)
+
+- It is important to use memory-safe languages to prevent such vulnerabilities. Furthermore, recently, the White House released a report [143] requiring future software to be developed in memory-safe languages. Traditional memory safe languages, such as Java, have high overhead and are not suitable for embedded systems. Rust [125] is a memory-safe language that is shown to have comparable performance as native code. Furthermore, Rust can easily interoperate with existing unsafe codebases [63], enabling incremental adoption. Rust team has a special focus on embedded systems [116], and several works [76, 77] demonstrate the feasibility of engineering a complete embedded software stack in Rust. Furthermore, Rust popularity is rising [103], and it is now adopted in Linux kernel [81] and Android [111].
+
+- Tóm tắt việt, anh
+- Danh mục các từ viết tắt
+- Kết luận

@@ -1,30 +1,26 @@
 \begin{center}
-\textbf{\large{Abstract}	}
+\textbf{\large{Abstract}}
 \end{center}
 
 \addcontentsline{toc}{chapter}{Abstract}
 \begin{small}
 
 \textbf{Abstract}:
-
-Rust has become an incredibly prominent and widely-used programming language in recent years.
-Thanks to its outstanding features of ensuring memory safety and superior performance, the source code of thousands of projects worldwide has been rewritten or newly developed using Rust, from embedded systems to modern web applications.
-Rust has been chosen as the development language for enterprise-level projects such as Servo, the web engine of the Mozilla browser, part of the Windows 11 operating system, and many other projects.
-
-These projects demonstrate that Rust is not just a trend but a language with long-term potential for development.
-As Rust becomes more popular, the demand for source code analysis, testing, and security tools is also increasing.
-When major projects switch to using Rust, ensuring that the source code is safe and error-free becomes a challenge.
-However, the current ecosystem and tools for Rust source code analysis are still insufficient.
-Since Rust has only become widely used in recent years, the development of analysis tools is still in its early stages.
-To enhance the reliability of source code, automated software testing methods are receiving widespread attention and are being widely applied in both the research community and software companies.
-One of the methods used in testing is source code analysis or static analysis.
-This process involves analyzing, evaluating the quality of the source code, and identifying programming errors and security vulnerabilities without needing to execute the program.
-
-This thesis presents a method for building a source code analysis tool for the Rust language.
-The tool's input is Rust source code files, and the output is a Code Property Graph (CPG).
-The tool utilizes the Code Property Graph following the specification and existing platform of Joern.
-The output can be stored in a graph database, visualized, queried, manually or automatically analyzed to serve various source code analysis purposes.
-Additionally, this CPG can be applied to machine learning techniques to detect security vulnerabilities such as graph neural networks (GNN).
+Rust has become a prominent and widely used programming language in recent years.
+Thanks to its memory safety guarantees and superior performance, Rust has been adopted by many large projects as a successor to C/C++.
+These projects demonstrate that Rust is not just a trend but a language with long-term potential.
+As major projects transition to Rust, ensuring secure source code and avoiding security vulnerabilities becomes a challenge.
+With its growing popularity and strong adoption, the demand for source code analysis tools is also increasing.
+Rust has only gained its popularity recently, so the development of source code analysis tools is still in its early stages.
+Some studies have been conducted, showing certain practical results and potential.
+However, these studies are still limited in terms of performance, applicability to real-world projects, and integration with other research.
+This thesis develops a source code analysis tool for the Rust programming language with the aim of overcoming these limitations.
+The thesis adopts a static analysis approach based on code property graphs.
+This allows the solution to be applied to large codebases and be more cost-effective compared to other solutions.
+The tool performs analysis at the source code level rather than lower levels to ensure no loss of information regarding memory safety mechanisms.
+Built on the extensible and reusable architecture of Joern, the tool is compatible with many existing analysis tools and research.
+With code property graphs as the output, automated querying and analysis can be performed for various purposes.
+Additionally, code property graphs can be applied to machine learning and reinforcement learning tasks to detect security vulnerabilities in Rust code.
 
 \vspace*{1cm}
 \textbf{Keywords}: Source code analysis, static analysis, Rust programming language

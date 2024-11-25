@@ -1,0 +1,32 @@
+\section{Hạn chế}
+
+\subsection{Macro}
+
+Trong các ngôn ngữ lập trình như C/C++ và Rust có macro hay còn gọi là metaprogramming. Có thể hiểu macro (metaprogramming) là viết code để sinh ra code, tức là viết code Rust để sinh ra các đoạn code Rust còn lại. Macro trong Rust có 2 loại: declarative macro và procedural macro. Declarative macro giống như macro trong C/C++, còn procedural macro giống như inline function, được xử lý ở bước sinh cây AST. Đối C/C++ có preprossor để xử lý Marco trước khi cho vào compiler, đo đó khi mã nguồn sau khi được tiền xử lý thì đã được xử lý toàn bộ Macro. Tuy nhiên, Rust không giống C/C++, Marco của Rust \cite{rustlangMacrosRust} không được xử lý ở bước sinh cây AST mà sẽ được xử lý sau khi sinh cây AST nhưng trước khi đi vào phase Semantic Ananlysis của trình biên dịch. Như đã để cập ở trên, công cụ hiện tại sử dụng thư viện syn để sinh cây AST cho mã nguồn Rust và syn không hỗ trợ xử lý Macro. Do đó tất cả các mã lệnh nằm bên trong macro sẽ không được xử lý, dẫn đến việc không thể sinh cây AST cho đoạn mã lệnh sử dụng macro. Tất cả các đoạn lệnh nằm trong 1 lời gọi macro hiện tại được xem như 1 chuỗi token. Không chỉ vậy macro trong Rust sử dụng DSL riêng, DSL này gần với ngôn ngữ Rust nhưng có sự mở rộng biến đổi để phù hợp với vai trò macro, do đó không thể sinh cây AST cho macro.
+
+Để xử lý trường hợp trên, ta có thể thêm 1 bước tiền xử lý mã nguồn để giải macro như C/C++. Chúng ta sẽ sử dụng đến thư viện cargo-expand, thư viện này có tác dụng đưa đoạn code Rust macro mà lập trình viên nhìn thấy thành đoạn code Rust mà compiler nhìn thấy. Đoạn code sau khi được mở rộng thì sẽ có được các thông tin bị ẩn đi như prelude mặc định của Rust bao gồm các hàm, symbol được built-in trong ngôn ngữ mà người dùng không phải import thủ công, các macro sẽ được xử lý, bao gồm cả declarative và procedural macro. Đối với declarative macro, thì macro built-in của ngôn ngữ như $println!$, $vec!$ hay kể cả declarative macro do người dùng định nghĩa cũng sẽ được giải.
+
+Tuy nhiên, việc xử lý macro trước khi cho vào cây AST sẽ làm cho mã nguồn bị biến đổi so với mã nguồn gốc, đồng thời tăng kích cỡ và độ lớn của mã nguồn. Việc thêm các thông tin ẩn mà lập trình viên không nhìn thấy có thể gây nhầm lẫn cho người đọc mã nguồn. Điều này cũng đồng nghĩa với việc việc sinh cây AST cho mã nguồn sau khi xử lý macro sẽ phức tạp hơn, việc này sẽ làm tăng thời gian xử lý và độ phức tạp
+
+\subsection{Module}
+
+Cơ chế module trong Rust tương ứng với namespace trong C++, package trong Java. Module chia nhỏ mã nguồn thành các phần nhỏ hơn, tổ chức và quản lý mã nguồn, giúp tái sử dụng mã nguồn, giúp tránh xung đột tên biến, hàm giữa các module khác nhau.
+Một module trong Rust có thể là một file riêng biệt hoặc một phần của một file khác. Các module có thể được tổ chức thành một hệ thống phân cấp, với các module con được khai báo bên trong các module cha.
+% Có một số file được coi là file đặc biệt trong cấu trúc mã nguồn trong rust.
+% Ví dụ như file mod.rs, đây là file module root của thư mục chứa nó, tất cả các module con trong thư mục đó sẽ được import thông qua module root mod.rs.
+% Ngoài ra còn có file main.rs, lib.rs để đánh dấu điểm đầu vào của chương trình và xác định xem dự án là 1 thư viện hay 1 ứng dụng.
+Rust còn cung cấp cơ chế workspace, cho phép quản lý nhiều dự án nhỏ trong cùng 1 dự án lớn, mỗi dự án là 1 thư mục con trong thư mục workspace.
+Để kiểm soát khả năng truy cập, Rust sử dụng cơ chế visibility. Mặc định các thành phần trong module là private, để làm cho chúng có thể truy cập được từ các module khác, ta sử dụng từ khóa pub.
+Cơ chế path resolution dùng để định danh 1 thành phần cấu trúc từ module khác ta mà ta có thể import. Path resolution có thể là đường dẫn tuyệt đối hoặc tương đối. Ví dụ dùng từ khóa $self$ để chỉ tới module hiện tại, dùng từ khóa $super$ để chỉ tới module cha của module hiện tại, $crate$ để chỉ tới module root của dự án.
+Hệ thống module phức tạp của Rust làm tăng đáng kể độ khó việc xử lý quan hệ giữa các module trong cây AST và phân tích ngữ cảnh.
+Việc xử lý các khái niệm như module con, module gốc, visibility, import và path resolution đòi hỏi một cơ chế phân tích tinh vi, do vậy hiện tại công cụ chưa xử lý module
+
+% \subsection{Path}
+
+% \begin{itemize}
+%     \item Path có thể là Absolute Path hoặc Relative Path tùy vào bối cảnh module hiện tại, path có thể chỉ tới đối tượng trong cùng 1 module hoặc khác module
+%     \item Path trong Rust là đường dẫn đến 1 đối tượng nào đó được định nghĩa trong mã nguồn như struct, trait, static, const, function
+%     \item Cây AST sử dụng thư viện $syn$, $syn$ có thể lấy được path của 1 đối tượng nhưng không biết được đối đượng đang trỏ tới là static, const, hay function. Do đó đang không phân biệt được đâu là path của static, const, hay function
+% \end{itemize}
+
+% \subsection{Type Argument match Type Parameter}

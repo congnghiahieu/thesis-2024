@@ -1,38 +1,22 @@
 \chapter*{Kết luận}
 \addcontentsline{toc}{chapter}{Kết luận}
 
-% Phân tích mã nguồn là một bước quan trọng trong quá trình phát triển phần mềm.
-% Quá trình này sẽ giúp phát hiện các lỗi, lỗ hổng bảo mật và vấn đề tiềm ẩn tồn tại trong mã nguồn, đồng thời nó giúp lập trình viên phát hiện các lỗi logic, tối ưu mã nguồn và đảm bảo các quy tắc và tiêu chuẩn khi lập trình.
-% Điều này giúp sớm phát hiện các lỗi nghiêm trọng, đảm bảo tính ổn định, dễ quản lý và dễ bảo trì cho mã nguồn về sau.
+Phân tích mã nguồn là một bước quan trọng trong quy trình đảm bảo chất lượng phần mềm, giúp phát hiện lỗ hổng bảo mật trong mã nguồn.
+Việc phân tích mã nguồn với ngôn ngữ Rust trở nên khó khăn hơn do cú pháp đan xen lập trình hướng đối tượng và lập trình hướng hàm, hệ thống kiểu dữ liệu phức tạp và có các cơ chế đảm bảo an toàn bộ nhớ tạo ra sự khác biệt của Rust so với các ngôn ngữ đã xuất hiện trước đó.
+Cũng đã có các nghiên cứu được đề xuất để giải quyết vấn đề này, nhưng các công cụ vẫn còn tồn tại những hạn chế về hiệu suất, khả năng áp dụng vào dự án thực tế hay khả năng áp dụng với các nghiên cứu khác.
 
-% Hiện nay trên thế giới có khoảng 20 ngôn ngữ lập trình thông dụng và đi kèm với đó là hàng trăm công cụ phân tích mã nguồn khác nhau.
-% Khóa luận này đã xây dựng thành công một công cụ phân tích mã nguồn dành cho ngôn ngữ lập trình Rust.
-% Khác so với các công cụ phân tích mã nguồn hiện có, công cụ chọn phân tích mã nguồn thành đồ thị thuộc tính mã nguồn thay vì chỉ phân tích thành cây cú pháp trừu tượng bởi lẽ dạng đồ thị này là tổng hợp của cây cú pháp trừu tượng, đồ thị dòng điều khiển và đồ thị thuộc tính mã nguồn.
-% Nó không chỉ cung cấp thông tin về cú pháp trong mã nguồn mà còn cung cấp cả thông tin về luồng điều khiển và phụ thuộc dữ liệu trong chương trình.
-% Đồng thời công cụ cũng được phát triển dựa trên công cụ có sẵn là Joern nên nó kế thừa được những tiện ích mạnh mẽ sẽ giúp cho quá trình khai thác mã nguồn dựa trên đồ thị thuộc tính mã nguồn trở nên dễ dàng và chuyên sâu hơn.
-% Qua quá trình thực nghiệm công cụ với bộ dự án mã nguồn Rust phổ biến, công cụ đã đáp ứng được những mục tiêu đề ra của khóa luận khi đã xử lý được thông tin về kiểu dữ liệu, phân tích được phần lớn các cú pháp mã nguồn Rust và đưa ra kết quả chi tiết và đầy đủ hơn so với công cụ Joern.
-% Tuy nhiên, công cụ vẫn chưa xử lý được toàn bộ các cú pháp mã nguồn mà Rust cung cấp, việc phân tích còn tốn nhiều thời gian đặc biệt là với các dự án có sử dụng nhiều thư viện bên ngoài do việc xử lý kiểu dữ liệu đòi hỏi phải phân tích cả những thư viện đi kèm.
+Khóa luận phát triển một công cụ phân tích mã nguồn cho ngôn ngữ lập trình Rust với mục tiêu khắc phục được các điểm yếu kế trên.
+Khóa luận lựa chọn hướng tiếp cận phân tích tĩnh thay vì các giải pháp kiểm chứng, kiểm thử động hay thực thi tượng trưng.
+Điều này giúp giải pháp trong khóa luận có thể áp dụng vào các dự án mã nguồn lớn và tốn ít chi phí hơn so với các giải pháp còn lại.
+Công cụ thực hiện phân tích ngôn ngữ Rust ở mức độ mã nguồn thay vì các cấp độ thấp hơn để đảm bảo không bị mất mát thông tin về các cơ chế đảm bảo an toàn bộ nhớ.
+Công cụ lựa chọn đồ thị thuộc tính mã nguồn làm kiểu biểu diễn trung gian.
+Việc này làm cho công cụ có thể tương thích, mở rộng với nhiều nghiên cứu đã có trước đó về đồ thị thuộc tính mã nguồn, đồng thời tái sử dụng được nhiều công cụ phân tích khác.
 
-% Trong tương lai, công cụ phân tích mã nguồn Rust sẽ hoàn thiện hơn khi xử lý được toàn bộ các cú pháp mã nguồn.
-% Việc xử lý kiểu dữ liệu sẽ được tối ưu bằng một chiến thuật phân tích khác thay vì phải phân tích toàn bộ các thư viện đi kèm dự án, từ đó giúp thời gian phân tích nhanh chóng hơn.
-% Đồng thời công cụ cũng sẽ hỗ trợ các hệ điều hành thông dụng như Windows hay MacOS thay vì chỉ hỗ trợ Ubuntu như hiện tại.
-% Với độ chi tiết của đồ thị đầu ra và các tiện ích truy vấn mạnh mẽ đi kèm, công cụ này sẽ là một nền tảng mạnh mẽ để xây dựng nên các công cụ phân tích mã nguồn khác với các chức năng như tìm kiếm lỗ hổng trong mã nguồn, gợi ý mã nguồn, phát hiện lỗi cú pháp...
-% Bên cạnh đó, đầu ra của công cụ cũng có thể sử dụng cho các bài toán về học máy hoặc học sâu.
-
-Phân tích mã nguồn là một bước quan trọng trong quy trình phát triển phần mềm, giúp phát hiện lỗi, lỗ hổng bảo mật và các vấn đề tiềm ẩn khác trong mã nguồn.
-Quá trình này cũng hỗ trợ lập trình viên phát hiện lỗi logic, tối ưu mã nguồn và tuân thủ các quy tắc và tiêu chuẩn lập trình, từ đó đảm bảo tính ổn định, khả năng quản lý và bảo trì mã nguồn về lâu dài.
-
-Hiện có khoảng 20 ngôn ngữ lập trình thông dụng trên thế giới, kèm theo đó là hàng trăm công cụ phân tích mã nguồn khác nhau.
-Khóa luận này đã phát triển thành công một công cụ phân tích mã nguồn cho ngôn ngữ lập trình Rust.
-Công cụ này phân tích mã nguồn thành đồ thị thuộc tính mã nguồn thay vì chỉ phân tích thành cây cú pháp trừu tượng, vì đồ thị này tổng hợp thông tin từ cây cú pháp trừu tượng, đồ thị luồng điều khiển và đồ thị thuộc tính mã nguồn.
-Điều này không chỉ cung cấp thông tin về cú pháp mà còn về luồng điều khiển và phụ thuộc dữ liệu trong chương trình.
-
-Công cụ được phát triển dựa trên Joern, kế thừa các tiện ích mạnh mẽ giúp khai thác mã nguồn dựa trên đồ thị thuộc tính mã nguồn trở nên dễ dàng và chuyên sâu hơn.
-Qua thử nghiệm với các dự án mã nguồn Rust phổ biến, công cụ đã đạt được các mục tiêu đề ra, xử lý thông tin về kiểu dữ liệu, phân tích hầu hết các cú pháp Rust và đưa ra kết quả chi tiết hơn so với Joern.
-Tuy nhiên, công cụ vẫn chưa xử lý được tất cả các cú pháp của Rust và còn tốn nhiều thời gian phân tích, đặc biệt với các dự án sử dụng nhiều thư viện ngoài.
-
-Trong tương lai, công cụ sẽ được hoàn thiện hơn để xử lý toàn bộ cú pháp Rust.
-Việc xử lý kiểu dữ liệu sẽ được tối ưu bằng chiến thuật khác, không cần phân tích tất cả các thư viện đi kèm dự án, giúp rút ngắn thời gian phân tích.
-Công cụ cũng sẽ hỗ trợ các hệ điều hành phổ biến như Windows và MacOS, thay vì chỉ Ubuntu.
-Với độ chi tiết của đồ thị đầu ra và các tiện ích truy vấn mạnh mẽ, công cụ sẽ là nền tảng mạnh mẽ để phát triển các công cụ phân tích mã nguồn khác, như tìm kiếm lỗ hổng, gợi ý mã nguồn và phát hiện lỗi cú pháp.
-Đầu ra của công cụ cũng có thể được sử dụng cho các bài toán học máy hoặc học sâu.
+Công cụ được phát triển dựa trên Joern, kế thừa kiến trúc mở rộng và tái sử dụng mạnh mẽ.
+Công cụ đã được kiểm thử trên các dự án mã nguồn mở lớn, thử nghiệm trên các đoạn mã nguồn có lỗ hổng trong thực tế và cho thấy tiềm năng khai thác.
+Mặc dù công cụ đã đạt được kết quả nhất định, các hạn chế vẫn còn tồn tại.
+Hiện tại công cụ chỉ có thể phân tích từng tệp mã nguồn Rust riêng lẻ, chưa xử lý được liên kết bằng module giữa các tệp mã nguồn.
+Ngoài ra các macro trong Rust vẫn là khó khăn lớn do tính chất không được xử lý trước khi xây dựng cây AST.
+Marco vẫn đang được giữ ở dạng chuỗi token và chưa thể xây dựng được cây AST từ đó.
+Nhìn chung, bên cạnh các hạn chế liệt kê ở trên, phương pháp có tiềm năng khi áp dụng phân tích mã nguồn cho dự án Rust thực tế.
+Phương pháp giải quyết được những hạn chế gặp phải của các nghiên cứu phân tích mã nguồn Rust trước đó.

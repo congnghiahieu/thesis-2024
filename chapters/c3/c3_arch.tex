@@ -1,0 +1,24 @@
+\section{Kiến trúc công cụ}
+
+\begin{figure}[H]
+	\includegraphics[width=1\columnwidth]{figures/c3/c3_arch.drawio.pdf}
+	\centering
+	\caption{Kiến trúc công cụ.}
+	\label{img:c3_arch}
+\end{figure}
+
+Do sử dụng công cụ joern nên kiến trúc của công cơ về cơ bản sẽ là kiến trúc của Joern và mở rộng thêm. Phần này sẽ đi chi tiết hơn so với phần \ref{sec:joern_flow} đã trình bày ở phía trên. Các thành phần chính của công cụ bao gồm:
+
+\textbf{Language Frontend} là phần đặc thù của mỗi ngôn ngữ lập trình, người dùng cần tự đảm nhiệm phần này khi muốn mở rộng công cụ Joern cho ngôn ngữ lập trình mới. Nhiệm vụ của Language Frontend là chuyển đổi mã nguồn thành cây AST dựa trên định nghĩa AST của đặc tả ngôn ngữ. Language Frontend có thể được cài đặt bằng bất cứ ngôn ngữ nào, do đó để có thể chuyển tiếp dư liệu cho quá trình tiếp theo, Language Frontend cần xuất cây AST ra dữ liệu trung gian, ở đây là JSON.
+
+\textbf{Joern Frontend} là nơi chính thực hiện các công việc chuyển đổi cây AST của một ngôn ngữ lập trình cụ thể thành cây CPG theo đặc tả CPG. Đặc tả CPG sẽ được sử dụng xuyên suốt trong cả Joern Frontend và Joern Backend.
+Joern Frontend sẽ nhận dữ liệu từ Language Frontend dưới dạng JSON bằng AST Loader. Cây AST sau khi được nạp vào Joern Frontend dưới ngôn ngữ Scala thì sẽ được chuyển đổi thành cây CPG bởi AST Creation. AST Creation thực hiện ánh xạ mỗi một loại nút AST của ngôn ng
+sang một loại nút CPG tương ứng. Không chỉ tạo nút, AST Creation còn tạo các cạnh giữa các nút, giữa các nút có thể có nhiều cạnh, mỗi cạnh thể hiện một mối quan hệ giữa các nút. Mặc định giữa các nút có mối quan hệ là cạnh \textit{AST}. Tùy vào thể loại nút thì sẽ có các cạnh thể hiện mối quan hệ khác, ví dụ nút IF sẽ có cạnh \textit{CONDITION} nối với nút thể hiện điều kiện của IF.
+
+\textbf{Scope Manager} được sử dụng trong Joern Frontend để thực hiện quản lý phạm vi của các biến, hàm hay các khai báo khác. Trong phần lớn các ngôn ngữ, một đơn vị cấu trúc sẽ có định danh riêng và định danh đó chỉ hợp lệ trong 1 giới hạn nhất định. Trong quá trình duyệt cây AST, Scope Manager sẽ kiểm soát thông tin về các định danh và phạm vi hoạt động của chúng. Khi sử dụng một định danh hoặc khai báo một định danh mới, Scope Manager sẽ kiểm tra xem khai báo đó có hợp lệ trong phạm vi hay không. Với Scope Manager ta có thể xác định được quan hệ giữa việc khai báo và sử dụng một biến, hàm hay đơn vị cấu trúc khác, từ đó có thể xác định được các cạnh giữa các nút trong cây CPG. Các cạnh sau này sẽ được sử dụng để xây dựng đồ thị CFG và PDG.
+
+\textbf{Pass.} Như đã đề cập ở trên, một phần của cây AST CPG bao gồm các nút và cạnh đã được xây dựng ở AST Creation kết hợp với Scope Manager. Sau đó cây AST CPG sẽ tiếp tục được làm giàu thông tin bằng cách đi qua các Pass. Mỗi Pass sẽ bổ sung một lớp thông tin riêng biệt, ví dụ thông tin về kiểu dữ liệu, cấu trúc module, thứ tự thực hiện câu lệnh, ... Các lớp thông tin này hoàn toàn phụ thuộc vào ngữ cảnh của ngôn ngữ, do vậy số lượng pass cũng sẽ không cố định. Các pass thao tác trên AST CPG nên có thể dùng chung cho nhiều ngôn ngữ, nhưng cũng có các pass được xây dựng riêng cho đặc điểm của một ngôn ngữ cụ thể. Một pass có thể phụ thuộc vào kết quả của pass trước đó hoặc chạy độc lập nên thứ tự chạy các pass cũng rất quan trọng. Ở đây, công cụ chỉ sử dụng 2 pass là Type Resolver và Module Resolver để xử lý kiểu dữ liệu và hệ thống module của Rust, các pass khác sẽ được xây dựng trong tương lai. Sau khi chạy qua các pass, cây AST CPG đã được bổ sung các lớp thông tin nhất định và đây cũng là công đoạn cuối cùng của Joern Frontend.
+
+\textbf{Joern Backend}. Khi chuyển đổi một ngôn ngữ sang CPG, người dùng phải tự thực hiện công đoạn Language Frontend và Joern Frontend để xây dựng cây CPG. Các thông tin có được từ 2 bước trên sẽ được Joern Backend sử dụng để tự động hoàn thiện cây AST CPG thành đồ thị CPG. Các nút, cạnh mới về luồng điều khiển, luồng dữ liệu sẽ được thêm vào và kết nối với các cạnh, nút đã tồn tại. Không chỉ lớp thông tin về điều khiển và dữ liệu, Joern Backend bổ sung các lớp thông tin như  FileSystem, CallGraph, Shortcuts, TagsAndLocation, Annotation \cite{joernCodeProperty}. Kết quả cuối cùng của Joern Backend là một đồ thị CPG hoàn chỉnh.
+
+\textbf{Persistence}. Đồ thị CPG có thể được lưu trư bền vững dưới dạng file nhị phân. File này có thể tiếp tục được chuyển đổi thành kiểu dữ liệu tương thích với các công cụ khác như Neo4j để thực hiện các truy vấn phức tạp hơn, hoặc sử dụng bằng các công cụ khác của Joern.

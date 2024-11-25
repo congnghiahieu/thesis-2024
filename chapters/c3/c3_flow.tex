@@ -1,17 +1,40 @@
-\section{Quy trình tổng quan}
-
-Mục tiêu của công cụ là phân tích mã nguồn Rust và xây dựng đồ thị thuộc tính mã
-nguồn (CPG) biểu diễn mã nguồn đó.
-Hình \ref{img:c3_flow} thể hiện các bước xây dựng cây CPG từ
-các tệp mã nguồn Rust.
+\section{Luồng hoạt động}
 
 \begin{figure}[H]
-	\includegraphics[width=1\columnwidth]{figures/c3/c3_flow.drawio.pdf}
+	\includegraphics[width=1\columnwidth]{figures/c3/c3_flow_2.drawio.pdf}
 	\centering
 	\caption{Quy trình phân tích mã nguồn Rust.}
-	\label{img:c3_flow}
+	\label{img:c3_flow_2}
 \end{figure}
 
-Mã nguồn Rust sẽ được trình phân tích và sinh ra cây AST tương ứng với từng tệp mã nguồn.
-Sau đó, cây cú pháp trừu tượng sẽ được ánh xạ sang đồ thị thuộc tính mã nguồn.
-Cuối dùng, đồ thị CPG sẽ được lưu dưới dạng cơ sở dữ liệu đồ thị phục vụ mục đích của người dùng.
+% \begin{figure}[H]
+% 	\includegraphics[width=1\columnwidth]{figures/c3/c3_flow.drawio.pdf}
+% 	\centering
+% 	\caption{Quy trình phân tích mã nguồn Rust.}
+% 	\label{img:c3_flow}
+% \end{figure}
+
+% \begin{figure}[H]
+% 	\includegraphics[width=1\columnwidth]{figures/c4/c4_install_flow.drawio.pdf}
+% 	\centering
+% 	\caption{Kiến trúc công cụ.}
+% 	\label{img:c4_install_flow}
+% \end{figure}
+
+% \begin{figure}[H]
+% 	\includegraphics[width=1\columnwidth]{figures/c3/c3_flow_ast.drawio.pdf}
+% 	\centering
+% 	\caption{Quy trình xây dựng cây cú pháp trừu tượng.}
+% 	\label{img:c3_flow_ast}
+% \end{figure}
+
+Mục tiêu của công cụ là phân tích mã nguồn Rust và xây dựng đồ thị thuộc tính mã nguồn (CPG) biểu diễn mã nguồn đó. Đầu vào của công cụ là các tập tin mã nguồn Rust, đầu ra là đồ thị thuộc tính mã nguồn được lưu dưới dạng tệp nhị phân, đồ thị được phục vụ cho việc thực hiện các câu lệnh truy vấn trên đồ thị hoặc quét đồ thị để tìm lỗ hổng trong mã nguồn. Với yêu cầu đầu vào, đầu ra như trên, luồng hoạt động của công cụ bao gồm các bước được thể hiện trong hình \ref{img:c3_flow_2}, chi tiết các bước được tiến hành như sau:
+
+\begin{enumerate}
+	\item Từ thư mục của dự án, lọc lấy các tệp mã nguồn Rust (các tệp có đuôi .rs).
+	\item Với mỗi tệp mã nguồn, sử dụng thư viện syn \cite{synRust} để phân tích thành cây cú pháp trừu tượng (AST) ứng với tệp đó. syn là 1 thư viện phân tích mã nguồn thành cây AST được sử dụng trong cộng đồng Rust, tính năng Procedural Macro \cite{rustlangProceduralMacros} của Rust cũng cần thư viện này để cài đặt. Tính tới thời điểm hiện tại Rust không có đặc tả ngôn ngữ chính thức, do đó cộng đồng sử dụng Rust Reference \cite{rustReference} coi như phiên bản sát nhất so với một đặc tả ngữ chính thức. Thư viện syn xây dựng định nghĩa các nút của cây cú pháp trừu tượng tuân theo Rust Reference.
+	\item Chuyển đổi cây cú pháp trừu tượng từ ngôn ngữ Rust sang định dạng JSON.
+	Do Joern có thể được sử dụng cho nhiều ngôn ngữ và Joern Frontend không phụ thuộc vào công cụ Language Parser của một ngôn ngữ nhất định, do vậy cần có định dạng dữ liệu trung gian để chuyển đổi cây AST của Language Parser sang ngôn ngữ Scala của Joern Frontend. Các kiểu dữ liệu trung gian phổ biến như JSON, XML, YAML, trong đó JSON được lựa chọn bởi tính đơn giản, dễ chuyển đổi.
+	\item Cây AST dưới định dạng JSON được đọc ngược lại bằng mã nguồn Scala của Joern Frontend. Từ đây ta sẽ thực hiện chuyển đổi cây AST sang đồ thị CPG, từng loại nút trong cây AST sẽ có ánh xạ tương ứng là một loại nút trong đồ thị CPG. Các thông tin trong cây AST sẽ được khai thác để xây dựng nút CPG phù hợp, thông tin giữa các nút AST được sử dụng để xây dựng các cạnh, thuộc tính cho cạnh và nút trong đồ thị CPG. Quá trình xây dựng cây CPG sẽ bao gồm vai trò của Joern Frontend và Joern Backend, quá trình này sẽ được mô tả chi tiết ở phần sau.
+	\item Cuối cùng, đồ thị thuộc tính mã nguồn được lưu dưới dạng tệp nhị phân và đây là đầu ra kì vọng của công cụ.
+\end{enumerate}

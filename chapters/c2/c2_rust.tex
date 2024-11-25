@@ -1,94 +1,231 @@
 \section{Ngôn ngữ lập trình Rust}
 
-\subsection{Giới thiệu tổng quan}
-
-% Rust was first introduced in 2006 by the Mozilla Foundation with its version 1.0 release announced in 2015. The language has since been adopted rapidly, with its strong focus on code safety and high performance comparable to that of C or C++ as the main reasons for its success [35], [46]. Rust features a strong type system and enforces memory safety guarantees, adding to the language’s safety [29]. Guarantees include that there is only one mutable (writeable) reference to an object or several readable ones, but not both at the same time. This ownership system introduces zero runtime overhead as it is enforced at compile time and effectively eliminates a large class of correctness errors many C implementations are suffering from. Classic memory safety bugs that are typically avoided with Rust include buffer overflows, use-after-frees and null pointer dereferences [48]. Using the unsafe keyword, it is still possible to perform potentially unsafe operations where necessary [29], [28]. Raw pointer accesses are one example of an unsafe operation as the borrow checker is not able to reason about these without a type-safe view on the underlying memory. Especially in embedded systems and low-level programming, such operations often are not completely avoidable. Usage of unsafe blocks can often be restricted to very few code sites, e.g., by wrapping unsafe functionality in safe interfaces. Overall, Rust offers full control where needed while still being considerably safer than the alternatives, making it highly suitable for systems programming [27]. Besides C and assembly, it is the only language supported for Linux kernel development
-
-Rust lần đầu tiên được giới thiệu vào năm 2006 bởi Mozilla, với phiên bản 1.0 được công bố vào năm 2015 và nhanh chóng được đem vào sử dụng trong nhiều dự án.
-Với điểm mạnh tập trung vào sự an toàn và hiệu suất cao, có thể so sánh với C/C++, là những lý do chính cho sự thành công của Rust \cite{je2020scientists,stackoverflowStackOverflow}.
-Rust là ngôn ngữ định kiểu mạnh tương tự như C/C++ hay Java và áp đặt các cơ chế đảm bảo về an toàn bộ nhớ \cite{rustlangRustProgramming}.
-Một số tính năng an toàn có thể kể đến như đảm bảo chỉ có một tham chiếu có thể ghi (mutable) tới một đối tượng hoặc nhiều tham chiếu chỉ đọc, nhưng không thể cỏ ghi và đọc cùng 1 lúc.
-Cơ chế quản lý bộ nhớ $ownership$ được áp dụng vào thời điểm biên dịch, do đó loại bỏ được một lớp lớn các lỗi bộ nhớ mà C/C++ gặp phải.
-Các lỗi về an toàn bộ nhớ cổ điển có thể được tránh bởi việc sử dụng Rust bao gồm tràn bộ đệm (stack-overflow), sử dụng sau khi giải phóng bộ nhớ (use-after-free) và tham chiếu null \cite{googleblogMemorySafe}.
-Ngoài các cơ chế đảm bảo an toàn được sử dụng mặc định trong ngôn ngữ, Rust vẫn cho phép viết những đoạn mã code có tiềm năng mất an toàn bằng từ khóa \textit{unsafe} \cite{rustlangRustProgramming}.
-Tổng quan, Rust cung cấp cho sự an toàn và quyền kiểm soát khi cần thiết, làm cho nó rất phù hợp cho lập trình hệ thống \cite{jung2021safe}, lập trình nhúng \cite{sharma2023rust}, hay các chương trình du hành ngoài không gian yêu cầu sự an toàn tuyệt đối \cite{seidel2024bringing}.
-
 \subsection{Cơ chế an toàn của Rust}
+
+Rust là một ngôn ngữ an toàn về bộ nhớ, được thiết kế cho phát triển phần mềm mức hệ thống.
+Trình biên dịch Rust kiểm tra chương trình với các luật để đảm bảo an toàn bộ nhớ và chống tương tranh dữ liệu.
+Các cơ chế an toàn bao gồm các khái niệm cơ bản: ownership, borrowing, lifetime, exclusive mutability và thread safe.
+
+\textbf{Ownership}. Cơ chế ownership giúp Rust có sự điều khiển vừa đủ với bộ nhớ, không cần sử dụng garbage collector hoặc để người dùng tự xử lý như C/C++.
+Theo cơ chế ownership của Rust, một giá trị (vị trí bộ nhớ) chỉ có một chủ sở hữu độc quyền (biến).
+Khi chủ sở hữu của giá trị ra khỏi phạm vi cụ thể, giá trị trong bộ nhớ sẽ bị giải phóng.
+Gán biến cho 1 biến khác dẫn đến chuyển ownership.
+Khi một biến mất quyền ownership một giá trị, biến đó sẽ không còn sử dụng được nưa.
+Trình biên dịch Rust theo dõi lifetime của mỗi giá trị thông qua cơ chế ownership và thực hiện thu hồi bộ nhớ cần thiết.
+Cơ chế ownership tương tự như mẫu thiết kế Resource-Acquisition-Is-Initialization (RAII) \cite{cppreferenceRAIICppreferencecom} thường được sử dụng trong ngôn ngữ C++.
+
+\textbf{Borrowing}. Để có thể chia sẻ giá trị mà không chuyển quyền sở hữu, cơ chế borrowing cho phép việc tạo một tham chiếu đến giá trị và biến khác sẽ sử dụng tham chiếu đó.
+Với cơ chế borrowing, một giá trị có thể được đọc hoặc cập nhật mà không thay đổi quyền sở hữu của giá trị.
+Có hai loại borrowing: 1) mượn chia sẻ để đọc và 2) mượn độc quyền để ghi.
+Trình biên dịch Rust đảm bảo rằng tham chiếu đọc và tham chiếu ghi không bao giờ xuất hiện cùng một lúc.
+Điều này có nghĩa là các thao tác đọc và ghi đồng thời là không thể trong Rust, từ đó loại bỏ khả năng xảy ra tương tranh dữ liệu, các lỗi an toàn bộ nhớ như truy cập các tham chiếu không hợp lệ (null-pointer dereferencing) hay các lỗi logic lập trình khác.
+
+\textbf{Lifetime}. Lifetime đại diện cho phạm vi mà tham chiếu có hiệu lực, hay việc sử dụng tham chiếu đó đến một giá trị sẽ an toàn về bộ nhớ.
+Tính năng lifetime trong Rust là một loại generic, các lifetime generic thể hiện mối quan hệ rằng buộc giữa thời gian hợp lệ của tham chiếu và thời gian sống của giá trị mà chúng tham chiếu tới.
+Cụ thể, để xác định khi nào các tham chiếu ra khỏi phạm vi, trình biên dịch liên kết mỗi tham chiếu (borrow) với một lifetime và theo dõi các ràng buộc giữa các lifetime.
+Hệ thống lifetime kết hợp với borrow của Rust đảm bảo rằng các vấn đề an toàn bộ nhớ truyền thống như sử dụng sau khi giải phóng (use-after-free) hoặc con trỏ treo (dangling pointers) không thể xảy ra bằng cách không cho phép các tham chiếu tồn tại lâu hơn biến chủ sở hữu.
+
+\textbf{Thread safe}. Lập trình đa luồng trong Rust được đảm bảo an toàn nhờ mô hình ownership và \textit{borrowing}, ngăn chặn tương tranh dữ liệu, bế tắc (deadlock) ngay từ khi biên dịch.
+Rust sử dụng thuộc tính $Send$ và $Sync$ để đảm bảo an toàn đa luồng ở cấp độ kiểu dữ liệu.
+Một kiểu là $Send$ nếu nó có thể được chuyển quyền sở hữu một cách an toàn giữa các luồng, và $Sync$ nếu nó có thể được truy cập an toàn giữa các luồng.
+Trình biên dịch Rust sử dụng các đặc điểm này để kiểm tra tại thời điểm biên dịch xem dữ liệu có thể được chia sẻ hoặc di chuyển giữa các luồng một cách an toàn hay không.
+Để quản lý trạng thái có thể thay đổi được trong môi trường đa luồng, Rust cung cấp các cơ chế đồng bộ hóa như $Mutex$ (loại trừ lẫn nhau) và $Arc$ (loại trừ lẫn nhau).
+$Mutex$ đảm bảo rằng chỉ có một luồng có thể truy cập dữ liệu tại một thời điểm, ngăn chặn tương tranh dữ liệu.
+$Arc$ (Atomic Reference Count) được sử dụng để đếm số lượng tham chiếu an toàn giữa các luồng, cho phép nhiều luồng chia sẻ quyền sở hữu dữ liệu.
+Một nguyên tắc quan trọng trong lập trình đa luồng Rust là chuyển quyền sở hữu dữ liệu vào các luồng mới (Ownership Transfer in Threads).
+Khi một luồng được tạo ra, dữ liệu có thể được chuyển vào luồng đó, đảm bảo rằng luồng cha không còn quyền truy cập vào nó, do đó tránh được các điều kiện đua tiềm ẩn.
+
+% \textbf{Unsafe Blocks}. Rust cung cấp từ khóa \textit{unsafe} để cho phép viết các đoạn mã không an toàn, chẳng hạn như truy cập trực tiếp vào con trỏ hoặc thực hiện các thao tác không an toàn khác.
 
 \begin{listing}[H]
 \begin{minted}[mathescape, breaklines, frame=lines, framesep=2mm, baselinestretch=1.2, fontsize=\footnotesize, linenos]{rust}
-fn ownership_and_borrowing() -> &u32 {
-  // creates a `Vec`, a heap allocated buffer
-  let vec = vec![1, 2, 3];
-
-  // creates a reference to the first value with borrowing
-  let first_val = &vec[0];
-
-  // Ownership: `Vec` is automatically reclaimed
-  // when its owner `vec` goes out of the scope.
-  //
-  // Borrowing: compile error; Rust prevents `first_val`
-  // to outlive `vec` by tracking variable lifetimes.
-  return first_val;
+fn ownership() {
+  let s1 = String::from("hello"); // s1 sở hữu giá trị "hello"
+  let s2 = s1; // Chuyển quyền sở hữu từ s1 sang s2
+  // println!("{}", s1); // s1 không còn sử dụng được vì mất quyền sở hữu
+  println!("{}", s2); // s2 có thể sử dụng bình thường
 }
 
-fn aliasing_xor_mutability() {
-  let mut vec = vec![1, 2, 3];
+fn borrowing() {
+    let mut vec = vec![1, 2, 3];
+    // Mượn độc quyền để sửa
+    let mut_ref = &mut vec;
+    mut_ref.push(4);
+    // Mươn chia sẻ để đọc
+    let shared_ref1 = &vec;
+    let shared_ref2 = &vec;
+    println!("{}", shared_ref1[0]);
+    println!("{}", shared_ref2[0]);
+}
 
-  // exclusive mutable borrowing
-  let mut_ref = &mut vec;
+fn lifetime() {
+    let r;
+    {
+        let x = 5;
+        r = &x; // r mượn x nhưng x tồn tại chỉ trong phạm vi này
+    }
+    // println!("r: {}", r); // Lỗi: r trỏ đến x đã bị giải phóng
+}
 
-  // shared read-only borrowing
-  let shared_ref1 = &vec;
-  let shared_ref2 = &vec;
-  println!("{}", shared_ref1[0]);
-  println!("{}", shared_ref2[0]);
+// Data tự động là Send và Sync
+struct Data(i32)
 
-  // Exclusive mutability: compile error;
-  // Rust invalidates `mut_ref` when `shared_ref1` is
-  // used since they cannot coexist at the same time.
-  mut_ref.push(4);
+fn thread_safe() {
+    let data = Data(42);
+    let handles: Vec<_> = (0..10).map(|_| {
+        let data = data; // Di chuyển quyền sở hữu data vào luồng mới
+        thread::spawn(move || {
+            println!("Thread data: {:?}", data);
+        })
+    }).collect();
 }
 \end{minted}
-\caption{Ví dụ các khái niệm an toàn trong Rust: (1) ownership, (2) borrowing, (3) Exclusive mutability, (4) Lifetime, (5) Thread safe.}
+\caption{Ví dụ các khái niệm an toàn trong Rust: (1) ownership, (2) borrowing, (3) Lifetime, (4) Thread safe.}
 \label{code:c2_safe_rust}
 \end{listing}
-Rust là một ngôn ngữ an toàn về kiểu,
-được thiết kế cho phát triển phần mềm mức hệ thống,
-mang lại cho lập trình viên quyền kiểm soát tối đa với tài nguyên nhưng đảm bảo an toàn bộ nhớ và đa luồng bằng một tập các cơ chế nghiêm ngặt.
-Trình biên dịch của Rust sẽ kiểm tra các cơ chế này để loại bỏ các vấn đề nguy hiểm tiềm tàng.
-Các cơ chế an toàn bao gồm các khái niệm cơ bản:
 
-\textbf{Ownership}: Cơ chế $ownership$ giúp Rust có sự điều khiển vừa đủ với bộ nhớ, không cần sử dụng bộ thu gom rác (garbage collector) hoặc để người dùng tự xử lý như C/C++.
-Theo cơ chế $ownership$ của Rust, một giá trị (vị trí bộ nhớ) chỉ có một chủ sở hữu độc quyền (biến).
-Khi chủ sở hữu của giá trị ra khỏi phạm vi cụ thể, giá trị trong bộ nhớ sẽ bị giải phóng.
-Gán biến cho 1 biến khác dẫn đến chuyển quyền sở hữu.
-Khi một biến mất quyền sở hữu một giá trị, biến đó sẽ không còn sử dụng được.
-Trình biên dịch Rust theo dõi tuổi thọ của mỗi giá trị thông qua cơ chế $ownership$ và thực hiện thu hồi bộ nhớ cần thiết.
-Cơ chế $ownership$ tương tự như mẫu Resource-Acquisition-Is -Initialization (RAII) \cite{cppreferenceRAIICppreferencecom} thường được sử dụng trong ngôn ngữ C++.
+\subsection{Tính hướng hàm}
 
-\textbf{Borrowing}: Rust cho phép mượn giá trị (tức là tạo tham chiếu đến nó) trong suốt thời gian sống của biến chủ sở hữu.
-Với cơ chế mượn, một giá trị có thể được đọc hoặc cập nhật mà không thay đổi quyền sở hữu của giá trị.
-Hệ thống kiểu của Rust đảm bảo rằng các vấn đề an toàn bộ nhớ truyền thống như sử dụng sau khi giải phóng (use-after-free) hoặc con trỏ treo không thể xảy ra bằng cách không cho phép các tham chiếu tồn tại lâu hơn biến chủ sở hữu.
+Rust là một ngôn ngữ lấy cảm hứng từ nhiều nguồn khác nhau, trong đó có lập trình hướng hàm \cite{hughes1989functional}.
+Rust là sự kết hợp giữa lập trình hướng đối tượng và lập trình hướng hàm.
+Do có sự pha trộn của tính hướng hàm nên một số tính năng, cú pháp của Rust sẽ khác biệt so với ngôn ngữ tiêu biểu như C/C++.
 
-\textbf{Exclusive mutability}: Có hai loại mượn: 1) mượn chia sẻ để đọc và 2) mượn độc quyền để ghi.
-Trình biên dịch Rust đảm bảo rằng cả tham chiếu đọc và tham chiếu ghi không bao giờ xuất hiện cùng một lúc.
-Điều này có nghĩa là các thao tác đọc và ghi đồng thời là không thể trong Rust, loại bỏ khả năng xảy ra tương tranh với dữ liệu và các lỗi an toàn bộ nhớ như truy cập các tham chiếu không hợp lệ (null-pointer dereferencing).
+\textbf{Expression over statement}.
+Trong Rust, hầu hết mọi thứ đều là biểu thức.
+Điều này tạo ra sự khác biệt so với các ngôn ngữ cổ điển, nơi có những câu lệnh và cú pháp không hợp lệ trong C/C++ nhưng lại hợp lệ trong Rust.
+Ví dụ đơn giản về biểu thức if else dưới đây, if else trong Rust trả về một giá trị, có thể gán cho một biến khác hoặc truyền vào hàm khác.
 
-\textbf{Lifetime}: Lifetime giải thích các phạm vi mà tham chiếu trong chương trình Rust có hiệu lực.
-Tính năng lifetime trong Rust bao gồm một loạt các generic cho biết cách các tham chiếu liên quan đến nhau.
-Cụ thể, để xác định khi nào các tham chiếu ra khỏi phạm vi, trình biên dịch liên kết mỗi tham chiếu mượn với một lifetime và theo dõi các ràng buộc giữa các tham chiếu.
-Lifetime inference đảm bảo rằng thời gian sống của quyền sở hữu mượn sẽ đủ dài để sử dụng.
+\begin{listing}[H]
+\begin{minted}[mathescape, breaklines, frame=lines, framesep=2mm, baselinestretch=1.2, fontsize=\footnotesize, linenos]{rust}
+fn main() {
+  let x = 5;
+  let value = if x < 0 {
+      -1
+  } else {
+      1
+  }
+}
+\end{minted}
+\caption{Ví dụ Expression trong Rust}
+\label{code:fp_expression}
+\end{listing}
 
-\textbf{Thread safe}: Lập trình đa luồng trong Rust được đảm bảo an toàn nhờ mô hình $ownership$ và \textit{borrowing}, ngăn chặn tương tranh dữ liệu ngay từ khi biên dịch.
+\textbf{Pattern matching}.
+Pattern matching làm cho mã nguồn ngắn gọn, trực quan và rõ ràng hơn. Pattern matching trong Rust tương tự như switch case trong C/C++ nhưng mạnh mẽ hơn, có thể phân tách cấu trúc dữ liệu phức tạp như enum, struct.
 
-\textbf{Send và Sync Traits}: Rust sử dụng các đặc điểm Send và Sync để đảm bảo an toàn đa luồng ở mức kiểu.
-Một kiểu là Send nếu nó có thể được chuyển an toàn giữa các luồng, và Sync nếu nó có thể được chia sẻ an toàn giữa các luồng.
-Trình biên dịch Rust sử dụng các đặc điểm này để kiểm tra tại thời điểm biên dịch xem dữ liệu có thể được chia sẻ hoặc di chuyển giữa các luồng một cách an toàn hay không.
+\begin{listing}[H]
+\begin{minted}[mathescape, breaklines, frame=lines, framesep=2mm, baselinestretch=1.2, fontsize=\footnotesize, linenos]{rust}
+fn match_example(value: Option<i32>) {
+  match value {
+      Some(x) => println!("Received a value: {}", x),
+      None => println!("Received None"),
+  }
+}
+\end{minted}
+\caption{Ví dụ Pattern matching trong Rust}
+\label{code:fp_patternmatching}
+\end{listing}
 
-\textbf{Mutex và Arc}: Đối với trạng thái có thể thay đổi được chia sẻ, Rust cung cấp các nguyên thủy đồng bộ hóa như Mutex (loại trừ lẫn nhau) và Arc (đếm tham chiếu nguyên tử).
-Mutex đảm bảo rằng chỉ có một luồng có thể truy cập dữ liệu tại một thời điểm, ngăn chặn các điều kiện đua.
-Arc được sử dụng để đếm tham chiếu an toàn giữa các luồng, cho phép nhiều luồng chia sẻ quyền sở hữu dữ liệu.
+% \textbf{Higher Order Functions}. Rust cũng hỗ trợ các hàm bậc cao, cho phép các hàm được truyền vào như tham số hoặc trả về như giá trị.
 
-\textbf{Ownership Transfer in Threads}: Rust khuyến khích chuyển quyền sở hữu dữ liệu vào các luồng, điều này ngăn chặn trạng thái có thể thay đổi được chia sẻ giữa các luồng.
-Khi một luồng được tạo ra, dữ liệu có thể được chuyển vào luồng đó, đảm bảo rằng luồng cha không còn quyền truy cập vào nó, do đó tránh được các điều kiện đua tiềm ẩn.
+% \begin{listing}[H]
+% \begin{minted}[mathescape, breaklines, frame=lines, framesep=2mm, baselinestretch=1.2, fontsize=\footnotesize, linenos]{rust}
+% fn apply_operation<F>(value: i32, operation: F) -> i32
+% where
+%     F: Fn(i32) -> i32,
+% {
+%     operation(value)
+% }
+% fn main() {
+%     let result = apply_operation(5, |x| x * 2);  // 10
+% }
+% \end{minted}
+% \caption{Ví dụ Higher-order Function trong Rust}
+% \label{code:fp_hoc}
+% \end{listing}
+
+% \textbf{Closure}. Closure còn được biết đến là các biểu thức lambda, cho phép tạo ra các hàm ẩn danh.
+% Closure của Rust rất linh hoạt và có thể nắm bắt các biến từ môi trường xung quanh, cung cấp một công cụ mạnh mẽ cho lập trình hướng hàm.
+
+% \begin{listing}[H]
+% \begin{minted}[mathescape, breaklines, frame=lines, framesep=2mm, baselinestretch=1.2, fontsize=\footnotesize, linenos]{rust}
+% fn main() {
+%   let multiplier = |x| x * 3;
+%   let result = multiplier(4);  // 12
+% }
+% \end{minted}
+% \caption{Ví dụ Closure trong Rust}
+% \label{code:fp_closure}
+% \end{listing}
+
+\textbf{Monad Design Pattern}. Monad là một mẫu thiết kế cho phép nối chuỗi các tính toán một cách tuần tự, đồng thời cung cấp một ngữ cảnh cho các tính toán đó.
+Monad sẽ ở dạng 1 lớp cha bọc lấy dữ liệu thực sự, thường được ví như "hộp" chứa một giá trị, và hộp này có những quy tắc đặc biệt về cách lấy giá trị bên trong.
+Trong Rust có 2 loại dữ liệu Option và Result, 1 dạng Maybe Monad, dùng để xử lý trường hợp không có giá trị và ngoại lệ một cách an toàn.
+
+\begin{listing}[H]
+\begin{minted}[mathescape, breaklines, frame=lines, framesep=2mm, baselinestretch=1.2, fontsize=\footnotesize, linenos]{rust}
+fn safe_divide(dividend: i32, divisor: i32) -> Option<i32> {
+  if divisor != 0 {
+      Some(dividend / divisor)
+  } else {
+      None
+  }
+}
+fn main() {
+  let result = safe_divide(10, 2);
+  match result {
+      Some(value) => println!("Result: {}", value),
+      None => println!("Cannot divide by zero"),
+  }
+}
+\end{minted}
+\caption{Ví dụ Monad Design pattern trong Rust}
+\label{code:fp_monad}
+\end{listing}
+
+% \textbf{Traits}. Hệ thống trait của Rust cung cấp một cơ chế mạnh mẽ để định nghĩa các hành vi chung giữa các loại, thúc đẩy tổ chức mã nguồn và tái sử dụng.
+% Các trait trong Rust tương tự như các lớp kiểu (type classes) trong các ngôn ngữ lập trình hướng hàm, cho phép lập trình viên đóng gói chức năng và đạt được tính đa hình.
+
+% \begin{listing}[H]
+% \begin{minted}[mathescape, breaklines, frame=lines, framesep=2mm, baselinestretch=1.2, fontsize=\footnotesize, linenos]{rust}
+% trait Printable {
+%   fn print(&self);
+% }
+
+% struct Book {
+%   title: String,
+%   author: String,
+% }
+% impl Printable for Book {
+%   fn print(&self) {
+%       println!("Book: {} by {}", self.title, self.author);
+%   }
+% }
+% \end{minted}
+% \caption{Ví dụ Trait trong Rust}
+% \label{code:fp_trait}
+% \end{listing}
+
+\textbf{Algebraic Data Types}. Hệ thống kiểu của Rust theo xu hướng kiểu dữ liệu đại số có trong lập trình hướng hàm do vậy có thể tạo ra các mô hình dữ liệu linh hoạt hơn.
+Ví dụ như kiểu enum trong Rust khi kết hợp với pattern matching.
+
+\begin{listing}[H]
+\begin{minted}[mathescape, breaklines, frame=lines, framesep=2mm, baselinestretch=1.2, fontsize=\footnotesize, linenos]{rust}
+enum Option<T> {
+  Some(T),
+  None,
+}
+
+fn main() {
+  let some_value: Option<i32> = Option::Some(42);
+  let no_value: Option<i32> = Option::None;
+
+  match some_value { // Pattern matching
+      Option::Some(value) => println!("Got a value: {}", value),
+      Option::None => println!("No value"),
+  }
+}
+\end{minted}
+\caption{Ví dụ ADT trong Rust}
+\label{code:fp_adt}
+\end{listing}

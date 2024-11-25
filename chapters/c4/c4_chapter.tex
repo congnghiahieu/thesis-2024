@@ -1,7 +1,15 @@
-\chapter{Cài đặt công cụ và thực nghiệm}
+\chapter{Ánh xạ Rust sang CPG và ứng dụng}
 \label{chap:experiment}
 
-Chương này sẽ tập trung trình bày về quá trình thực nghiệm và đánh giá phương pháp đánh giá điểm thưởng dựa trên thiết kế đã mô tả chi tiết trong phần trước. Phần thực nghiệm sẽ đi sâu vào việc áp dụng phương pháp để cải thiện hiệu quả công cụ ARAT-RL và so sánh hiệu suất của phương pháp mới với phương pháp đánh giá điểm thưởng mặc định của ARAT-RL. Dựa trên kết quả thu được, tôi sẽ đưa ra các nhận xét và kết luận về giải pháp đề xuất.
+Chương này sẽ trình bày về việc ánh xạ cây AST sang đồ thị CPG trên các thể loại cú pháp của Rust và ứng dụng công cụ phân tích mã nguồn của một số đoạn mã nguồn có lỗ hổng bảo mật được công bố trên RUSTSEC Database \cite{rustsecAboutRustSec}.
 
-\input{chapters/c4/c4_install.tex}
-\input{chapters/c4/c4_experiment.tex}
+% Những đoạn mã nguồn và hình ảnh mô tả đồ thị thuộc tính mã nguồn trong chương này đã được lược bỏ phần thông tin không cần thiết để thuận tiện trong diễn giải.
+
+Hiện tại công cụ đã ánh xạ một nút AST sang một nút CPG trên 162 struct và 33 enum theo định nghĩa của thư viện \href{https://docs.rs/syn/2.0.87/syn/}{syn v2.0.87}, tương đương 100\% định nghĩa các loại nút AST có trong thư viện tại phiên bản hiện thời. Thực hiện kiểm thử công cụ trên 151 file mã nguồn Rust tự thu thập từ trang \href{https://doc.rust-lang.org/stable/rust-by-example/index.html}{Rust By Example} bao gồm đa dạng các thể loại cú pháp và  14 project lớn của Rust. Mã nguồn của công cụ được lưu trữ tại \href{https://github.com/congnghiahieu/rust-parser}{rust-parser}, \href{https://github.com/congnghiahieu/joern}{joern}, \href{https://github.com/congnghiahieu/codepropertygraph}{codepropertygraph}.
+
+
+
+\input{chapters/c4/c4_done.tex}
+\input{chapters/c4/c4_rustsec.tex}
+\input{chapters/c4/c4_limit.tex}
+
