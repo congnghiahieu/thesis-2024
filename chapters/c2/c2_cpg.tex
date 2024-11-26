@@ -1,6 +1,6 @@
 \section{Các cách biểu diễn mã nguồn}
 
-Có nhiều cách biểu diễn mã nguồn khác nhau đã được phát triển trong lĩnh vực phân tích chương trình và thiết kế trình biên dịch, với điểm chung là để giải thích các thuộc tính của chương trình. Các kiểu biểu diễn chủ yếu ở dưới dạng cấu trúc dữ liệu như cây, đồ thị. Khóa luận này sẽ tập trung vào đồ thị thuộc tính mã nguồn, trong đó đồ thị thuộc tính mã nguồn là dạng đồ thị được hợp thành từ cây cú pháp trừu tượng, đồ thị dòng điều khiển và đồ thị phụ thuộc chương trình.
+Có nhiều cách biểu diễn mã nguồn khác nhau đã được phát triển trong lĩnh vực phân tích chương trình và thiết kế trình biên dịch, với điểm chung là để giải thích các thuộc tính của chương trình. Các kiểu biểu diễn chủ yếu ở dưới dạng cấu trúc dữ liệu cây và đồ thị. Khóa luận này sẽ tập trung vào đồ thị CPG, trong đó đồ thị CPG là dạng đồ thị được hợp thành từ cây AST, đồ thị CFG và đồ thị PDG.
 
 \subsection{Cây cú pháp trừu tượng}
 
@@ -8,36 +8,36 @@ Cây cú pháp trừu tượng (Abstract Syntax Tree) \cite{zhang2019novel} là 
 AST không chứa tất cả cú pháp chi tiết nhưng vẫn thể hiện được quan hệ của các biểu thức, mệnh đề trong mã nguồn.
 AST giúp trừu tượng hóa các phần chi tiết của mã nguồn và chỉ giữ lại những thông tin cần thiết để trình biên dịch hiểu cấu trúc của chương trình.
 AST là một cây cấu trúc phân cấp, nút trong gọi là toán tử bao gồm biểu thức và mệnh đề, các lá con gọi là toán hạng bao gồm các biến và ký tự.
-AST được áp dụng cho phân tích cấu trúc, biến đổi cấu trúc hoặc phát hiện các đoạn code cấu trúc giống nhau \cite{yamaguchi2012generalized}.
+AST được áp dụng cho phân tích cấu trúc, biến đổi cấu trúc hoặc phát hiện các đoạn mã cấu trúc giống nhau \cite{yamaguchi2012generalized}.
 Tuy nhiên nó không sử dụng được cho các phân tích chuyên sâu hơn bởi vì AST không chứa thông tin về luồng điều khiển hoặc phụ thuộc dữ liệu của chương trình.
-Hình \ref{img:c2_ast} biểu diễn một cây cú pháp trừu tượng tương ứng với 1 đoạn mã nguồn trong Rust.
+Hình \ref{img:c2_ast} biểu diễn một cây AST tương ứng với một đoạn mã nguồn trong Rust.
 
 \begin{figure}[H]
   \includegraphics[width=1\columnwidth]{figures/c2/c2_ast.drawio.pdf}
   \centering
-  \caption{Ví dụ về cây cú pháp trừu tượng cho mã nguồn Rust.}
+  \caption{Ví dụ về cây AST cho mã nguồn Rust.}
   \label{img:c2_ast}
 \end{figure}
 
-\subsection{Đồ thị dòng điều khiển}
+\subsection{Đồ thị luồng điều khiển}
 
-Đồ thị dòng điều khiển (Control Flow Graph) \cite{yan2019classifying} là đồ thị có hướng, mô tả thứ tự thực thi của các mệnh đề và điều kiện để một mệnh đề được thực thi.
+Đồ thị luồng điều khiển (Control Flow Graph) \cite{yan2019classifying} là đồ thị có hướng, mô tả thứ tự thực thi của các mệnh đề và điều kiện để một mệnh đề được thực thi.
 Các nút là các mệnh đề hoặc mệnh đề điều kiện, được nối với nhau bằng các cạnh có hướng, thể hiện thứ tự điều khiển giữa các nút.
 Nếu một nút là mệnh đề thì có 1 cạnh ra, nếu một nút là mệnh đề điều kiện thì sẽ có 2 cạnh ra, một cạnh điều khiển khi điều kiện đúng và một cạnh điều khiển khi điều kiện sai.
 CFG được sử dụng cho nhiều ứng dụng phân tích ngữ cảnh, phân tích mã độc hại \cite{gascon2013structural}, định hướng cho công cụ kiểm thử mờ \cite{sparks2007automated}.
-Tuy nhiên, CFG không chứa thông tin về luồng dữ liệu của chương trình, do vậy CFG không thực sự đủ để ứng dụng phát hiện lỗ hổng cho mã nguồn một cách toàn diện
+Tuy nhiên, CFG không chứa thông tin về luồng dữ liệu của chương trình, do vậy CFG không thực sự đủ để ứng dụng phát hiện lỗ hổng cho mã nguồn một cách toàn diện.
 
 \begin{figure}[H]
   \includegraphics[width=1\columnwidth]{figures/c2/c2_cfg_point.drawio.pdf}
   \centering
-  \caption{Các thành phần cơ bản trong đồ thị dòng điều khiển.}
+  \caption{Các thành phần cơ bản trong đồ thị CFG.}
   \label{img:c2_cfg_point}
 \end{figure}
 
-Đồ thị dòng điều khiển bao gồm các thành phần chính là điểm xuất phát, khối xử lý, điểm quyết định, điểm nối và điểm kết thúc. Trong hình \ref{img:c2_cfg_point}, \textbf{điểm xuất phát} và \textbf{điểm kết thúc} biểu thị điểm bắt đầu và kết thúc của chương trình, lần lượt được thể hiện bằng hình tròn đặc và hình tròn đặc viền.
+Đồ thị luồng điều khiển bao gồm các thành phần chính là điểm xuất phát, khối xử lý, điểm quyết định, điểm nối và điểm kết thúc. Trong hình \ref{img:c2_cfg_point}, \textbf{điểm xuất phát} và \textbf{điểm kết thúc} biểu thị điểm bắt đầu và kết thúc của chương trình, lần lượt được thể hiện bằng hình tròn đặc và hình tròn đặc có viền.
 \textbf{Khối xử lý} tượng trưng cho các câu lệnh gán, khai báo và khởi tạo, được thể hiện bằng hình tròn rỗng.
-\textbf{Điểm quyết định} biểu thị các câu lệnh điều kiện trong các khối lệnh rẽ nhánh, được thể hiện bằng hình tròn rỗng với hai nhánh đi ra.
-\textbf{Điểm nối} biểu thị các câu lệnh thực hiện ngay sau các lệnh rẽ nhánh, có hai điểm trỏ đến, được thể hiện bằng hình tròn rỗng.
+\textbf{Điểm quyết định} biểu thị các câu lệnh điều kiện trong các khối lệnh rẽ nhánh, được thể hiện bằng hình tròn rỗng với hai cạnh đi ra.
+\textbf{Điểm nối} biểu thị các câu lệnh thực hiện ngay sau các lệnh rẽ nhánh, có hai cạnh nối đến, được thể hiện bằng hình tròn rỗng.
 
 \begin{figure}[H]
   \includegraphics[width=1\columnwidth] {figures/c2/c2_cfg_line.drawio.pdf}
@@ -54,39 +54,39 @@ Hình \ref{img:c2_cfg_line} mô tả các cấu trúc điều khiển phổ bi�
 
 % The PDG represents a program as a graph in which the nodes are statements and predicate expressions (or operators and operands) and the edges incident to a node represent both the data values on which the node’s operations depend and the control conditions on which the execution of the operations depends
 
-Đồ thị phụ thuộc chương trình (Program Dependence Graph) \cite{ferrante1987program} là đồ thị có hướng thể hiện cả 2 khía cạnh phụ thuộc điều khiển và phụ thuộc dữ liệu của chương trình.
+Đồ thị phụ thuộc chương trình (Program Dependence Graph) \cite{ferrante1987program} là đồ thị có hướng thể hiện hai khía cạnh của chương trình, phụ thuộc điều khiển và phụ thuộc dữ liệu.
 Một nút đại diện cho các mệnh đề hoặc mệnh đề điều kiện, một cạnh thể hiện mối quan hệ phụ thuộc điều khiển hoặc phụ thuộc dữ liệu giữa các nút.
 Mệnh đề mà một nút đại diện có được thực thi hay không phụ thuộc vào các cạnh điều kiện điều khiển trỏ tới nút, giá trị của các biến mà mệnh đề sử dụng phụ thuộc vào các cạnh phụ thuộc dữ liệu trỏ tới nút đó.
-Lưu ý rằng cạnh phụ thuộc điều khiển không giống như cạnh của đồ thị CFG, cạnh phụ thuộc điều kiện chỉ thể hiện điều kiện để mệnh đề của một nút được thực thi, không thể hiện thứ tự thực thi của mệnh đề giữa các nút.
+Lưu ý rằng cạnh phụ thuộc điều khiển không giống như cạnh của đồ thị CFG, cạnh phụ thuộc điều khiển chỉ thể hiện điều kiện để mệnh đề của một nút được thực thi, không thể hiện thứ tự thực thi của mệnh đề giữa các nút.
 
 \begin{figure}[H]
   \includegraphics[width=1\columnwidth]{figures/c2/c2_pdg.drawio.pdf}
   \centering
-  \caption{Ví dụ về đồ thị phụ thuộc chương trình.}
+  \caption{Ví dụ về đồ thị PDG.}
   \label{img:c2_pdg}
 \end{figure}
 
-Hình \ref{img:c2_pdg} biểu diễn ví dụ về một đồ thị phụ thuộc chương trình với cấu trúc điều kiện if else trong ngôn ngữ Rust, các cạnh nét đứt biểu diễn phụ thuộc điều khiển và các cạnh nét liền biểu diễn phụ thuộc dữ liệu.
+Hình \ref{img:c2_pdg} biểu diễn ví dụ về một đồ thị PDG với cấu trúc điều kiện if else trong ngôn ngữ Rust, các cạnh nét đứt biểu diễn phụ thuộc điều khiển và các cạnh nét liền biểu diễn phụ thuộc dữ liệu.
 
 \subsection{Đồ thị thuộc tính mã nguồn}
 
-Đồ thị thuộc tính mã nguồn (Code Property Graph) \cite{yamaguchi2014modeling} là một dạng đồ thị biểu diễn mã nguồn hợp thành từ cây cú pháp trừu tượng, đồ thị dòng điều khiển và đồ thị phụ thuộc chương trình.
-Đồ thị chứa các thông tin về cấu trúc cú pháp, luồng điều khiển và phụ thuộc dữ liệu trong chương trình, tạo ra một lớp biểu diễn trung gian trừu tượng cho mã nguồn mà không bị phụ thuộc vào ngôn ngữ lập trình cụ thể.
+Đồ thị thuộc tính mã nguồn (Code Property Graph) \cite{yamaguchi2014modeling} là một dạng đồ thị biểu diễn mã nguồn hợp thành từ cây AST, đồ thị CFG và đồ thị PDG.
+Đồ thị chứa các thông tin về cấu trúc cú pháp, luồng điều khiển và phụ thuộc dữ liệu trong chương trình. Đồ thị CPG tạo ra một lớp biểu diễn trung gian cho mã nguồn mà không bị phụ thuộc vào ngôn ngữ lập trình cụ thể.
 Các nút đại diện cho các thành phần như hàm, biến, lớp và các cạnh đại diện cho mối quan hệ giữa chúng như lời gọi hàm, sự gán giá trị, quan hệ cha con hay tham chiếu.
 Mỗi nút, cạnh đều có các thuộc tính, mỗi thuộc tính có giá trị riêng.
-CPG được ứng dụng để tìm kiếm lỗ hổng trong mã nguồn, phát hiện sao chép mã nguồn, đo lường khả năng kiểm thử mã nguồn và sinh mã khai thác \cite{xiaomeng2018cpgva, han2023bjxnet, kuchler2022representing}.
+Đồ thị CPG được ứng dụng để tìm kiếm lỗ hổng trong mã nguồn, phát hiện sao chép mã nguồn bằng học máy, học tăng cường \cite{xiaomeng2018cpgva, han2023bjxnet}.
 
 % \begin{figure}[H]
 %   \includegraphics[width=1\columnwidth]{figures/c2/c2_cpg.png}
 %   \centering
-%   \caption{Ví dụ đồ thị thuộc tính mã nguồn.}
+%   \caption{Ví dụ đồ thị CPG.}
 %   \label{img:c2_cpg}
 % \end{figure}
 
 \begin{figure}[H]
   \includegraphics[width=1\columnwidth]{figures/c2/c2_cpg_yamaguchi.png}
   \centering
-  \caption{Minh họa đồ thị thuộc tính mã nguồn \cite{yamaguchi2014modeling}.}
+  \caption{Minh họa đồ thị CPG \cite{yamaguchi2014modeling}.}
   \label{img:c2_cpg_yamaguchi}
 \end{figure}
 
@@ -103,6 +103,6 @@ CPG được ứng dụng để tìm kiếm lỗ hổng trong mã nguồn, phát
 %   return sum;
 % }
 % \end{minted}
-% \caption{Mã nguồn đầy đủ cho đồ thị thuộc tính mã nguồn hình \ref{img:c2_cpg}.}
+% \caption{Mã nguồn đầy đủ cho đồ thị CPG hình \ref{img:c2_cpg}.}
 % \label{code:c2_cpg}
 % \end{listing}

@@ -335,7 +335,3 @@
 # Rust for Embedded Systems: Current State and Open Problems (Extended Report)
 
 - It is important to use memory-safe languages to prevent such vulnerabilities. Furthermore, recently, the White House released a report [143] requiring future software to be developed in memory-safe languages. Traditional memory safe languages, such as Java, have high overhead and are not suitable for embedded systems. Rust [125] is a memory-safe language that is shown to have comparable performance as native code. Furthermore, Rust can easily interoperate with existing unsafe codebases [63], enabling incremental adoption. Rust team has a special focus on embedded systems [116], and several works [76, 77] demonstrate the feasibility of engineering a complete embedded software stack in Rust. Furthermore, Rust popularity is rising [103], and it is now adopted in Linux kernel [81] and Android [111].
-
-- Tóm tắt việt, anh
-- Danh mục các từ viết tắt
-- Kết luận
