@@ -1,9 +1,11 @@
-\section{Các tính năng đã hỗ trợ}
+\section{Các cú pháp đã hỗ trợ}
 
-Phần này sẽ trình bày một số tính năng của Rust khác biệt so với ngôn ngữ C/C++ và cách mà công cụ đã hỗ trợ cho các tính năng này.
-Các tính năng bao gồm: if let, while let, match, lifetime.
+Phần này sẽ trình bày một số cú pháp của Rust khác biệt so với ngôn ngữ C/C++ và cách mà công cụ đã hỗ trợ cho các cú pháp này.
+Các cú pháp bao gồm: if let, while let, match, lifetime.
+Những đoạn mã nguồn và hình ảnh mô tả đồ thị CPG được sử dụng từ giờ đến cuối chương đã được đơn giản hóa để dễ dàng thể hiện và minh họa.
+Các cạnh và các nút không phải trọng tâm của đồ thị CPG đã được loại bỏ để tập trung vào các tính năng cần trình bày.
 
-\subsection{if let}
+\subsection{Cú pháp if let}
 If else là cấu trúc điều khiển có mặt trong tất cả các loại ngôn ngữ phổ biến.
 Nó cho phép chúng ta kiểm tra một điều kiện và thực thi một khối mã nếu điều kiện đúng và một khối mã khác nếu điều kiện sai.
 Cấu trúc câu lệnh if else sẽ bao gồm một điều kiện và 2 khối mã.
@@ -11,7 +13,7 @@ Nếu điều kiện đúng, khối mã trong if sẽ được thực thi, ngư�
 Thông thường khối điều kiện sẽ là biểu thức trả về kết quả đúng hoặc sai của biểu thức đó.
 Trong ngôn ngữ như C/C++ thì chỉ chấp nhận biểu thức điều kiện, việc sử dụng mệnh đề có dấu hai chấm để kết thúc câu lệnh là không hợp lệ.
 
-Với phương châm \texttt{"Expression over statement"} và nhằm mục đích tạo sự ngắn gọn, Rust cho phép thực hiện phép khai báo biến và gán giá trị cho biến trong cùng một câu lệnh bằng điều kiện if let.
+Với phương châm \textit{"Expression over statement"} và nhằm mục đích tạo sự ngắn gọn, Rust cho phép thực hiện phép khai báo biến và gán giá trị cho biến trong cùng một câu lệnh bằng điều kiện if let.
 Cú pháp của câu lệnh if let như sau:
 
 \begin{minted}[mathescape, breaklines, frame=lines, framesep=2mm, baselinestretch=1.2, fontsize=\footnotesize, linenos]{rust}
@@ -59,6 +61,8 @@ if (obj != nullptr) { // 1 câu lệnh kiểm tra điều kiện
 \end{listing}
 
 Trong hình \ref{img:c4_cpg_iflet}, cạnh \texttt{CONDITION} của nút \texttt{ExprIf} trỏ tới nút \texttt{Assignment}, đồng thời cũng khai báo biến mới với tên $i$.
+Mặc định Joern sẽ không cho phép cạnh \texttt{CONDITION} tới nút \texttt{Assignment} bởi vì trong ngôn ngữ C/C++ không lấy một phép gán làm điều kiện cho câu lệnh if.
+Khóa luận đã thực hiện chỉnh sửa đặc tả CPG của Joern để cho phép cạnh \texttt{CONDITION} trỏ tới nút \texttt{Assignment} trong trường hợp này.
 Các mệnh đề trong khối được thực thi khi điều kiện đúng nếu có nhắc tới biến $i$ thì sẽ tham chiếu tới biến $i$ vừa được khai báo thông qua cạnh \texttt{REF}.
 
 \begin{figure}[H]
@@ -68,7 +72,7 @@ Các mệnh đề trong khối được thực thi khi điều kiện đúng n�
 \label{img:c4_cpg_iflet}
 \end{figure}
 
-\subsection{while let}
+\subsection{Cú pháp while let}
 
 Tương tự với tính năng if let ở trên, Rust cũng hỗ trợ việc khai báo biến làm điều kiện cho vòng lặp while. Cú pháp của vòng lặp while let như sau:
 
@@ -105,7 +109,7 @@ while let Some(i) = optional {
     \label{img:c4_cpg_whilelet}
 \end{figure}
 
-\subsection{match}
+\subsection{Cú pháp match}
 
 Ngoài việc sử dụng mệnh đề gán biến thành biểu thức điều kiện, tính hướng hàm của Rust còn thể hiện ở tính năng match với sự kết hợp giữa Pattern matching và Algebraic Data Types.
 Cấu trúc match không chỉ kiểm tra giá trị mà còn kết hợp với các pattern phức tạp, bao gồm kiểm tra điều kiện, kiểm tra các kiểu dữ liệu khác nhau và so sánh.
@@ -147,7 +151,7 @@ fn main() {
     \label{img:c4_match}
 \end{figure}
 
-\subsection{lifetime}
+\subsection{Cú pháp lifetime}
 
 Lifetime là cơ chế được sử dụng trong Rust để quản lý vòng đời của các biến tham chiếu, đảm bảo rằng các biến tham chiếu không trỏ tới vùng nhớ không còn tồn tại.
 Lifetime có vai trò tương tự như kiểu tổng quát, nhưng thay vì định kiểu cho biến thì lifetime sẽ xác định vòng đời cho biến tham chiếu.
@@ -156,7 +160,7 @@ Ngoài ra còn có cạnh \texttt{OUT\_LIVE} được bổ sung để chỉ ra q
 
 \texttt{LifetimeParameter} và \texttt{LifetimeArgument} được sử dụng cho các \texttt{struct}, \texttt{enum}, \texttt{trait} để chỉ ra lifetime tổng quát cho các biến tham chiếu.
 Loại nút \texttt{Lifetime} sẽ thể hiện vòng đời thực sự của biến tham chiếu.
-Các biến tham chiếu sẽ được gán lifetime thông qua cú pháp \texttt{'a}, \texttt{'b}, \texttt{'c}, ...
+Các biến tham chiếu sẽ được gán lifetime thông qua việc sử dụng dấu "\texttt{'}" trước tên lifetime, ví dụ như \texttt{'a}.
 Nếu các biến cùng đánh dấu lifetime \texttt{'a} thì sẽ có cạnh \texttt{OUT\_LIVE} trỏ từ biến tới nút \texttt{Lifetime} đại diện cho \texttt{'a} tương ứng.
 Nếu lifetime \texttt{'a} được giới hạn bởi lifetime \texttt{'b} thì sẽ có cạnh \texttt{OUT\_LIVE} từ nút \texttt{Lifetime} \texttt{'a} tới nút \texttt{Lifetime} \texttt{'b}.
 
@@ -172,26 +176,26 @@ Từ đó có thể khai thác thông tin để kiểm tra vòng đời của bi
 % Cuối cùng, nếu hàm có một hoặc nhiều hơn một biến tham chiếu đầu vào và một trong biến đầu vào là biến \texttt{self} (\texttt{self} tương đương với \texttt{this} trong C/C++), trình biên dịch sẽ suy luận rằng biến tham chiếu đầu ra có cùng lifetime với \texttt{self}.
 % Ngoài 3 trường hợp trên, Rust yêu cầu phải ghi rõ lifetime cho tất cả các biến tham chiếu để tránh nhầm lẫn và đảm bảo an toàn bộ nhớ.
 
-\begin{listing}[H]
-\begin{minted}[mathescape, breaklines, frame=lines, framesep=2mm, baselinestretch=1.2, fontsize=\footnotesize, linenos]{rust}
-fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
-    if x.len() > y.len() {
-        x
-    } else {
-        y
-    }
-}
-\end{minted}
-\caption{Ví dụ mã nguồn cho lifetime cho hàm}
-\label{code:c4_lifetime_1}
-\end{listing}
+% \begin{listing}[H]
+% \begin{minted}[mathescape, breaklines, frame=lines, framesep=2mm, baselinestretch=1.2, fontsize=\footnotesize, linenos]{rust}
+% fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
+%     if x.len() > y.len() {
+%         x
+%     } else {
+%         y
+%     }
+% }
+% \end{minted}
+% \caption{Ví dụ mã nguồn cho lifetime cho hàm}
+% \label{code:c4_lifetime_1}
+% \end{listing}
 
-\begin{figure}[H]
-    \includegraphics[width=1\columnwidth]{figures/c4/c4_lifetime_1.png}
-    \centering
-    \caption{Ví dụ đồ thị CPG cho đoạn mã nguồn \ref{code:c4_lifetime_1}}
-    \label{img:c4_lifetime_1}
-\end{figure}
+% \begin{figure}[H]
+%     \includegraphics[width=1\columnwidth]{figures/c4/c4_lifetime_1.png}
+%     \centering
+%     \caption{Ví dụ đồ thị CPG cho đoạn mã nguồn \ref{code:c4_lifetime_1}}
+%     \label{img:c4_lifetime_1}
+% \end{figure}
 
 \begin{listing}[H]
 \begin{minted}[mathescape, breaklines, frame=lines, framesep=2mm, baselinestretch=1.2, fontsize=\footnotesize, linenos]{rust}

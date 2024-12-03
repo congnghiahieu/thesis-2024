@@ -1,14 +1,18 @@
-\chapter{Chuyển đổi Rust sang đồ thị CPG}
-\label{chap:experiment}
+\chapter{Chuyển đổi mã nguồn Rust sang đồ thị CPG}
+\label{chap:mapping}
 
-Chương này sẽ trình bày về việc ánh xạ cây AST sang đồ thị CPG trên các thể loại cú pháp Rust và ứng dụng công cụ trong phân tích mã nguồn của một số đoạn mã có lỗ hổng bảo mật được công bố trên RUSTSEC Database \cite{rustsecAboutRustSec}.
+% Chương 4 trình bày về cách ánh xạ cây AST sang đồ thị CPG trên các thể loại cú pháp Rust.
+% Mức độ cài đặt và các hạn chế hiện thời của công cụ sẽ được thảo luận.
+% Không chỉ vậy, công cụ sẽ được sử dụng để phân tích mã nguồn của một số đoạn mã có lỗ hổng bảo mật được công bố trên RUSTSEC Database \cite{rustsecAboutRustSec}.
+% Ngoài ra, chương cũng sẽ thực nghiệm ứng dụng đồ thị CPG trong bài toán học máy phân loại mã nguồn Rust có lỗ hổng bảo mật, thực hiện so sánh với mô hình học máy khác và chứng minh tiềm năng khai thác của đồ thị CPG dành cho ngôn ngữ Rust.
 
-% Những đoạn mã nguồn và hình ảnh mô tả đồ thị CPG trong chương này đã được lược bỏ phần thông tin không cần thiết để thuận tiện trong diễn giải.
+Nội dung của chương 4 là về việc chuyển đổi cây AST sang đồ thị CPG trên các thể loại cú pháp Rust.
+Mức độ cài đặt của công cụ cho việc bao phủ các loại nút AST và ánh xạ chúng sang nút CPG tương ứng sẽ được thảo luận.
+Ngoài ra, chương cũng sẽ trình bày về các hạn chế hiện thời của công cụ.
 
-Hiện tại công cụ đã ánh xạ từ nút AST sang nút CPG tương ứng trên 162 struct và 33 enum theo định nghĩa của thư viện syn, tương đương 100\% định nghĩa các loại nút AST có trong thư viện tại phiên bản \href{https://docs.rs/syn/2.0.87/syn/}{2.0.87}.
-Công cụ được thực hiện kiểm thử trên 151 tệp mã nguồn tự thu thập từ trang \href{https://doc.rust-lang.org/stable/rust-by-example/index.html}{Rust By Example} bao gồm đa dạng các thể loại cú pháp và 14 dự án lớn trong thực tế.
-Mã nguồn của công cụ được lưu trữ tại địa chỉ \href{https://github.com/congnghiahieu/rust-parser}{rust-parser}, \href{https://github.com/congnghiahieu/syn-serde}{syn-serde}, \href{https://github.com/congnghiahieu/joern}{joern}, \href{https://github.com/congnghiahieu/codepropertygraph}{codepropertygraph}.
-
-\input{chapters/c4/c4_done.tex}
-\input{chapters/c4/c4_rustsec.tex}
+\input{chapters/c4/c4_implement.tex}
+\input{chapters/c4/c4_support_syntax.tex}
 \input{chapters/c4/c4_limit.tex}
+
+% \input{chapters/c4/c4_rustsec.tex}
+% \input{chapters/c4/c4_ml.tex}

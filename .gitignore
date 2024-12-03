@@ -15,4 +15,5 @@
 **/*.pdf
 **/*.drawio
 !**/*.drawio.pdf
+!thesis.pdf
 _minted

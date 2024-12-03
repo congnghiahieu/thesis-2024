@@ -7,6 +7,8 @@
 	\label{img:c3_arch}
 \end{figure}
 
+\newpage
+
 Kiến trúc của công cụ về cơ bản sẽ là kiến trúc của Joern và mở rộng thêm.
 Phần này sẽ đi chi tiết hơn so với phần \ref{sec:joern_flow} đã trình bày ở phía trên.
 Các thành phần kiến trúc của công cụ bao gồm:
@@ -33,7 +35,7 @@ Các cạnh sau này sẽ được sử dụng để xây dựng đồ thị CFG
 
 \textbf{Passes.} Một phần của cây CPG bao gồm các nút và cạnh đã được xây dựng ở AST Creation kết hợp với Scope Manager.
 Sau đó cây CPG sẽ tiếp tục được làm giàu thông tin bằng cách đi qua các pass.
-Mỗi pass sẽ bổ sung một lớp thông tin riêng biệt, ví dụ thông tin về kiểu dữ liệu, cấu trúc module, thứ tự thực hiện câu lệnh, ...
+Mỗi pass sẽ bổ sung một lớp thông tin riêng biệt, ví dụ thông tin về kiểu dữ liệu, cấu trúc module, thứ tự thực hiện câu lệnh, v.v.
 Các lớp thông tin này hoàn toàn phụ thuộc vào ngữ cảnh của ngôn ngữ, do vậy số lượng pass cũng sẽ không cố định.
 Các pass thao tác trên cây CPG nên có thể dùng chung cho nhiều ngôn ngữ, nhưng cũng có các pass được xây dựng riêng cho đặc điểm của một ngôn ngữ cụ thể.
 Một pass có thể phụ thuộc vào kết quả của pass trước đó hoặc chạy độc lập nên thứ tự chạy các pass cũng rất quan trọng.

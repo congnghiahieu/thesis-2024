@@ -30,10 +30,10 @@ Rust sử dụng thuộc tính \texttt{Send} và \texttt{Sync} để đảm bả
 Một kiểu là \texttt{Send} nếu nó có thể được chuyển quyền sở hữu một cách an toàn từ luồng này sang luồng khác, và \texttt{Sync} nếu nó có thể được truy cập an toàn giữa các luồng.
 Trình biên dịch Rust sử dụng các đặc điểm này để kiểm tra tại thời điểm biên dịch xem dữ liệu có thể được chia sẻ hoặc di chuyển giữa các luồng một cách an toàn hay không.
 Để quản lý trạng thái có thể thay đổi được trong môi trường đa luồng, Rust cung cấp các cơ chế đồng bộ hóa như \texttt{Mutex} và \texttt{Arc}.
-\texttt{Mutex} (Mutual Exclusion) đảm bảo rằng chỉ có một luồng có thể truy cập dữ liệu tại một thời điểm, ngăn chặn tương tranh dữ liệu.
-\texttt{Arc} (Atomic Reference Count) được sử dụng để đếm số lượng tham chiếu an toàn giữa các luồng, cho phép nhiều luồng chia sẻ quyền sở hữu dữ liệu, hoạt động tương tự cơ chế dọn rác bộ nhớ trong Java.
-Một nguyên tắc quan trọng trong lập trình đa luồng Rust là chuyển quyền sở hữu dữ liệu vào các luồng mới (Ownership Transfer in Threads).
-Khi một luồng được tạo ra, dữ liệu có thể được chuyển vào luồng đó, đảm bảo rằng luồng cha không còn quyền truy cập vào nó, do đó tránh được các điều kiện tương tranh dữ liệu.
+\texttt{Mutex} (Mutual exclusion) đảm bảo rằng chỉ có một luồng có thể truy cập dữ liệu tại một thời điểm, ngăn chặn tương tranh dữ liệu.
+\texttt{Arc} (Atomic reference count) được sử dụng để đếm số lượng tham chiếu an toàn giữa các luồng, cho phép nhiều luồng chia sẻ quyền sở hữu dữ liệu, hoạt động tương tự cơ chế dọn rác bộ nhớ trong Java.
+Một nguyên tắc quan trọng trong lập trình đa luồng Rust là chuyển quyền sở hữu dữ liệu từ luồng cũ vào luồng mới.
+Khi một luồng được tạo ra, dữ liệu có thể được chuyển vào luồng đó, đảm bảo rằng luồng cha không còn quyền truy cập vào nó, do đó tránh được tương tranh dữ liệu.
 
 % \textbf{Unsafe Blocks.} Rust cung cấp từ khóa \textit{unsafe} để cho phép viết các đoạn mã không an toàn, chẳng hạn như truy cập trực tiếp vào con trỏ hoặc thực hiện các thao tác không an toàn khác.
 

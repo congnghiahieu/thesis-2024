@@ -1,5 +1,11 @@
 \section{Hạn chế}
 
+\begin{itemize}
+    \item Ví dụ 1 loại nút AST -> 1 loại nút CPG. 100\% loại nút AST -> 1 loại nút CPG tương ứng
+    \item Tuy nhiên cần phải xem xem nút CPG đó có giàu thông tin hay không
+    \item Cái được cung cấp chỉ là AST. Ví dụ đối với C/C++ của Joern sử dụng CDT rất mạnh nên có nhiều thông tin hơn AST, ví dụ 1 nút AST có kèm luôn cả đoạn code tương ứng. Nhưng với TH này của Rust thì không có thư viện syn không có thông tin đoạn code tương ứng, thậm chí không có số dòng số cột, chỉ có cấu trúc cây AST. Riêng phần đoạn code là phải cấu tạo lại từ cây AST, và cũng chưa cấu tạo lại được hết tất cả các trường hợp.
+\end{itemize}
+
 \subsection{Macro}
 
 Trong các ngôn ngữ lập trình như C/C++ và Rust có tính năng macro hay meta-programming, là cách viết mã nguồn để sinh ra mã nguồn khác.
@@ -48,10 +54,3 @@ Việc xử lý các khái niệm như module con, module gốc, visibility, imp
 % \end{itemize}
 
 % \subsection{Type Argument match Type Parameter}
-
-% \subsection{Các lớp thông tin khác của đồ thị CPG}
-
-% Như đã trình bày ở phần kiến trúc của công cụ Joern, một đồ thị CPG sẽ bao gồm nhiều lớp thông tin khác nhau như AST, CFG, PDG hay các lớp thông tin khác của Joern và đặc thù của ngôn ngữ.
-% Hiện tại công cụ đã xử lý toàn bộ thông tin của lớp AST, phần lớn các thônng tin của lớp CFG, PDG.
-% Tuy nhiên vẫn còn một số lớp thông tin khác phục vụ cho việc duyệt đồ thị, liên kết đồ thị như \texttt{FileSystem}, \texttt{Shortcuts}, \texttt{TagsAndLocation}, \texttt{Annotation} vẫn chưa được đầy đủ.
-% Do vậy, một trong các mục tiêu tương lai của công cụ là hoàn thiện các lớp thông tin này.

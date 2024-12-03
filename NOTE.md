@@ -335,3 +335,32 @@
 # Rust for Embedded Systems: Current State and Open Problems (Extended Report)
 
 - It is important to use memory-safe languages to prevent such vulnerabilities. Furthermore, recently, the White House released a report [143] requiring future software to be developed in memory-safe languages. Traditional memory safe languages, such as Java, have high overhead and are not suitable for embedded systems. Rust [125] is a memory-safe language that is shown to have comparable performance as native code. Furthermore, Rust can easily interoperate with existing unsafe codebases [63], enabling incremental adoption. Rust team has a special focus on embedded systems [116], and several works [76, 77] demonstrate the feasibility of engineering a complete embedded software stack in Rust. Furthermore, Rust popularity is rising [103], and it is now adopted in Linux kernel [81] and Android [111].
+
+| Metric               | Logisitic Regression | Devign              |
+| -------------------- | -------------------- | ------------------- |
+| Accuracy             | 0.7321428571428571   | 0.7652694610778443  |
+| Precision            | 0.7307692307692307   | 0.7693236714975845  |
+| Recall               | 0.7037037037037037   | 0.9922118380062306  |
+| F1-score             | 0.7169811320754716   | 0.8666666666666667  |
+| ROC AUC              | 0.8071519795657727   | 0.4744725840556551  |
+| Precision-Recall AUC | 0.7400311365109602   | 0.7785454595108143  |
+| MCC                  | 0.46321262548101694  | 0.01190365485636284 |
+| Error Rate           | 0.2678571428571429   | 10.012780811437555  |
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{|c|c|c|}
+\hline
+Metric & Logisitic Regression & Devign \\
+\hline
+Accuracy & 0.7321428571428571 & 0.7652694610778443 \\
+Precision & 0.7307692307692307 & 0.7693236714975845 \\
+Recall & 0.7037037037037037 & 0.9922118380062306 \\
+F1-score & 0.7169811320754716 & 0.8666666666666667 \\
+ROC AUC & 0.8071519795657727 & 0.4744725840556551 \\
+Precision-Recall AUC & 0.7400311365109602 & 0.7785454595108143 \\
+MCC & 0.46321262548101694 & 0.01190365485636284 \\
+Error Rate & 0.2678571428571429 & 10.012780811437555 \\
+\hline
+\end{tabular}
+\end{table}
