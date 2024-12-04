@@ -1,42 +1,46 @@
 \section{Hạn chế}
 
-\subsection{Macro}
+\subsection{Cú pháp Macro}
 
-Trong các ngôn ngữ lập trình như C/C++ và Rust có tính năng macro hay meta-programming, là cách viết mã nguồn để sinh ra mã nguồn khác.
-Macro trong Rust bao gồm 2 loại declarative macro và procedural macro.
-Declarative macro giống như macro trong C/C++, còn procedural macro giống như inline function.
-Đối C/C++ có preprossor để xử lý macro trước khi cho vào trình biên dịch, đo đó khi mã nguồn sau khi được tiền xử lý thì đã được xử lý toàn bộ macro.
-Tuy nhiên, Rust không giống C/C++, macro của Rust \cite{rustlangMacrosRust} không được xử lý ở trước khi sinh cây AST mà sẽ được xử lý sau khi sinh cây AST nhưng trước khi đi vào pha phân tích ngữ cảnh của trình biên dịch.
+Trong ngôn ngữ lập trình C/C++ và Rust có tính năng macro, là cách viết mã nguồn để sinh ra mã nguồn khác \cite{rustlangMacrosRust}.
+% Macro trong Rust bao gồm 2 loại declarative macro và procedural macro.
+% Declarative macro giống như macro trong C/C++ \cite{}, còn procedural macro giống như inline function.
+Ngôn ngữ C/C++ có bộ tiền xử lý trước khi cho mã nguồn vào trình biên dịch, đo đó sau khi được tiền xử lý thì mã nguồn đã được xử lý toàn bộ macro.
+Tuy nhiên, Rust không giống C/C++, macro của Rust không được xử lý ở trước khi sinh cây AST mà sẽ được xử lý sau khi sinh cây AST nhưng trước khi đi vào pha phân tích ngữ cảnh của trình biên dịch \cite{veykrilSourceAnalysis}.
 Như đã đề cập ở phần các trước, công cụ hiện tại sử dụng thư viện syn để sinh cây AST cho mã nguồn và syn không hỗ trợ xử lý macro.
 Do đó tất cả các mã lệnh nằm bên trong macro sẽ không được xử lý, dẫn đến việc không thể sinh cây AST cho đoạn mã lệnh sử dụng macro.
 Tất cả các đoạn lệnh nằm trong một lời gọi macro hiện tại được xem như một chuỗi ký tự.
 Không chỉ vậy macro trong Rust sử dụng DSL (Domain-Specific Language) riêng, DSL này gần với ngôn ngữ Rust nhưng có sự mở rộng biến đổi để phù hợp với vai trò macro, do đó không thể sinh cây AST cho macro.
 
 Để xử lý trường hợp trên, một bước tiền xử lý mã nguồn có thể được thêm vào để mở rộng macro như C/C++.
-Công cụ có thể sử dụng đến thư viện \texttt{cargo-expand}, thư viện này có tác dụng đưa đoạn mã macro mà lập trình viên nhìn thấy thành đoạn mã mà trình biên dịch nhìn thấy.
-Mã nguồn sau khi được mở rộng thì sẽ có được các thông tin bị ẩn đi như \texttt{prelude} mặc định của Rust bao gồm các hàm, các ký tự được nạp sẵn trong ngôn ngữ, các macro sẽ được mở rộng, bao gồm cả declarative và procedural macro.
-Đối với declarative macro, thì macro nạp sẵn của ngôn ngữ như \texttt{println!}, \texttt{vec!} hay kể cả declarative macro do người dùng định nghĩa cũng sẽ được xử lý.
-Tuy nhiên, việc mở rộng macro trước khi cho vào cây AST sẽ làm cho mã nguồn bị biến đổi so với mã nguồn gốc, đồng thời tăng kích cỡ và độ lớn của mã nguồn.
+Công cụ có thể sử dụng đến tính năng mở rộng marco của trình biên dịch Rust \cite{rustlangMacroExpansion}.
+Tính năng này có tác dụng đưa đoạn mã macro mà lập trình viên nhìn thấy thành đoạn mã mà trình biên dịch nhìn thấy.
+Mã nguồn sau khi được mở rộng sẽ thay thế các lời gọi macro bằng định nghĩa gốc của macro.
+Các macro nạp sẵn của ngôn ngữ Rust như \texttt{println!}, \texttt{vec!} hay kể cả macro do người dùng định nghĩa cũng sẽ được xử lý.
+Không chỉ vậy, mã nguồn sau khi được mở rộng thì sẽ có được các thông tin bị ẩn đi như các mặc định của Rust bao gồm các hàm, các ký tự được nạp sẵn trong ngôn ngữ.
+Tuy nhiên, việc mở rộng macro trước khi cho vào sinh cây AST sẽ làm cho mã nguồn bị biến đổi so với mã nguồn gốc, đồng thời tăng kích cỡ và độ lớn của mã nguồn.
 Việc thêm các thông tin ẩn mà lập trình viên không nhìn thấy có thể gây nhầm lẫn.
-Điều này cũng đồng nghĩa với việc việc sinh cây AST cho mã nguồn sau khi xử lý macro sẽ phức tạp và tốn nhiều thời gian hơn.
+Điều này cũng đồng nghĩa với việc quá trình sinh cây AST cho mã nguồn sau khi xử lý macro sẽ phức tạp và tốn nhiều thời gian hơn.
 
-\subsection{Module}
+\subsection{Cơ chế Module}
 
-Cơ chế module trong Rust tương ứng với namespace trong C++, package trong Java.
+Cơ chế module trong Rust tương tự namespace trong C++, package trong Java \cite{rustlangManagingGrowing}.
 Module chia nhỏ mã nguồn thành các phần nhỏ hơn, tổ chức và quản lý mã nguồn, giúp tái sử dụng mã nguồn, giúp tránh xung đột tên biến, hàm giữa các module khác nhau.
-Một module trong Rust có thể là một file riêng biệt hoặc một phần của một file khác.
+Một module trong Rust có thể là một tệp riêng biệt hoặc nằm chung trong một tệp mã nguồn.
 Các module có thể được tổ chức thành một hệ thống phân cấp, với các module con được khai báo bên trong các module cha.
-% Có một số file được coi là file đặc biệt trong cấu trúc mã nguồn trong rust.
-% Ví dụ như file mod.rs, đây là file module gốc của thư mục chứa nó, tất cả các module con trong thư mục đó sẽ được import thông qua module gốc mod.rs.
-% Ngoài ra còn có file main.rs, lib.rs để đánh dấu điểm đầu vào của chương trình và xác định xem dự án là một thư viện hay một ứng dụng.
-Rust còn cung cấp cơ chế workspace, cho phép quản lý nhiều dự án nhỏ trong cùng một dự án lớn, mỗi dự án là một thư mục con trong thư mục workspace.
-Để kiểm soát khả năng truy cập, Rust sử dụng cơ chế visibility.
-Mặc định các thành phần trong module là private, để làm cho chúng có thể truy cập được từ các module khác, ta sử dụng từ khóa \texttt{pub}.
-Cơ chế path resolution dùng để định danh một thành phần cấu trúc từ module khác ta mà ta có thể import.
-Path resolution có thể là đường dẫn tuyệt đối hoặc tương đối.
-Ví dụ dùng từ khóa \texttt{self} để chỉ tới module hiện tại, dùng từ khóa \texttt{super} để chỉ tới module cha của module hiện tại, \texttt{crate} để chỉ tới module gốc của dự án.
-Hệ thống module phức tạp của Rust làm tăng đáng kể độ khó việc xử lý quan hệ giữa các module trong cây AST và phân tích ngữ cảnh.
-Việc xử lý các khái niệm như module con, module gốc, visibility, import và path resolution đòi hỏi một cơ chế phân tích tinh vi, do vậy hiện tại công cụ chưa xử lý được module.
+% Có một số tệp được coi là tệp đặc biệt trong cấu trúc mã nguồn trong rust.
+% Ví dụ như tệp mod.rs, đây là tệp module gốc của thư mục chứa nó, tất cả các module con trong thư mục đó sẽ được import thông qua module gốc mod.rs.
+% Ngoài ra còn có tệp main.rs, lib.rs để đánh dấu điểm đầu vào của chương trình và xác định xem dự án là một thư viện hay một ứng dụng.
+Rust còn cung cấp cơ chế workspace, cho phép quản lý nhiều dự án nhỏ trong cùng một dự án lớn, mỗi dự án là một thư mục con trong thư mục gốc lớn nhất \cite{rustlangCargoWorkspaces}.
+Để kiểm soát khả năng truy cập, Rust sử dụng cơ chế visibility \cite{rustlangVisibilityPrivacy}.
+Mặc định các thành phần trong module chỉ có phạm vi truy cập giới hạn trong module nó được định nghĩa.
+Để làm cho một đơn vị có thể truy cập được từ các module khác, ta sử dụng từ khóa \texttt{pub} đơn vi cần mở rộng truy cập.
+Ngoài ra, Rust có cơ chế đường dẫn dùng để định danh một thành phần cấu trúc từ module khác ta mà ta có thể truy cập nếu cho phép.
+Một đường dẫn có thể là đường dẫn tuyệt đối hoặc đường dẫn tương đối.
+Ví dụ dùng từ khóa \texttt{self} để chỉ tới module hiện tại, từ khóa \texttt{super} để chỉ tới module cha của module hiện tại, từ khóa \texttt{crate} để chỉ tới module gốc của dự án.
+Hệ thống module phức tạp của Rust làm tăng đáng kể độ khó cho việc xử lý quan hệ giữa các module trong cây AST và phân tích ngữ cảnh.
+Các khái niệm như workspace, module, visibility và cơ chế đường dẫn tạo nên sự phức tạp cho việc phân tích mã nguồn, ngữ cảnh của mã nguồn.
+Hiện tại công cụ chưa xử lý được các tính năng xung quanh các khái niệm này.
 
 % \subsection{Path}
 
@@ -53,5 +57,5 @@ Việc xử lý các khái niệm như module con, module gốc, visibility, imp
 
 % Như đã trình bày ở phần kiến trúc của công cụ Joern, một đồ thị CPG sẽ bao gồm nhiều lớp thông tin khác nhau như AST, CFG, PDG hay các lớp thông tin khác của Joern và đặc thù của ngôn ngữ.
 % Hiện tại công cụ đã xử lý toàn bộ thông tin của lớp AST, phần lớn các thônng tin của lớp CFG, PDG.
-% Tuy nhiên vẫn còn một số lớp thông tin khác phục vụ cho việc duyệt đồ thị, liên kết đồ thị như \texttt{FileSystem}, \texttt{Shortcuts}, \texttt{TagsAndLocation}, \texttt{Annotation} vẫn chưa được đầy đủ.
+% Tuy nhiên vẫn còn một số lớp thông tin khác phục vụ cho việc duyệt đồ thị, liên kết đồ thị như \texttt{tệpSystem}, \texttt{Shortcuts}, \texttt{TagsAndLocation}, \texttt{Annotation} vẫn chưa được đầy đủ.
 % Do vậy, một trong các mục tiêu tương lai của công cụ là hoàn thiện các lớp thông tin này.

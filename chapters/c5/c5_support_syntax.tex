@@ -60,8 +60,8 @@ if (obj != nullptr) { // 1 câu lệnh kiểm tra điều kiện
 \label{code:c5_iflet_cpp}
 \end{listing}
 
-Trong hình \ref{img:c5_cpg_iflet}, cạnh \texttt{CONDITION} của nút \texttt{ExprIf} trỏ tới nút \texttt{Assignment}, đồng thời cũng khai báo biến mới với tên $i$.
-Các mệnh đề trong khối được thực thi khi điều kiện đúng nếu có nhắc tới biến $i$ thì sẽ tham chiếu tới biến $i$ vừa được khai báo thông qua cạnh \texttt{REF}.
+Trong hình \ref{img:c5_cpg_iflet}, cạnh \texttt{CONDITION} của nút \texttt{ExprIf} trỏ tới nút \texttt{Assignment}, đồng thời cũng khai báo biến mới với tên \texttt{i}.
+Các mệnh đề trong khối được thực thi khi điều kiện đúng nếu có nhắc tới biến \texttt{i} thì sẽ tham chiếu tới biến \texttt{i} vừa được khai báo thông qua cạnh \texttt{REF}.
 
 \begin{figure}[H]
 \includegraphics[width=1\columnwidth]{figures/c5/c5_iflet.png}
@@ -72,7 +72,8 @@ Các mệnh đề trong khối được thực thi khi điều kiện đúng n�
 
 \subsection{Cú pháp while let}
 
-Tương tự với tính năng if let ở trên, Rust cũng hỗ trợ việc khai báo biến làm điều kiện cho vòng lặp while. Cú pháp của vòng lặp while let như sau:
+Tương tự với tính năng if let ở trên, Rust cũng hỗ trợ việc khai báo biến làm điều kiện cho vòng lặp while.
+Cú pháp của vòng lặp while let như sau:
 
 \begin{minted}[mathescape, breaklines, frame=lines, framesep=2mm, baselinestretch=1.2, fontsize=\footnotesize, linenos]{rust}
 while let <pattern> = <expression> {
@@ -80,8 +81,8 @@ while let <pattern> = <expression> {
 }
 \end{minted}
 
-Có thể hiểu là nếu việc khớp giữa \texttt{<pattern>} và \texttt{<expression>} thành công thì sẽ tiếp tục thực hiện vòng lặp, sẽ có 1 biến $i$ mới được khởi tạo đối với mỗi lần lặp.
-Các mệnh đề trong khối được thực thi điều kiện của vòng lặp thành công sẽ tham chiếu tới biến $i$ vừa được khai báo thông qua cạnh \texttt{REF} nếu có sử dụng tới.
+Có thể hiểu là nếu việc khớp giữa \texttt{<pattern>} và \texttt{<expression>} thành công thì sẽ tiếp tục thực hiện vòng lặp, sẽ có 1 biến \texttt{i} mới được khởi tạo đối với mỗi lần lặp.
+Các mệnh đề trong khối được thực thi điều kiện của vòng lặp thành công sẽ tham chiếu tới biến \texttt{i} vừa được khai báo thông qua cạnh \texttt{REF} nếu có sử dụng tới.
 Không chỉ vậy vế phải của điều kiện \texttt{<expression>} có thể được gán lại liên tục trong quá trình lặp, nếu \texttt{<pattern>} không khớp kết thúc vòng lặp.
 
 \begin{listing}[H]
@@ -153,14 +154,14 @@ fn main() {
 
 Lifetime là cơ chế được sử dụng trong Rust để quản lý vòng đời của các biến tham chiếu, đảm bảo rằng các biến tham chiếu không trỏ tới vùng nhớ không còn tồn tại.
 Lifetime có vai trò tương tự như kiểu tổng quát, nhưng thay vì định kiểu cho biến thì lifetime sẽ xác định vòng đời cho biến tham chiếu.
-Để biểu diễn được tính năng lifetime trên đồ thị CPG, có 3 loại nút mới được thêm vào đặc tả CPG là \texttt{Lifetime}, \texttt{LifetimeParameter}, \texttt{LifetimeArgument}.
-Ngoài ra còn có cạnh \texttt{OUT\_LIVE} được bổ sung để chỉ ra quan hệ giữa biến và lifetime, quan hệ giữa các lifetime với nhau.
+Để biểu diễn được tính năng lifetime trên đồ thị CPG, có 3 loại nút mới được thêm vào đặc tả CPG là \texttt{LIFETIME}, \texttt{LIFETIME PARAMETER}, \texttt{LIFETIME ARGUMENT}.
+Ngoài ra còn có cạnh \texttt{OUT LIVE} được bổ sung để chỉ ra quan hệ giữa biến và lifetime, quan hệ giữa các lifetime với nhau.
 
-\texttt{LifetimeParameter} và \texttt{LifetimeArgument} được sử dụng cho các \texttt{struct}, \texttt{enum}, \texttt{trait} để chỉ ra lifetime tổng quát cho các biến tham chiếu.
-Loại nút \texttt{Lifetime} sẽ thể hiện vòng đời thực sự của biến tham chiếu.
+\texttt{LIFETIME PARAMETER} và \texttt{LIFETIME ARGUMENT} được sử dụng cho các \texttt{struct}, \texttt{enum}, \texttt{trait} để chỉ ra lifetime tổng quát cho các biến tham chiếu.
+Loại nút \texttt{LIFETIME} sẽ thể hiện vòng đời thực sự của biến tham chiếu.
 Các biến tham chiếu sẽ được gán lifetime thông qua việc sử dụng dấu "\texttt{'}" trước tên lifetime, ví dụ như \texttt{'a}.
-Nếu các biến cùng đánh dấu lifetime \texttt{'a} thì sẽ có cạnh \texttt{OUT\_LIVE} trỏ từ biến tới nút \texttt{Lifetime} đại diện cho \texttt{'a} tương ứng.
-Nếu lifetime \texttt{'a} được giới hạn bởi lifetime \texttt{'b} thì sẽ có cạnh \texttt{OUT\_LIVE} từ nút \texttt{Lifetime} \texttt{'a} tới nút \texttt{Lifetime} \texttt{'b}.
+Nếu các biến cùng đánh dấu lifetime \texttt{'a} thì sẽ có cạnh \texttt{OUT LIVE} trỏ từ biến tới nút \texttt{LIFETIME} đại diện cho \texttt{'a} tương ứng.
+Nếu lifetime \texttt{'a} được giới hạn bởi lifetime \texttt{'b} thì sẽ có cạnh \texttt{OUT LIVE} từ nút \texttt{LIFETIME} \texttt{'a} tới nút \texttt{LIFETIME} \texttt{'b}.
 
 Ownership, borrowing và lifetime là 3 tính năng làm nên cơ chế an toàn bộ nhớ trong Rust.
 Do vậy đồ thị CPG phải thể hiện được 3 tính năng trên đồ thị và cung cấp thông tin thông qua các nút, cạnh và thuộc tính phù hợp.

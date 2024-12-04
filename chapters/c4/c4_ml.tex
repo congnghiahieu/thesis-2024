@@ -18,20 +18,21 @@ Thực hiện chạy 10 lần đối với mỗi mô hình học máy để đá
 Kết quả là giá trị trung bình của 10 lần chạy.
 
 Bộ dữ liệu được sử dụng trong thực nghiệm 130 tệp mã nguồn Rust có lỗ hổng bảo mật và 130 tệp mã nguồn Rust không có lỗ hổng bảo mật.
-Đối với 130 tệp  mã nguồn Rust có lỗ hổng bảo mật được trích xuất từ bộ dữ liệu của bài báo "A Closer Look at the Security Risks in the Rust Ecosystem" \cite{zheng2023closer}.
+Đối với 130 tệp mã nguồn Rust có lỗ hổng bảo mật được trích xuất từ bộ dữ liệu trong nghiên cứu của David Lo và cộng sự \cite{zheng2023closer}.
 130 tệp mã nguồn Rust không có lỗ bảo mật được thu thập từ 100 dự án mã nguồn mở của Rust nhiều sao nhất trên Github \cite{githubGithubRankingTop100RustmdMaster} và thực kiện kiểm chửng thủ công.
 
-Đối với bài toán học máy để phát hiện lỗ hổng bảo mật trên nền tảng CPG thì trước đây đã có mô hình Devign, một mô hình kinh điển cho lớp bài toán này \cite{zhou2019devign}.
+Đối với bài toán học máy để phát hiện lỗ hổng bảo mật trên nền tảng CPG thì trước đây đã có phương pháp Devign, một mô hình kinh điển cho lớp bài toán này \cite{zhou2019devign}.
 Devign đã được sử dụng cho ngôn ngữ C/C++, cũng sử dụng CPG của Joern, do đó Devign hoàn toàn có áp dụng tương tự cho CPG Rust trong khóa luận này
 Đối thủ so sánh của Devign là mô hình học máy sử dụng Word2Vec và Logistic Regression, mô hình này được đặt tên là Baseline.
 
 Do bài toán học máy ở đây rơi vào dạng phân loại nhị phân, nên các thang đo được sử dụng để đánh giá hiệu suất của mô hình là Accuracy, Precision, Recall, F1-score, ROC AUC, Precision-Recall AUC, MCC, Error Rate
 
-Mã nguồn của việc thực nghiệm được lưu trữ tại địa chỉ \href{TODO}{TODO}. Kết quả thực nghiệm được thể hiện trong bảng \ref{table:c4_ml}.
+Mã nguồn của việc thực nghiệm được lưu trữ tại địa chỉ \href{TODO}{TODO}.
+Kết quả thực nghiệm được thể hiện trong bảng \ref{table:c4_ml}.
 
 \begin{table}[H]
     \centering
-    \caption{Bảng so sánh mô hình Baseline và mô hình Devign}
+    \caption{Bảng so sánh mô hình Baseline và phương pháp Devign}
     \label{table:c4_ml}
     \begin{tabular}{l @{\hskip 2cm} c @{\hskip 2cm} c}
         \hline
@@ -49,17 +50,17 @@ Mã nguồn của việc thực nghiệm được lưu trữ tại địa chỉ 
     \end{tabular}
 \end{table}
 
-Trong bảng \ref{table:c4_ml}, mô hình Devign đã cho kết quả tốt hơn so với mô hình Baseline với hầu hết các thang đo đánh giá hiệu suất.
+Trong bảng \ref{table:c4_ml}, phương pháp Devign đã cho kết quả tốt hơn so với mô hình Baseline với hầu hết các thang đo đánh giá hiệu suất.
 Ta thấy được Accuracy hơn 0.04, Precision hơn 0.04, Recall hơn 0.29, F1-Score hơn 0.15, Precision-Recall AUC hơn 0.04 và Error Rate thấp hơn 0.04.
-Tuy nhiên, ROC AUC và MCC của mô hình Devign lại thấp hơn so với mô hình Baseline.
-Điều này chứng tỏ mô hình Devign có tiềm năng áp dụng cho bài toán học máy phát hiện lỗ hổng bảo mật trên nền tảng CPG Rust, nhưng vẫn cần cải thiện thêm.
+Tuy nhiên, ROC AUC và MCC của phương pháp Devign lại thấp hơn so với mô hình Baseline.
+Điều này chứng tỏ phương pháp Devign có tiềm năng áp dụng cho bài toán học máy phát hiện lỗ hổng bảo mật trên nền tảng CPG Rust, nhưng vẫn cần cải thiện thêm.
 
-Vốn dĩ độ chỉ số Accuracy của mô hình Devign chỉ đạt được ở mức 0.77 bời nhiều lý do.
+Vốn dĩ độ chỉ số Accuracy của phương pháp Devign chỉ đạt được ở mức 0.77 bời nhiều lý do.
 Thứ nhất là hạn chế về bộ dữ liệu của ngôn ngữ Rust, hiện tại các mã nguồn có lỗi được xác nhận chủ yếu lấy từ RUSTSEC Database.
 Rust là ngôn ngữ mới phát triển gần đây, hệ sinh thái chưa lớn mạnh nên số lượng mã nguồn có lỗi được báo cáo chưa nhiều.
 Thứ hai là hạn chế về đồ thị CPG, hiện tại đồ thị CPG của Rust vẫn còn nhiều thiếu sót.
 Các lớp thông tin về CFG, PDG vẫn chưa được hoàn thiện, hay các lớp thông tin khác có giá trị khai thác được sinh ra từ Joern cũng được có được cung cấp.
-Thứ ba là hạn chế về phiên bản cài đặt của mô hình Devign.
+Thứ ba là hạn chế về phiên bản cài đặt của phương pháp Devign.
 Phiên bản cài đặt của Devign hiện tại là mô phỏng lại từ bài báo gốc, mã nguồn đã lâu không được bảo trì và phát triển.
 Hiện tại Devign chỉ có thể sử dụng lớp thông tin về AST, CFG mà không có PDG, do vậy không thể khai thác được hết toàn bộ thông tin từ đồ thị CPG, chưa kể các lớp thông tin khác của Joern CPG.
 

@@ -3,19 +3,19 @@
 Phần này sẽ trình bày một số cú pháp của Rust khác biệt so với ngôn ngữ C/C++ và cách mà công cụ đã hỗ trợ cho các cú pháp này.
 Các cú pháp bao gồm: if let, while let, match, lifetime.
 Những đoạn mã nguồn và hình ảnh mô tả đồ thị CPG được sử dụng từ giờ đến cuối chương đã được đơn giản hóa để dễ dàng thể hiện và minh họa.
-Các cạnh và các nút không phải trọng tâm của đồ thị CPG đã được loại bỏ để tập trung vào các tính năng cần trình bày.
+Các cạnh và các nút không phải trọng tâm của đồ thị CPG sẽ được loại bỏ để tập trung vào các tính năng cần trình bày.
 
 \subsection{Cú pháp if let}
 If else là cấu trúc điều khiển có mặt trong tất cả các loại ngôn ngữ phổ biến.
-Nó cho phép chúng ta kiểm tra một điều kiện và thực thi một khối mã nếu điều kiện đúng và một khối mã khác nếu điều kiện sai.
+% Nó cho phép chúng ta kiểm tra một điều kiện và thực thi một khối mã nếu điều kiện đúng và một khối mã khác nếu điều kiện sai.
 Cấu trúc câu lệnh if else sẽ bao gồm một điều kiện và 2 khối mã.
 Nếu điều kiện đúng, khối mã trong if sẽ được thực thi, ngược lại khối mã trong else sẽ được thực thi.
 Thông thường khối điều kiện sẽ là biểu thức trả về kết quả đúng hoặc sai của biểu thức đó.
-Trong ngôn ngữ như C/C++ thì chỉ chấp nhận biểu thức điều kiện, việc sử dụng mệnh đề có dấu hai chấm để kết thúc câu lệnh là không hợp lệ.
+Trong ngôn ngữ như C/C++ thì chỉ chấp nhận biểu thức điều kiện, việc sử dụng mệnh đề (có dấu hai chấm để kết thúc câu lệnh) là không hợp lệ.
+Với phương châm "Expression over statement" và nhằm mục đích tạo sự ngắn gọn, Rust cho phép thực hiện phép khai báo biến và gán giá trị cho biến trong cùng một câu lệnh bằng điều kiện if let.
+Cú pháp tổng quát của câu lệnh if let như sau:
 
-Với phương châm \textit{"Expression over statement"} và nhằm mục đích tạo sự ngắn gọn, Rust cho phép thực hiện phép khai báo biến và gán giá trị cho biến trong cùng một câu lệnh bằng điều kiện if let.
-Cú pháp của câu lệnh if let như sau:
-
+\begin{listing}[H]
 \begin{minted}[mathescape, breaklines, frame=lines, framesep=2mm, baselinestretch=1.2, fontsize=\footnotesize, linenos]{rust}
 if let <pattern> = <expression> {
      <block>
@@ -23,29 +23,31 @@ if let <pattern> = <expression> {
      <block>
 }
 \end{minted}
+\caption{Mã giả cho cú pháp tổng quát của if let}
+\label{code:c4_iflet_general}
+\end{listing}
 
-\usemintedstyle{default}
-
-Cú pháp này sẽ thực hiện 2 công việc, kiểm tra xem \texttt{<expression>} có khớp với \texttt{<pattern>} hay không, nếu không khớp thì trả về $false$, nếu có khớp thì tiếp tục thực hiện tạo biến mới dựa theo \texttt{<pattern>} vừa lấy được và trả về $true$.
+Cú pháp \ref{code:c4_iflet_general} sẽ thực hiện 2 công việc, kiểm tra xem \texttt{<expression>} có khớp với \texttt{<pattern>} hay không, nếu không khớp thì trả về $false$, nếu khớp thì tiếp tục thực hiện tạo biến mới dựa theo \texttt{<pattern>} và trả về $true$.
 Các biến được khai báo mới từ \texttt{<pattern>} sẽ có phạm vi tồn tại trong khối lệnh điều kiện thành công.
-Do thực hiện 2 công việc trong cùng 1 câu lệnh nên khi quy đổi sang câu lệnh tương tự trong ngôn ngữ như C/C++ sẽ tương đương 2 câu lệnh kiểm tra điều kiện và gán biến.
 
 \begin{listing}[H]
 \begin{minted}[mathescape, breaklines, frame=lines, framesep=2mm, baselinestretch=1.2, fontsize=\footnotesize, linenos]{rust}
 let number: Option<i32> = None;
-let i_like_letters = false;
 
 if let Some(i) = number {
     println!("Matched number {:?}!", i);
-} else if i_like_letters {
-    // ...
 } else {
     // ...
 }
 \end{minted}
-\caption{Ví dụ mã nguồn cho if let}
+\caption{Ví dụ mã nguồn cho cú pháp if let}
 \label{code:c4_iflet}
 \end{listing}
+
+Đoạn mã \ref{code:c4_iflet} sử dụng cú pháp if let với điều kiện là kiểm tra xem biến \texttt{number} có giá trị bên trong hay không, nếu có thì khai báo một biến \texttt{i} mới và gán giá trị cho biến \texttt{i}.
+Tiếp theo sẽ thực thi khối lệnh bên trong if.
+Biến \texttt{i} sẽ chỉ tồn tại trong khối lệnh if, và được sử dụng trong câu lệnh \texttt{println!}.
+Do thực hiện 2 công việc trong cùng 1 câu lệnh nên khi quy đổi sang câu lệnh tương tự trong ngôn ngữ C/C++, cú pháp if let sẽ tương đương 2 câu lệnh kiểm tra điều kiện và gán biến \ref{code:c4_iflet_cpp}.
 
 \begin{listing}[H]
 \begin{minted}[mathescape, breaklines, frame=lines, framesep=2mm, baselinestretch=1.2, fontsize=\footnotesize, linenos]{cpp}
@@ -56,35 +58,33 @@ if (obj != nullptr) { // 1 câu lệnh kiểm tra điều kiện
     std::cout << "Matched " << number << "!" << std::endl;
 }
 \end{minted}
-\caption{Ví dụ mã nguồn cho if let tương đương trong C++}
+\caption{Ví dụ mã nguồn cho cú pháp if let tương đương trong C++}
 \label{code:c4_iflet_cpp}
 \end{listing}
-
-Trong hình \ref{img:c4_cpg_iflet}, cạnh \texttt{CONDITION} của nút \texttt{ExprIf} trỏ tới nút \texttt{Assignment}, đồng thời cũng khai báo biến mới với tên $i$.
-Mặc định Joern sẽ không cho phép cạnh \texttt{CONDITION} tới nút \texttt{Assignment} bởi vì trong ngôn ngữ C/C++ không lấy một phép gán làm điều kiện cho câu lệnh if.
-Khóa luận đã thực hiện chỉnh sửa đặc tả CPG của Joern để cho phép cạnh \texttt{CONDITION} trỏ tới nút \texttt{Assignment} trong trường hợp này.
-Các mệnh đề trong khối được thực thi khi điều kiện đúng nếu có nhắc tới biến $i$ thì sẽ tham chiếu tới biến $i$ vừa được khai báo thông qua cạnh \texttt{REF}.
 
 \begin{figure}[H]
 \includegraphics[width=1\columnwidth]{figures/c4/c4_iflet.png}
 \centering
-\caption{Ví dụ đồ thị CPG cho đoạn mã nguồn if let \ref{code:c4_iflet}}
+\caption{Ví dụ đồ thị CPG cho đoạn mã nguồn của cú pháp if let \ref{code:c4_iflet}}
 \label{img:c4_cpg_iflet}
 \end{figure}
 
+Trong hình \ref{img:c4_cpg_iflet}, cạnh \texttt{CONDITION} của nút \texttt{ExprIf} trỏ tới nút \texttt{Assignment}, đồng thời cũng khai báo biến mới với tên \texttt{i}.
+Mặc định Joern sẽ không cho phép cạnh \texttt{CONDITION} trỏ tới nút \texttt{Assignment} bởi vì trong ngôn ngữ C/C++ không thể lấy một phép gán làm điều kiện cho câu lệnh if.
+Khóa luận đã thực hiện chỉnh sửa đặc tả CPG của Joern để cho phép cạnh \texttt{CONDITION} trỏ tới nút \texttt{Assignment} trong trường hợp này.
+Các mệnh đề trong khối điều kiện đúng được thực thi, nếu có sử dụng tới biến \texttt{i} thì sẽ tham chiếu tới biến \texttt{i} vừa được khai báo thông qua cạnh \texttt{REF}.
+
 \subsection{Cú pháp while let}
 
-Tương tự với tính năng if let ở trên, Rust cũng hỗ trợ việc khai báo biến làm điều kiện cho vòng lặp while. Cú pháp của vòng lặp while let như sau:
+% Tương tự với tính năng if let ở trên, Rust cũng hỗ trợ việc khai báo biến làm điều kiện cho vòng lặp while.
+% Cú pháp của vòng lặp while let như sau:
 
-\begin{minted}[mathescape, breaklines, frame=lines, framesep=2mm, baselinestretch=1.2, fontsize=\footnotesize, linenos]{rust}
-while let <pattern> = <expression> {
-        <block>
-}
-\end{minted}
+% \begin{minted}[mathescape, breaklines, frame=lines, framesep=2mm, baselinestretch=1.2, fontsize=\footnotesize, linenos]{rust}
+% while let <pattern> = <expression> {
+%         <block>
+% }
+% \end{minted}
 
-Có thể hiểu là nếu việc khớp giữa \texttt{<pattern>} và \texttt{<expression>} thành công thì sẽ tiếp tục thực hiện vòng lặp, sẽ có 1 biến $i$ mới được khởi tạo đối với mỗi lần lặp.
-Các mệnh đề trong khối được thực thi điều kiện của vòng lặp thành công sẽ tham chiếu tới biến $i$ vừa được khai báo thông qua cạnh \texttt{REF} nếu có sử dụng tới.
-Không chỉ vậy vế phải của điều kiện \texttt{<expression>} có thể được gán lại liên tục trong quá trình lặp, nếu \texttt{<pattern>} không khớp kết thúc vòng lặp.
 
 \begin{listing}[H]
 \begin{minted}[mathescape, breaklines, frame=lines, framesep=2mm, baselinestretch=1.2, fontsize=\footnotesize, linenos]{rust}
@@ -98,23 +98,30 @@ while let Some(i) = optional {
     }
 }
 \end{minted}
-\caption{Ví dụ mã nguồn cho while let}
+\caption{Ví dụ mã nguồn cho cú pháp while let}
 \label{code:c4_whilelet}
 \end{listing}
+
+Tương tự với cú pháp if let ở trên, Rust cũng hỗ trợ việc khai báo biến làm điều kiện cho vòng lặp while.
+Đoạn mã \ref{code:c4_whilelet} trên được hiểu là nếu biến \texttt{optional} có giá trị bên trong thì thực hiện vòng lặp, nếu không thì kết thúc vòng lặp.
+Đồng thời sẽ có 1 biến \texttt{i} mới được khởi tạo đối với mỗi lần lặp, giá trị của \texttt{i} bằng giá trị của giá trị số nguyên bên trong biến \texttt{optional}.
+Các mệnh đề trong khối được thực thi, các mệnh đề bên trong sẽ tham chiếu tới biến \texttt{i} vừa được khai báo thông qua cạnh \texttt{REF} nếu có sử dụng tới.
+Không chỉ vậy vế phải của điều kiện có thể được gán lại liên tục trong quá trình lặp, việc kiểm tra giá trị số nguyên bên trong biến \texttt{optional} thất bại thì vòng lặp sẽ kết thúc.
+
+Hình \ref{img:c4_cpg_whilelet} mô tả đồ thị CPG cho đoạn mã nguồn while let ở trên. Nút \texttt{CONTROL STRUCTURE} thể hiện vòng lặp while, nút \texttt{ASSIGNMENT} thể hiện về điều kiện, nối với qua cạnh \texttt{CONDITION}. Ngoài ra biến \texttt{i} có khai báo riêng với nút \texttt{LOCAL} và được tham chiếu qua cạnh \texttt{REF} bởi nút tương ứng các mệnh đề trong khối mã.
 
 \begin{figure}[H]
     \includegraphics[width=1\columnwidth]{figures/c4/c4_whilelet.png}
     \centering
-    \caption{Ví dụ đồ thị CPG cho đoạn mã nguồn while let \ref{code:c4_whilelet}}
+    \caption{Ví dụ đồ thị CPG cho đoạn mã nguồn cú pháp while let \ref{code:c4_whilelet}}
     \label{img:c4_cpg_whilelet}
 \end{figure}
 
 \subsection{Cú pháp match}
 
-Ngoài việc sử dụng mệnh đề gán biến thành biểu thức điều kiện, tính hướng hàm của Rust còn thể hiện ở tính năng match với sự kết hợp giữa Pattern matching và Algebraic Data Types.
-Cấu trúc match không chỉ kiểm tra giá trị mà còn kết hợp với các pattern phức tạp, bao gồm kiểm tra điều kiện, kiểm tra các kiểu dữ liệu khác nhau và so sánh.
+Ngoài việc sử dụng mệnh đề gán biến thành biểu thức điều kiện, tính hướng hàm của Rust còn thể hiện ở sự kết hợp giữa cơ chế pattern matching và kiểu dữ liệu đại số (Algebraic Data Types).
+Ví dụ \ref{code:c4_match} cho thấy cấu trúc match không chỉ kiểm tra giá trị mà còn kết hợp với các pattern phức tạp, bao gồm kiểm tra điều kiện, kiểm tra các kiểu dữ liệu khác nhau và so sánh.
 Điều này mang lại cho Rust tính linh hoạt cao hơn so với switch trong C/C++ khi chỉ so sánh giá trị nguyên thủy.
-
 Một điểm khác biệt quan trọng giữa match và switch là tính toàn diện của match.
 Rust yêu cầu các pattern trong match phải bao quát tất cả các khả năng có thể xảy ra, nếu không trình biên dịch sẽ báo lỗi.
 Điều này giúp đảm bảo rằng không có tình huống nào bị bỏ qua, tăng cường độ an toàn của mã nguồn.
@@ -127,47 +134,58 @@ Ví dụ, Rust có thể match trên \texttt{tuple}, \texttt{enum}, \texttt{stru
 enum Color {
     Red,
     Blue(u32, u32, u32),
-    Green { red: u32, green: u32, blue: u32, },
+    Green {
+        red: u32,
+        green: u32,
+        blue: u32,
+    },
 }
 
 fn main() {
     let color = Color::Blue(0, 0, 255);
-
     match color {
-        Color::Red => println!("The color is Red!")
-        Color::Blue(r, g, b) => println!("R: {}, G: {}, B: {}!", r, g, b)
-        Color::Green {red, green, blue} => println!("R: {}, G: {}, B: {}!", red, green, blue),
+        Color::Red =>
+            println!("The color is Red!")
+        Color::Blue(r, g, b) =>
+            println!("R: {}, G: {}, B: {}!", r, g, b)
+        Color::Green {red, green, blue} =>
+            println!("R: {}, G: {}, B: {}!", red, green, blue),
     }
 }
 \end{minted}
-\caption{Ví dụ mã nguồn cho match}
+\caption{Ví dụ mã nguồn cho cú pháp match}
 \label{code:c4_match}
 \end{listing}
+
+Trong hình \ref{img:c4_match}, các biến thể của \texttt{enum Color} được thể hiện bằng nút \texttt{VARIANT}.
+Biến thể \texttt{Red} do không có giá trị nên không có nút con nào khác.
+Biến thể \texttt{Blue} có giá trị là 3 số nguyên tính theo chỉ mục nên sẽ có 3 nút con \texttt{MEMBER} tương ứng, nhưng mỗi nút \texttt{MEMBER} này không có nút con \texttt{IDENTIFIER} chỉ ra tên thành phần.
+Ngược lại mỗi nút \texttt{MEMBER} của \texttt{Green} sẽ có nút con \texttt{IDENTIFIER} thể hiện tên của thành phần.
+Còn cú pháp match được thể hiện bằng nút \texttt{CONTROL STRUCTURE} và cạnh \texttt{CONDITION} nối với nút \texttt{IDENTITER} chi tới biến \texttt{color}.
+Mỗi trường hợp của match sẽ được thể hiện bằng nút \texttt{ARM} và mỗi \texttt{ARM} cũng có sẽ cạnh \texttt{CONDITION} nối tới nút thể hiện biểu thức điều kiện.
 
 \begin{figure}[H]
     \includegraphics[width=1\columnwidth]{figures/c4/c4_match.png}
     \centering
-    \caption{Ví dụ đồ thị CPG cho đoạn mã nguồn match \ref{code:c4_match}}
+    \caption{Ví dụ đồ thị CPG cho đoạn mã nguồn cú pháp match \ref{code:c4_match}}
     \label{img:c4_match}
 \end{figure}
 
 \subsection{Cú pháp lifetime}
 
-Lifetime là cơ chế được sử dụng trong Rust để quản lý vòng đời của các biến tham chiếu, đảm bảo rằng các biến tham chiếu không trỏ tới vùng nhớ không còn tồn tại.
-Lifetime có vai trò tương tự như kiểu tổng quát, nhưng thay vì định kiểu cho biến thì lifetime sẽ xác định vòng đời cho biến tham chiếu.
-Để biểu diễn được tính năng lifetime trên đồ thị CPG, có 3 loại nút mới được thêm vào đặc tả CPG là \texttt{Lifetime}, \texttt{LifetimeParameter}, \texttt{LifetimeArgument}.
-Ngoài ra còn có cạnh \texttt{OUT\_LIVE} được bổ sung để chỉ ra quan hệ giữa biến và lifetime, quan hệ giữa các lifetime với nhau.
+Lifetime là cơ chế được sử dụng trong Rust để quản lý vòng đời của các biến tham chiếu.
+Quản lý lifetime một cách chặt chẽ đảm bảo rằng các biến tham chiếu không trỏ tới vùng nhớ không còn tồn tại.
+Lifetime có vai trò tương tự như kiểu tổng quát, nhưng thay vì định kiểu cho biến thì lifetime sẽ xác định thời gian hợp lệ cho biến tham chiếu.
+Để biểu diễn được kiểu dữ liệu tổng quát, đặc tả CPG của Joern đã có các nút như \texttt{TYPE}, \texttt{TYPE PARAMETER}, \texttt{TYPE ARGUMENT}.
+Do vậy để biểu diễn được tính năng lifetime trên đồ thị CPG, 3 loại nút mới đã được thêm vào đặc tả CPG bao gồm \texttt{LIFETIME}, \texttt{LIFETIME PARAMETER}, \texttt{LIFETIME ARGUMENT}.
+Để chỉ ra quan hệ ràng buộc giữa biến và lifetime, quan hệ giữa các lifetime với nhau ta sẽ thêm cạnh \texttt{OUT LIVE}. \texttt{OUT LIVE} có ý nghĩa nút nguồn phải có thời gian sống lớn hơn nút đích. Quy định thời gian sống của một đơn vị thành phần dài hơn đơn vị thành phần khác được tham khảo từ Rust Reference.
 
-\texttt{LifetimeParameter} và \texttt{LifetimeArgument} được sử dụng cho các \texttt{struct}, \texttt{enum}, \texttt{trait} để chỉ ra lifetime tổng quát cho các biến tham chiếu.
-Loại nút \texttt{Lifetime} sẽ thể hiện vòng đời thực sự của biến tham chiếu.
-Các biến tham chiếu sẽ được gán lifetime thông qua việc sử dụng dấu "\texttt{'}" trước tên lifetime, ví dụ như \texttt{'a}.
-Nếu các biến cùng đánh dấu lifetime \texttt{'a} thì sẽ có cạnh \texttt{OUT\_LIVE} trỏ từ biến tới nút \texttt{Lifetime} đại diện cho \texttt{'a} tương ứng.
-Nếu lifetime \texttt{'a} được giới hạn bởi lifetime \texttt{'b} thì sẽ có cạnh \texttt{OUT\_LIVE} từ nút \texttt{Lifetime} \texttt{'a} tới nút \texttt{Lifetime} \texttt{'b}.
+Nút \texttt{LIFETIME PARAMETER} và \texttt{LIFETIME ARGUMENT} được sử dụng cho các \texttt{struct}, \texttt{enum}, \texttt{trait} để chỉ ra lifetime tổng quát cho các biến tham chiếu.
+Loại nút \texttt{LIFETIME} sẽ thể hiện vòng đời thực sự của biến tham chiếu.
+Các biến tham chiếu sẽ được gán lifetime thông qua việc sử dụng dấu "\texttt{'}" đi trước tên lifetime, ví dụ như \texttt{'a}.
+Nếu biến đánh dấu lifetime \texttt{'a} thì sẽ có cạnh \texttt{OUT LIVE} trỏ từ nút \texttt{IDENTIFIER} của biến tới nút \texttt{LIFETIME} đại diện cho \texttt{'a} tương ứng.
+Nếu lifetime \texttt{'a} được giới hạn bởi lifetime \texttt{'b} thì sẽ có cạnh \texttt{OUT LIVE} từ nút \texttt{LIFETIME} \texttt{'a} tới nút \texttt{LIFETIME} \texttt{'b}.
 
-Ownership, borrowing và lifetime là 3 tính năng làm nên cơ chế an toàn bộ nhớ trong Rust.
-Do vậy đồ thị CPG phải thể hiện được 3 tính năng trên đồ thị và cung cấp thông tin thông qua các nút, cạnh và thuộc tính phù hợp.
-Đặc biệt là tính năng lifetime, vòng đời hợp lệ của các biến được thể hiện qua lifetime do đó việc thể hiện đúng quan hệ giữa lifetime và biến, lifetime với lifetime, biến với biến là rất quan trọng.
-Từ đó có thể khai thác thông tin để kiểm tra vòng đời của biến tham chiếu, giúp phát hiện được các lỗi về bộ nhớ gây ra khi đánh dấu lifetime không chính xác.
 
 % Lifetime elision là cơ chế trong Rust giúp tự động suy diễn lifetime cho các biến tham chiếu.
 % Có ba luật chính về lifetime elision trong Rust.
@@ -176,43 +194,90 @@ Từ đó có thể khai thác thông tin để kiểm tra vòng đời của bi
 % Cuối cùng, nếu hàm có một hoặc nhiều hơn một biến tham chiếu đầu vào và một trong biến đầu vào là biến \texttt{self} (\texttt{self} tương đương với \texttt{this} trong C/C++), trình biên dịch sẽ suy luận rằng biến tham chiếu đầu ra có cùng lifetime với \texttt{self}.
 % Ngoài 3 trường hợp trên, Rust yêu cầu phải ghi rõ lifetime cho tất cả các biến tham chiếu để tránh nhầm lẫn và đảm bảo an toàn bộ nhớ.
 
-% \begin{listing}[H]
-% \begin{minted}[mathescape, breaklines, frame=lines, framesep=2mm, baselinestretch=1.2, fontsize=\footnotesize, linenos]{rust}
-% fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
-%     if x.len() > y.len() {
-%         x
-%     } else {
-%         y
-%     }
-% }
-% \end{minted}
-% \caption{Ví dụ mã nguồn cho lifetime cho hàm}
-% \label{code:c4_lifetime_1}
-% \end{listing}
+\begin{listing}[H]
+\begin{minted}[mathescape, breaklines, frame=lines, framesep=2mm, baselinestretch=1.2, fontsize=\footnotesize, linenos]{rust}
+fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
+    if x.len() > y.len() {
+        x
+    } else {
+        y
+    }
+}
+\end{minted}
+\caption{Ví dụ mã nguồn cho lifetime cho hàm}
+\label{code:c4_lifetime_1}
+\end{listing}
 
-% \begin{figure}[H]
-%     \includegraphics[width=1\columnwidth]{figures/c4/c4_lifetime_1.png}
-%     \centering
-%     \caption{Ví dụ đồ thị CPG cho đoạn mã nguồn \ref{code:c4_lifetime_1}}
-%     \label{img:c4_lifetime_1}
-% \end{figure}
+Các biến tham chiếu luôn có một lifetime tương ứng với nó, có thể được chỉ ra tường mình hoặc không tường minh.
+Đoạn mã \ref{code:c4_lifetime_1} mô tả một ví dụ bắt buộc phải sử đúng lifetime một cách tường minh để chỉ có vòng đời cuả biến tham chiếu.
+Hàm \texttt{longest} nhận vào 2 biến tham chiếu \texttt{x} và \texttt{y} cùng có lifetime \texttt{'a} và giá trị trả về cũng có lifetime \texttt{'a}.
+Trình biên dịch Rust có thể tự động suy diễn lifetime không tường mình cho hai biến tham chiếu đầu vào \texttt{x} và \texttt{y}, nhưng không thể suy diễn được lifetime cho giá trị tham chiếu trả về.
+Hơn nữa, giá trị trả về của hàm \texttt{longest} là một trong hai giá trị tham chiếu đầu vào.
+Do trình biên dịch không thể biết được trong khi thực thi hàm thì giá trị trả về sẽ trỏ tới vùng nhớ của \texttt{x} hay \texttt{y}, do đó cần phải chỉ rõ lifetime cho giá trị trả về.
+Biến \texttt{x} và \texttt{y} cùng có lifetime \texttt{'a} tức là \texttt{x} và \texttt{y} có sẽ một khoảng thời gian mà \texttt{x} và \texttt{y} cùng tồn tại và đặt tên khoảng thời gian đó là \texttt{'a}.
+Giá trị đầu ra tồn tại trong khoảng thời gian \texttt{'a} này thì luôn đảm bảo không trỏ tới vùng nhớ không còn tồn tại.
+Khi sử dụng hàm, nếu đối số đầu vào hay biến nhận giá trị trả về không thỏa mãn ràng buộc lifetime \texttt{'a} thì trình biên dịch Rust sẽ báo lỗi.
+
+\begin{figure}[H]
+    \includegraphics[width=1\columnwidth]{figures/c4/c4_lifetime_1.png}
+    \centering
+    \caption{Ví dụ đồ thị CPG cho đoạn mã nguồn \ref{code:c4_lifetime_1}}
+    \label{img:c4_lifetime_1}
+\end{figure}
+
+Hình \ref{img:c4_lifetime_1} thể hiện mối quan hệ lifetime giữa các biến tham chiếu và giá trị trả về của hàm.
+Hàm \texttt{longest} được thể hiện qua nút \texttt{METHOD}.
+Trong đó nút \texttt{METHOD} có cạnh \texttt{AST} trỏ tới nút \texttt{GENERICS} đại diện cho nút cha bọc lấy nhiều nút thể hiện kiểu tổng quát.
+Nút \texttt{LIFETIME PARAMETER} thể hiện lifetime \texttt{'a} của hàm, và cũng là lifetime của các biến tham chiếu và giá trị trả về.
+Các biến tham chiếu \texttt{x} và \texttt{y} có cùng lifetime \texttt{'a} được thể hiện qua cạnh \texttt{OUT LIVE} từ nút \texttt{IDENTIFIER} của biến \texttt{x} và \texttt{y} tới nút \texttt{LIFETIME} của \texttt{'a}.
+Giá trị trả về của hàm cũng có lifetime \texttt{'a} và được thể hiện qua cạnh \texttt{OUT LIVE} từ nút \texttt{METHOD RETURN} tới nút \texttt{LIFETIME} \texttt{'a}.
+Mối quan hệ lifetime giữa các biến tham chiếu và giá trị trả về đều được thể hiện qua các nút \texttt{LIFETIME} và cạnh \texttt{OUT LIVE} trên đồ thị CPG.
 
 \begin{listing}[H]
 \begin{minted}[mathescape, breaklines, frame=lines, framesep=2mm, baselinestretch=1.2, fontsize=\footnotesize, linenos]{rust}
-fn f<'a, 'b, 'c, 'd: 'c>(x: &'a i32, mut y: &'b i32, z: &'c i32)
+fn f<'a, 'b, 'c, T>(x: &'a i32, mut y: &'b i32, z: &'c T)
 where
-    'a: 'b,
+    'b: 'a,
+    'c: 'b,
+    T: 'b,
 {
     // ...
 }
 \end{minted}
-\caption{Ví dụ mã nguồn cho giới hạn lifetime}
+\caption{Ví dụ mã nguồn cho cú pháp lifetime kết hợp cú pháp where}
 \label{code:c4_lifetime_2}
 \end{listing}
+
 
 \begin{figure}[H]
     \includegraphics[width=1\columnwidth]{figures/c4/c4_lifetime_2.png}
     \centering
-    \caption{Ví dụ đồ thị CPG cho đoạn mã nguồn \ref{code:c4_lifetime_2}}
+    \caption{Ví dụ đồ thị CPG cho đoạn mã nguồn cú pháp lifetime \ref{code:c4_lifetime_2}}
     \label{img:c4_lifetime_2}
 \end{figure}
+
+Trong Rust, kiểu tổng quát và ràng buộc của nó có thể được chỉ rõ thông qua cú pháp \texttt{where}.
+Cú pháp \texttt{where} cho phép thể hiện ràng buộc giữa kiểu dữ liệu tổng quát và kiểu lifetime tổng quát.
+Đoạn mã \ref{code:c4_lifetime_2} minh họa về một hàm có nhiều lifetime, nhiều kiểu tổng quát và tham chiếu đầu vào kết hợp với cú pháp \texttt{where} để thể hiện mối quan hệ ràng buộc giữa chúng.
+Hàm \texttt{f} nhận vào 3 biến tham chiếu \texttt{x}, \texttt{y}, \texttt{z} có lifetime tương ứng là \texttt{'a}, \texttt{'b}, \texttt{'c}.
+Cú pháp \texttt{'b: 'a} thể hiện ràng buộc lifetime \texttt{'b} của biến \texttt{y} phải lớn hơn hoặc bằng lifetime \texttt{'a} của biến \texttt{x}.
+Trên đồ thị CPG ở hình \ref{img:c4_lifetime_2}, điều này tức là sẽ có cạnh \texttt{OUT LIVE} từ nút \texttt{LIFETIME} \texttt{'b} tới nút \texttt{LIFETIME} \texttt{'a}.
+Điều này tương tự với việc lifetime \texttt{'c} của biến \texttt{z} phải lớn hơn hoặc bằng lifetime \texttt{'b} của biến \texttt{y}.
+Cạnh \texttt{OUT LIVE} từ nút \texttt{LIFETIME} \texttt{'c} tới nút \texttt{LIFETIME} \texttt{'b} được thể hiện rõ ràng trên đồ thị CPG.
+
+Không chỉ ràng buộc giữa các lifetime với nhau, hoàn toàn có thể ràng buộc lifetime cho một kiểu dữ liệu tổng quát.
+Kiểu dữ liệu \texttt{T} của biến \texttt{y} phải có lifetime lớn hơn \texttt{'b} thông qua cú pháp \texttt{T: 'b}.
+Cú pháp này sẽ có ý nghĩa trong trường hợp khi T là một kiểu \texttt{struct} tự định nghĩa, thì tất cả các thuộc tính tham chiếu của T cũng phải có lifetime lớn hơn hoặc bằng \texttt{'b}.
+Sẽ có cạnh \texttt{LIFETIME} từ nút \texttt{TYPE} của kiểu \texttt{T} tới nút \texttt{LIFETIME} \texttt{'b} để thể hiện mối quan hệ ràng buộc giữa chúng.
+Rust cung cấp hai cách để thể hiện ràng buộc cho kiểu dữ liệu và kiểu lifetime tổng quát.
+Một là khai báo ngay tại phần khai báo hàm, hai là sử dụng cú pháp \texttt{where} để thể hiện ràng buộc.
+Lưu ý rằng khai báo ngay tại hàm và cú pháp \texttt{where} không thay thế cho nhau mà cùng tồn tại để có thể kết hợp với nhau.
+Khai báo ngay tại hàm mang ý nghĩa khai báo nên sẽ sử dụng các nút \texttt{TYPE PARAMETER} và \texttt{LIFETIME PARAMETER} để thể hiện.
+Còn cú pháp \texttt{where} mang ý nghĩa ràng buộc nên sẽ sử dụng các nút \texttt{TYPE}, \texttt{LIFETIME} và cạnh \texttt{OUT LIVE}.
+
+Ownership, borrowing và lifetime là 3 tính năng làm nên cơ chế an toàn bộ nhớ trong Rust.
+Đây là bộ ba tính năng quan trọng làm cho Rust trở nên khác biệt so với các ngôn ngữ lập trình khác.
+Đồ thị CPG cần phải thể hiện được 3 tính năng trên và cung cấp thông tin thông qua các nút, cạnh và thuộc tính phù hợp.
+Đặc biệt là tính năng lifetime thể hiện sự hợp lệ của các biến tham chiếu.
+Do đó việc thể hiện đúng quan hệ giữa lifetime và biến, lifetime với lifetime, biến với biến là rất quan trọng.
+Từ đó có thể khai thác thông tin để kiểm tra sự hợp lệ của biến tham chiếu, giúp phát hiện được các lỗi về bộ nhớ gây ra khi đánh dấu lifetime không chính xác.

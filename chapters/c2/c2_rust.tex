@@ -4,34 +4,35 @@
 
 Rust là một ngôn ngữ an toàn về bộ nhớ, được thiết kế cho phát triển phần mềm mức hệ thống.
 Trình biên dịch Rust kiểm tra chương trình với các luật để đảm bảo an toàn bộ nhớ và chống tương tranh dữ liệu.
-Các cơ chế an toàn bao gồm các khái niệm cơ bản: ownership, borrowing, lifetime, exclusive mutability và thread safe.
+Các cơ chế an toàn bao gồm các khái niệm cơ bản: ownership, borrowing, lifetime và thread safe (an toàn luồng) \ref{code:c2_safe_rust}.
 
 \textbf{Ownership.} Cơ chế ownership giúp Rust có sự kiểm soát vừa đủ với việc quản lý bộ nhớ, không cần sử dụng cơ chế thu dọn bộ nhớ tự động như Java hoặc để người dùng tự xử lý như C/C++.
 Theo cơ chế ownership của Rust, một giá trị (có địa chỉ vị trí nhất định trong bộ nhớ) trong một lúc chỉ có một biến sở hữu độc quyền.
-Khi owner của giá trị ra khỏi phạm vi cụ thể, giá trị trong bộ nhớ sẽ bị giải phóng.
+Khi chủ sở hữu của giá trị ra khỏi phạm vi cụ thể, giá trị trong bộ nhớ sẽ bị giải phóng.
 Gán biến cho một biến khác dẫn đến chuyển ownership.
-Khi một biến mất quyền owner cho một giá trị, biến đó sẽ không còn sử dụng được nữa.
+Khi một biến mất quyền sở hữu một giá trị, biến đó sẽ không còn sử dụng được nữa.
 Trình biên dịch Rust theo dõi sự tồn tại của mỗi giá trị thông qua cơ chế ownership và thực hiện thu hồi bộ nhớ cần thiết.
-Cơ chế ownership tương tự như mẫu thiết kế \texttt{Resource Acquisition Is Initialization} (RAII) \cite{cppreferenceRAIICppreferencecom} thường được sử dụng trong ngôn ngữ C++.
+Cơ chế ownership tương tự như mẫu thiết kế Resource Acquisition Is Initialization (RAII) \cite{cppreferenceRAIICppreferencecom} thường được sử dụng trong ngôn ngữ C++.
 
 \textbf{Borrowing.} Để có thể chia sẻ giá trị mà không chuyển ownership, cơ chế borrowing cho phép việc tạo một tham chiếu đến giá trị và biến mới sẽ sử dụng tham chiếu đó.
 Với cơ chế borrowing, một giá trị có thể được đọc hoặc cập nhật mà không thay đổi ownership của giá trị.
-Có hai loại borrowing: 1) mượn chia sẻ để đọc và 2) mượn độc quyền để ghi.
+Có hai loại borrowing: 1) shared read-borrowing (mượn chia sẻ để đọc) và 2) exclusive mutable-borrowing (mượn độc quyền để ghi).
 Trình biên dịch Rust đảm bảo rằng tham chiếu đọc và tham chiếu ghi không bao giờ xuất hiện cùng một lúc.
-Điều này có nghĩa là các thao tác đọc và ghi đồng thời là không thể trong Rust, từ đó loại bỏ khả năng xảy ra tương tranh dữ liệu, các lỗi an toàn bộ nhớ như null pointer dereferencing hay các lỗi logic lập trình khác.
+Điều này có nghĩa là các thao tác đọc và ghi đồng thời là không thể trong Rust, từ đó loại bỏ khả năng xảy ra tương tranh dữ liệu hay các lỗi lập trình khác.
+% các lỗi an toàn bộ nhớ như null pointer dereferencing
 
-\textbf{Lifetime.} Lifetime đại diện cho phạm vi mà tham chiếu có hiệu lực, hay việc sử dụng tham chiếu đó để lấy giá trị sẽ an toàn về bộ nhớ.
+\textbf{Lifetime.} Lifetime đại diện cho phạm vi mà tham chiếu có hiệu lực, hay việc sử dụng tham chiếu đó để lấy giá trị là an toàn về bộ nhớ.
 Tính năng lifetime trong Rust là một loại kiểu tổng quát, các lifetime tổng quát thể hiện mối quan hệ ràng buộc giữa thời gian hợp lệ của tham chiếu và thời gian sống của giá trị mà chúng tham chiếu tới.
 Cụ thể, để xác định khi nào các tham chiếu ra khỏi phạm vi, trình biên dịch liên kết mỗi tham chiếu với một lifetime và theo dõi các ràng buộc giữa các lifetime.
-Hệ thống lifetime kết hợp với borrowing của Rust đảm bảo rằng các vấn đề an toàn bộ nhớ truyền thống như use after free hoặc dangling pointers là không thể xảy ra bằng cách không cho phép các tham chiếu tồn tại lâu hơn biến thực sự sở hữu giá trị.
+Hệ thống lifetime kết hợp với borrowing của Rust đảm bảo rằng các vấn đề an toàn bộ nhớ truyền thống như use after free, null pointer dereferencing, dangling pointer là không thể xảy ra bằng cách không cho phép các tham chiếu tồn tại lâu hơn biến thực sự sở hữu giá trị.
 
 \textbf{Thread safe.} Lập trình đa luồng trong Rust được đảm bảo an toàn nhờ mô hình ownership và borrowing, ngăn chặn tương tranh dữ liệu, bế tắc ngay từ khi biên dịch.
-Rust sử dụng thuộc tính \texttt{Send} và \texttt{Sync} để đảm bảo an toàn đa luồng ở cấp độ kiểu dữ liệu.
-Một kiểu là \texttt{Send} nếu nó có thể được chuyển quyền sở hữu một cách an toàn từ luồng này sang luồng khác, và \texttt{Sync} nếu nó có thể được truy cập an toàn giữa các luồng.
+Rust sử dụng thuộc tính (thuộc tính) Send (Gửi) và Sync (Đồng bộ) để đảm bảo an toàn đa luồng ở cấp độ kiểu dữ liệu.
+Một kiểu là Send nếu nó có thể được chuyển quyền sở hữu một cách an toàn từ luồng này sang luồng khác, và Sync nếu nó có thể được truy cập an toàn giữa các luồng.
 Trình biên dịch Rust sử dụng các đặc điểm này để kiểm tra tại thời điểm biên dịch xem dữ liệu có thể được chia sẻ hoặc di chuyển giữa các luồng một cách an toàn hay không.
-Để quản lý trạng thái có thể thay đổi được trong môi trường đa luồng, Rust cung cấp các cơ chế đồng bộ hóa như \texttt{Mutex} và \texttt{Arc}.
-\texttt{Mutex} (Mutual exclusion) đảm bảo rằng chỉ có một luồng có thể truy cập dữ liệu tại một thời điểm, ngăn chặn tương tranh dữ liệu.
-\texttt{Arc} (Atomic reference count) được sử dụng để đếm số lượng tham chiếu an toàn giữa các luồng, cho phép nhiều luồng chia sẻ quyền sở hữu dữ liệu, hoạt động tương tự cơ chế dọn rác bộ nhớ trong Java.
+Để quản lý trạng thái có thể thay đổi được trong môi trường đa luồng, Rust cung cấp các cơ chế đồng bộ hóa như Mutex (Mutual exclusion) (Ghi độc quyền) và Arc (Atomic reference count) (Đếm tham chiếu nguyên tử).
+Mutex đảm bảo rằng chỉ có một luồng có thể truy cập dữ liệu tại một thời điểm, ngăn chặn tương tranh dữ liệu.
+Arc được sử dụng để đếm số lượng tham chiếu an toàn giữa các luồng, cho phép nhiều luồng chia sẻ quyền sở hữu dữ liệu, hoạt động tương tự cơ chế dọn rác bộ nhớ trong Java.
 Một nguyên tắc quan trọng trong lập trình đa luồng Rust là chuyển quyền sở hữu dữ liệu từ luồng cũ vào luồng mới.
 Khi một luồng được tạo ra, dữ liệu có thể được chuyển vào luồng đó, đảm bảo rằng luồng cha không còn quyền truy cập vào nó, do đó tránh được tương tranh dữ liệu.
 
@@ -51,7 +52,7 @@ fn borrowing() {
     // Mượn độc quyền để sửa
     let mut_ref = &mut vec;
     mut_ref.push(4);
-    // Mươn chia sẻ để đọc
+    // Mượn chia sẻ để đọc
     let shared_ref1 = &vec;
     let shared_ref2 = &vec;
     println!("{}", shared_ref1[0]);
@@ -80,25 +81,26 @@ fn thread_safe() {
     }).collect();
 }
 \end{minted}
-\caption{Ví dụ các khái niệm an toàn trong Rust: (1) ownership, (2) borrowing, (3) Lifetime, (4) Thread safe.}
+\caption{Ví dụ các khái niệm an toàn trong Rust: (1) ownership, (2) borrowing, (3) lifetime và (4) thread safe.}
 \label{code:c2_safe_rust}
 \end{listing}
 
 \subsection{Tính hướng hàm}
 
-Rust là một ngôn ngữ lấy cảm hứng từ nhiều nguồn khác nhau, trong đó có lập trình hướng hàm \cite{hughes1989functional}.
+Rust được lấy cảm hứng từ nhiều ngôn ngữ khác nhau, trong đó có các ngôn ngữ lập trình hướng hàm \cite{hughes1989functional}.
 Rust là sự kết hợp giữa lập trình hướng đối tượng và lập trình hướng hàm.
 Do có sự pha trộn của tính hướng hàm nên một số tính năng, cú pháp của Rust sẽ khác biệt so với ngôn ngữ tiêu biểu như C/C++.
 
-\textbf{Expression over statement.}
+\textbf{Expression over statement (Sử dụng biểu thức hơn mệnh đề).}
 Trong Rust, hầu hết mọi thứ đều là biểu thức.
 Điều này tạo ra sự khác biệt so với các ngôn ngữ cổ điển, nơi có những câu lệnh và cú pháp không hợp lệ trong C/C++ nhưng lại hợp lệ trong Rust.
-Ví dụ đơn giản về biểu thức if else dưới đây, if else trong Rust trả về giá trị, có thể gán cho một biến khác hoặc truyền vào hàm khác.
+Ví dụ cú pháp if else \ref{code:fp_expression}, if else trong Rust là biểu thức, có thể trả về giá trị và gán giá trị cho một biến khác hoặc truyền vào hàm khác.
 
 \begin{listing}[H]
 \begin{minted}[mathescape, breaklines, frame=lines, framesep=2mm, baselinestretch=1.2, fontsize=\footnotesize, linenos]{rust}
 fn main() {
   let x = 5;
+
   let value = if x < 0 {
       -1
   } else {
@@ -106,12 +108,14 @@ fn main() {
   }
 }
 \end{minted}
-\caption{Ví dụ Expression trong Rust}
+\caption{Ví dụ về biểu thức if else trong Rust}
 \label{code:fp_expression}
 \end{listing}
 
-\textbf{Pattern matching.}
-Pattern matching làm cho mã nguồn ngắn gọn, trực quan và rõ ràng hơn. Pattern matching trong Rust tương tự như switch case trong C/C++ nhưng mạnh mẽ hơn, có thể phân tách cấu trúc dữ liệu phức tạp như \texttt{tuple}, \texttt{enum}, \texttt{struct}.
+\textbf{Pattern matching (Khớp mẫu).}
+Pattern matching làm cho mã nguồn ngắn gọn và rõ ràng hơn.
+Pattern matching trong Rust tương tự như switch case trong C/C++ nhưng mạnh mẽ hơn, có thể phân tách cấu trúc dữ liệu phức tạp như \texttt{tuple}, \texttt{enum}, \texttt{struct}.
+Ví dụ \ref{code:fp_patternmatching} minh họa cơ chế pattern matching trong Rust.
 
 \begin{listing}[H]
 \begin{minted}[mathescape, breaklines, frame=lines, framesep=2mm, baselinestretch=1.2, fontsize=\footnotesize, linenos]{rust}
@@ -122,7 +126,7 @@ fn match_example(value: Option<i32>) {
   }
 }
 \end{minted}
-\caption{Ví dụ Pattern matching trong Rust}
+\caption{Ví dụ cú pháp pattern matching trong Rust}
 \label{code:fp_patternmatching}
 \end{listing}
 
@@ -158,28 +162,35 @@ fn match_example(value: Option<i32>) {
 % \label{code:fp_closure}
 % \end{listing}
 
-\textbf{Monad Design Pattern.} Monad là một mẫu thiết kế cho phép nối chuỗi các tính toán một cách tuần tự, đồng thời cung cấp ngữ cảnh cho các tính toán đó \cite{gill2015remote}.
+\textbf{Monad design pattern (Mẫu thiết kế Monad).} Monad là một mẫu thiết kế cho phép nối chuỗi các tính toán một cách tuần tự, đồng thời cung cấp ngữ cảnh cho các tính toán đó \cite{gill2015remote}.
 Monad sẽ ở dạng một lớp cha bọc lấy dữ liệu con bên trong, thường được ví như "hộp" chứa giá trị, và hộp này có những quy tắc đặc biệt về cách lấy giá trị bên trong.
-Trong Rust có 2 loại dữ liệu \texttt{Option} và \texttt{Result}, một dạng Maybe Monad, dùng để xử lý trường hợp không có giá trị và ngoại lệ một cách an toàn.
+Ví dụ trong Rust có 2 loại dữ liệu \texttt{Option} và \texttt{Result}, một dạng Maybe Monad \cite{wikibooksHaskellUnderstandingMonadsMaybe}, dùng để xử lý trường hợp không có giá trị và ngoại lệ một cách an toàn \ref{code:fp_monad}.
 
 \begin{listing}[H]
 \begin{minted}[mathescape, breaklines, frame=lines, framesep=2mm, baselinestretch=1.2, fontsize=\footnotesize, linenos]{rust}
-fn safe_divide(dividend: i32, divisor: i32) -> Option<i32> {
+enum Option<T> {
+    Some(T),
+    None,
+}
+
+fn safe_divide(divided: i32, divisor: i32) -> Option<i32> {
   if divisor != 0 {
-      Some(dividend / divisor)
+      Some(divided / divisor)
   } else {
       None
   }
 }
+
 fn main() {
   let result = safe_divide(10, 2);
+
   match result {
       Some(value) => println!("Result: {}", value),
       None => println!("Cannot divide by zero"),
   }
 }
 \end{minted}
-\caption{Ví dụ Monad Design pattern trong Rust}
+\caption{Ví dụ sử dụng mẫu thiết kế Monad trong Rust}
 \label{code:fp_monad}
 \end{listing}
 
@@ -206,24 +217,29 @@ fn main() {
 % \label{code:fp_trait}
 % \end{listing}
 
-\textbf{Algebraic Data Types.} Hệ thống kiểu của Rust theo xu hướng kiểu dữ liệu đại số có trong lập trình hướng hàm, cho phép tạo ra các mô hình dữ liệu linh hoạt.
-Ví dụ như kiểu \texttt{enum} trong Rust khi kết hợp với pattern matching.
+\textbf{Algebraic Data Types (Kiểu dữ liệu đại số).} Hệ thống kiểu của Rust theo xu hướng kiểu dữ liệu đại số có trong lập trình hướng hàm.
+Nhờ kiểu dữ liệu đại số, Rust cung cấp cách thức linh hoạt để mô hình hóa các vấn đề phức tạp trong lập trình.
+Kiểu dữ liệu đại số trong Rust được thể hiện thông qua cú pháp khai báo kiểu \texttt{enum}.
+Kiểu \texttt{enum} thường được sử dụng cùng với pattern matching để biểu diễn và xử lý các trường hợp khác nhau của dữ liệu một cách rõ ràng \ref{code:fp_adt}.
 
 \begin{listing}[H]
 \begin{minted}[mathescape, breaklines, frame=lines, framesep=2mm, baselinestretch=1.2, fontsize=\footnotesize, linenos]{rust}
-enum Option<T> {
-  Some(T),
-  None,
+enum GameResult {
+    Win { score: u32 },
+    Lose { reason: String },
 }
 
 fn main() {
-  let some_value: Option<i32> = Option::Some(42);
-  let no_value: Option<i32> = Option::None;
+    let result = GameResult::Win { score: 100 };
 
-  match some_value { // Pattern matching
-      Option::Some(value) => println!("Got a value: {}", value),
-      Option::None => println!("No value"),
-  }
+    match result {
+        GameResult::Win { score } => {
+            println!("You win with a score of {}!", score);
+        }
+        GameResult::Lose { reason } => {
+            println!("You lose because: {}", reason);
+        }
+    }
 }
 \end{minted}
 \caption{Ví dụ về kiểu dữ liệu đại số trong Rust}

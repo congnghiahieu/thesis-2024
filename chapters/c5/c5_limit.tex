@@ -1,18 +1,12 @@
 \section{Hạn chế}
 
-\begin{itemize}
-    \item Ví dụ 1 loại nút AST -> 1 loại nút CPG. 100\% loại nút AST -> 1 loại nút CPG tương ứng
-    \item Tuy nhiên cần phải xem xem nút CPG đó có giàu thông tin hay không
-    \item Cái được cung cấp chỉ là AST. Ví dụ đối với C/C++ của Joern sử dụng CDT rất mạnh nên có nhiều thông tin hơn AST, ví dụ 1 nút AST có kèm luôn cả đoạn code tương ứng. Nhưng với TH này của Rust thì không có thư viện syn không có thông tin đoạn code tương ứng, thậm chí không có số dòng số cột, chỉ có cấu trúc cây AST. Riêng phần đoạn code là phải cấu tạo lại từ cây AST, và cũng chưa cấu tạo lại được hết tất cả các trường hợp.
-\end{itemize}
-
 \subsection{Macro}
 
-Trong các ngôn ngữ lập trình như C/C++ và Rust có tính năng macro hay meta-programming, là cách viết mã nguồn để sinh ra mã nguồn khác.
+Trong ngôn ngữ lập trình C/C++ và Rust có tính năng macro, là cách viết mã nguồn để sinh ra mã nguồn khác \cite{rustlangMacrosRust}.
 Macro trong Rust bao gồm 2 loại declarative macro và procedural macro.
 Declarative macro giống như macro trong C/C++, còn procedural macro giống như inline function.
-Đối C/C++ có preprossor để xử lý macro trước khi cho vào trình biên dịch, đo đó khi mã nguồn sau khi được tiền xử lý thì đã được xử lý toàn bộ macro.
-Tuy nhiên, Rust không giống C/C++, macro của Rust \cite{rustlangMacrosRust} không được xử lý ở trước khi sinh cây AST mà sẽ được xử lý sau khi sinh cây AST nhưng trước khi đi vào pha phân tích ngữ cảnh của trình biên dịch.
+Đối C/C++ có bộ tiền xử lý để xử lý macro trước khi cho vào trình biên dịch, đo đó khi mã nguồn sau khi được tiền xử lý thì đã được xử lý toàn bộ macro.
+Tuy nhiên, Rust không giống C/C++, macro trong Rust không được xử lý ở trước khi sinh cây AST mà sẽ được xử lý sau khi sinh cây AST nhưng trước khi đi vào pha phân tích ngữ cảnh của trình biên dịch.
 Như đã đề cập ở phần các trước, công cụ hiện tại sử dụng thư viện syn để sinh cây AST cho mã nguồn và syn không hỗ trợ xử lý macro.
 Do đó tất cả các mã lệnh nằm bên trong macro sẽ không được xử lý, dẫn đến việc không thể sinh cây AST cho đoạn mã lệnh sử dụng macro.
 Tất cả các đoạn lệnh nằm trong một lời gọi macro hiện tại được xem như một chuỗi ký tự.
@@ -30,11 +24,11 @@ Việc thêm các thông tin ẩn mà lập trình viên không nhìn thấy có
 
 Cơ chế module trong Rust tương ứng với namespace trong C++, package trong Java.
 Module chia nhỏ mã nguồn thành các phần nhỏ hơn, tổ chức và quản lý mã nguồn, giúp tái sử dụng mã nguồn, giúp tránh xung đột tên biến, hàm giữa các module khác nhau.
-Một module trong Rust có thể là một file riêng biệt hoặc một phần của một file khác.
+Một module trong Rust có thể là một tệp riêng biệt hoặc một phần của một tệp khác.
 Các module có thể được tổ chức thành một hệ thống phân cấp, với các module con được khai báo bên trong các module cha.
-% Có một số file được coi là file đặc biệt trong cấu trúc mã nguồn trong rust.
-% Ví dụ như file mod.rs, đây là file module gốc của thư mục chứa nó, tất cả các module con trong thư mục đó sẽ được import thông qua module gốc mod.rs.
-% Ngoài ra còn có file main.rs, lib.rs để đánh dấu điểm đầu vào của chương trình và xác định xem dự án là một thư viện hay một ứng dụng.
+% Có một số tệp được coi là tệp đặc biệt trong cấu trúc mã nguồn trong rust.
+% Ví dụ như tệp mod.rs, đây là tệp module gốc của thư mục chứa nó, tất cả các module con trong thư mục đó sẽ được import thông qua module gốc mod.rs.
+% Ngoài ra còn có tệp main.rs, lib.rs để đánh dấu điểm đầu vào của chương trình và xác định xem dự án là một thư viện hay một ứng dụng.
 Rust còn cung cấp cơ chế workspace, cho phép quản lý nhiều dự án nhỏ trong cùng một dự án lớn, mỗi dự án là một thư mục con trong thư mục workspace.
 Để kiểm soát khả năng truy cập, Rust sử dụng cơ chế visibility.
 Mặc định các thành phần trong module là private, để làm cho chúng có thể truy cập được từ các module khác, ta sử dụng từ khóa \texttt{pub}.

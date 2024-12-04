@@ -274,9 +274,9 @@ Với các thông tin có được về cây cú pháp mã nguồn được lưu
 Đồ thị CPG sẽ được dựng lên từ những thông tin đó.
 Sau đây tôi sẽ mô tả việc ánh xạ các thành phần mã nguồn chính của Rust từ cây cú pháp mã nguồn sang đồ thị CPG.
 
-\textbf{Ánh xạ tệp (file) và gói (package)}
+\textbf{Ánh xạ tệp  và gói}
 
 Hình 3.5 biểu diễn ánh xạ từ mã nguồn sang cây AST và ánh xạ sang đồ thị CPG.
 cây AST của Rust không có nút biểu diễn gói, thông tin về gói sẽ được lưu trong nút tệp định nghĩa gói đó.
-Khi ánh xạ nút tệp sang đồ thị CPG sẽ biểu diễn được nút FILE và NAMESPACE tương ứng.
+Khi ánh xạ nút tệp sang đồ thị CPG sẽ biểu diễn được nút tệp và NAMESPACE tương ứng.
 Nút NAMESPACE\_BLOCK biểu diễn thân của gói, nút này đóng vai trò làm nút cha của các định nghĩa bên trong thân của gói.

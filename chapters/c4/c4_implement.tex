@@ -1,8 +1,8 @@
 \section{Mức độ cài đặt công cụ}
 
-Theo thư viện \href{https://docs.rs/syn/2.0.87/syn/}{syn v2.0.87}, phiên bản hiện thời có định nghĩa của 162 struct tương ứng với 162 loại nút AST và 33 enum tương ứng với 33 loại nút AST đa hình.
-Hiện tại công cụ đã ánh xạ 162 loại nút AST và 33 loại nút AST đa hình ở trên thành một loại nút CPG tương ứng, tức là 100\% định nghĩa các loại nút AST đã được ánh xạ sang nút CPG.
-\href{https://github.com/congnghiahieu/rust-parser/blob/master/docs/MAPPING.md}{Bảng tổng hợp ánh xạ 1-1 nút AST sang nút CPG.}
+Theo thư viện \href{https://docs.rs/syn/2.0.87/syn/}{syn v2.0.87}, phiên bản hiện thời có định nghĩa của 162 \texttt{struct} tương ứng với 162 loại nút AST và 33 \texttt{enum} tương ứng với 33 loại nút AST đa hình.
+Hiện tại công cụ đã ánh xạ 162 loại nút AST và 33 loại nút AST đa hình ở trên thành loại nút CPG tương ứng, tức là 100\% định nghĩa các loại nút AST đã được ánh xạ sang nút CPG.
+\href{https://github.com/congnghiahieu/rust-parser/blob/master/docs/MAPPING.md}{Bảng tổng hợp ánh xạ 1-1 từ loại nút AST sang loại nút CPG.}
 
 Công cụ được thực hiện kiểm thử trên 151 tệp mã nguồn bao gồm đa dạng các thể loại cú pháp, thu thập từ trang \href{https://doc.rust-lang.org/stable/rust-by-example/index.html}{Rust By Example} thuộc Rust Foundation \cite{rustlangRustFoundation}.
 Ngoài ra, việc chuyển đổi từ AST sang CPG được kiểm tra trên 20 dự án lớn nằm trong 100 dự án Rust có lượng sao lớn nhất trên Github \cite {githubGithubRankingTop100RustmdMaster}.
