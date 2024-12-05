@@ -1,8 +1,20 @@
-\chapter{Luồng hoạt động và kiến trúc công cụ}
+% \chapter{Luồng hoạt động và kiến trúc công cụ}
+\chapter{Thiết kế và cài đặt công cụ}
 \label{chap:method}
 
-Chương 3 sẽ trình bày quy trình phân tích mã nguồn cho ngôn ngữ lập trình Rust bao gồm xây dựng cây AST, ánh xạ từ cây AST sang đồ thị CPG.
-Chương cũng sẽ đi sâu vào kiến trúc của công cụ, bao gồm các thành phần chính và mối liên hệ giữa chúng.
+Chương 3 trình bày về quy trình phân tích mã nguồn cho ngôn ngữ Rust bao gồm việc xây dựng cây AST và ánh xạ từ cây AST sang đồ thị CPG.
+Chương cũng sẽ đi sâu vào kiến trúc, các thành phần và cài đặt của công cụ.
+% Tiếp theo, các thể loại cú pháp Rust ...
+% Ngoài ra, chương cũng sẽ trình bày về các hạn chế hiện thời của công cụ.
+Tiếp theo, các thể loại cú pháp Rust sẽ được phân tích để minh họa cách ánh xạ từ cây AST sang đồ thị CPG một cách hiệu quả.
+Ngoài ra, chương cũng sẽ trình bày về các hạn chế hiện thời, nhằm làm rõ các thách thức và định hướng cải tiến công cụ trong tương lai.
+
+% Nội dung của chương 4 là về việc chuy`ển đổi mã nguồn sang đồ thị CPG trên các thể loại cú pháp Rust.
+% Mức độ cài đặt của công cụ cho việc bao phủ các loại nút AST và ánh xạ chúng sang nút CPG tương ứng sẽ được thảo luận.
+% Ngoài ra, chương cũng sẽ trình bày về các hạn chế hiện thời của công cụ.
 
 \input{chapters/c3/c3_flow.tex}
 \input{chapters/c3/c3_arch.tex}
+% \input{chapters/c3/c3_implement.tex}
+\input{chapters/c3/c3_support_syntax.tex}
+\input{chapters/c3/c3_limit.tex}

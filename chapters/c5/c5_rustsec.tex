@@ -7,11 +7,18 @@ Mặc dù Rust có các cơ chế để khắc phục những lỗi này, nhưng
 
 \subsection{RUSTSEC-2021-0086}
 
-Đoạn mã \ref{code:c5_RUSTSEC-2021-0086} minh họa một lỗi về khởi tạo bộ nhớ không an toàn.
-Lỗi này xảy ra khi sử dụng hàm \texttt{Vec::with\_capacity} để khởi tạo một vectơ với dung lượng được định sẵn, sau đó sử dụng hàm \texttt{set\_len} để điều chỉnh độ dài của vectơ.
-Tuy nhiên hàm \texttt{set\_len}, một hàm được coi là \texttt{unsafe}, nó không khởi tạo giá trị cho các phần tử của vectơ mà chỉ sửa lại độ dài của vectơ, dẫn đến việc các phần tử có giá trị là không xác định.
+% Đoạn mã \ref{code:c5_RUSTSEC-2021-0086} minh họa một lỗ hổng bảo mật phổ biến liên quan đến việc khởi tạo bộ nhớ không an toàn trong Rust. Lỗi xảy ra khi sử dụng hàm \texttt{Vec::with_capacity} để tạo một vectơ có dung lượng dự kiến, sau đó tùy ý điều chỉnh độ dài của vectơ bằng hàm \texttt{set_len}. Tuy nhiên, hàm \texttt{set_len}, một hàm không an toàn, chỉ đơn thuần thay đổi kích thước của vectơ mà không khởi tạo giá trị cho các phần tử mới được thêm vào. Điều này dẫn đến tình trạng các phần tử này chứa giá trị rác, tiềm ẩn nhiều nguy cơ như lỗi tràn bộ nhớ, truy cập trái phép vào vùng nhớ và các vấn đề bảo mật nghiêm trọng khác.
+
+% Để khắc phục lỗi này, Rust cung cấp macro \texttt{vec!} giúp khởi tạo vectơ một cách an toàn hơn. Khi sử dụng macro này, chúng ta có thể chỉ định rõ độ dài và giá trị ban đầu cho các phần tử của vectơ, đảm bảo rằng tất cả các phần tử đều được khởi tạo với giá trị mong muốn. Trong hình \ref{img:c5_RUSTSEC-2021-0086}, nút \texttt{BLOCK} với thuộc tính \texttt{unsafe} đánh dấu rõ ràng vùng mã không an toàn, trong khi các nút con của nó thể hiện các hoạt động cụ thể có khả năng gây ra lỗi.
+
+Đoạn mã \ref{code:c5_RUSTSEC-2021-0086} minh họa một lỗ hổng bảo mật phổ biến liên quan đến việc khởi tạo bộ nhớ không an toàn trong Rust.
+Lỗi xảy ra khi sử dụng hàm \texttt{Vec::with\_capacity} để tạo một vectơ có dung lượng được định sẵn là $N$, sau đó tùy chỉnh độ dài của vectơ bằng hàm \texttt{set\_len}.
+Tuy nhiên hàm \texttt{set\_len}, một hàm được coi là \texttt{"unsafe"}, chỉ đơn thuần thay đổi kích thước của vectơ mà không khởi tạo giá trị cho các phần tử mới được thêm vào.
+Điều này dẫn đến tình trạng các phần tử này chứa giá trị rác, tiềm ẩn nhiều nguy cơ như lỗi tràn bộ nhớ, truy cập trái phép vào vùng nhớ và các vấn đề bảo mật nghiêm trọng khác.
 Để sửa lỗi, ta có thể sử dụng macro \texttt{vec!} để khởi tạo vectơ với độ dài và dung lượng là $N$, giá trị mặc định của mỗi phần tử là $0$.
-Trong hình \ref{img:c5_RUSTSEC-2021-0086}, nút \texttt{BLOCK} với thuộc tính \texttt{unsafe} biểu diễn việc bắt đầu một khối lệnh không an toàn. Các nút con của nút \texttt{BLOCK} này biểu diễn các mệnh đề, lời gọi hàm hoặc các biểu thức không an toàn.
+% Trong hình \ref{img:c5_RUSTSEC-2021-0086}, nút \texttt{BLOCK} với thuộc tính \texttt{unsafe} biểu diễn việc bắt đầu một khối lệnh không an toàn.
+Trong hình \ref{img:c5_RUSTSEC-2021-0086}, nút \texttt{BLOCK} với thuộc tính \texttt{unsafe} đánh dấu rõ ràng vùng mã không an toàn.
+Các nút con của nút \texttt{BLOCK} này biểu diễn các mệnh đề, lời gọi hàm không an toàn.
 
 \begin{listing}[H]
 \begin{minted}[mathescape, breaklines, frame=lines, framesep=2mm, baselinestretch=1.2, fontsize=\footnotesize, linenos]{rust}

@@ -17,12 +17,17 @@ Bộ dữ liệu được sử dụng bao gồm 277 tệp mã nguồn, trong đ�
 Đối với 138 tệp có lỗ hổng bảo mật, các tệp này được trích xuất từ bộ dữ liệu trong nghiên cứu của David Lo và cộng sự \cite{zheng2023closer}.
 Còn 139 tệp không có lỗ bảo mật được thu thập từ 100 dự án mã nguồn mở của Rust nhiều sao nhất trên Github \cite{githubGithubRankingTop100RustmdMaster} và xác nhận thủ công.
 Tập dữ liệu được chia thành 3 phần, 80\% dữ liệu được sử dụng cho quá trình huấn luyện, 10\% dữ liệu được sử dụng cho kiểm chứng, 10\% dữ liệu được sử dụng cho kiểm thử.
-
-Với bài toán phân loại, thang đánh giá hiệu suất của phương pháp sẽ bao gồm các chỉ số Accuracy, Precision, Recall và F1-score.
-% ROC AUC, Precision-Recall AUC, MCC, Error Rate
-Để đánh giá hiệu suất, mỗi phương pháp được chạy 10 lần đối với tập dữ liệu như trên.
+Để đánh giá, mỗi phương pháp được chạy 10 lần đối với tập dữ liệu như trên.
 Kết quả của các chỉ số là giá trị trung bình của 10 lần chạy.
-Kết quả thực nghiệm được thể hiện trong bảng \ref{table:c5_ml}.
+Kết quả thực nghiệm được thể hiện bằng bảng phía dưới.
+
+Với bài toán phân loại, thang đo đánh giá hiệu suất của phương pháp sẽ bao gồm các chỉ số Accuracy, Precision, Recall và F1-score.
+% ROC AUC, Precision-Recall AUC, MCC, Error Rate
+Accuracy biểu thị tỷ lệ phần trăm các dự đoán đúng trên tổng số các dự đoán, thể hiện độ chính xác tổng thể của mô hình, nhưng có thể không phản ánh đúng với dữ liệu mất cân bằng.
+Precision đo độ chính xác trong việc phân loại đúng một lớp cụ thể, hữu ích khi cần giảm thiểu dự đoán dương tính sai.
+Recall, hay độ nhạy, đánh giá khả năng phát hiện đầy đủ các mẫu thuộc một lớp, đặc biệt quan trọng trong việc giảm thiểu bỏ sót các trường hợp dương tính.
+F1-score là chỉ số thể hiện sự cân bằng giữa Precision và Recall, giúp đánh giá hiệu suất chung khi cả hai chỉ số này đều quan trọng.
+
 
 \begin{table}[H]
     \centering
