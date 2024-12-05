@@ -9,15 +9,15 @@ Mặc dù Rust có các cơ chế để khắc phục những lỗi này, nhưng
 
 % Đoạn mã \ref{code:c5_RUSTSEC-2021-0086} minh họa một lỗ hổng bảo mật phổ biến liên quan đến việc khởi tạo bộ nhớ không an toàn trong Rust. Lỗi xảy ra khi sử dụng hàm \texttt{Vec::with_capacity} để tạo một vectơ có dung lượng dự kiến, sau đó tùy ý điều chỉnh độ dài của vectơ bằng hàm \texttt{set_len}. Tuy nhiên, hàm \texttt{set_len}, một hàm không an toàn, chỉ đơn thuần thay đổi kích thước của vectơ mà không khởi tạo giá trị cho các phần tử mới được thêm vào. Điều này dẫn đến tình trạng các phần tử này chứa giá trị rác, tiềm ẩn nhiều nguy cơ như lỗi tràn bộ nhớ, truy cập trái phép vào vùng nhớ và các vấn đề bảo mật nghiêm trọng khác.
 
-% Để khắc phục lỗi này, Rust cung cấp macro \texttt{vec!} giúp khởi tạo vectơ một cách an toàn hơn. Khi sử dụng macro này, chúng ta có thể chỉ định rõ độ dài và giá trị ban đầu cho các phần tử của vectơ, đảm bảo rằng tất cả các phần tử đều được khởi tạo với giá trị mong muốn. Trong hình \ref{img:c5_RUSTSEC-2021-0086}, nút \texttt{BLOCK} với thuộc tính \texttt{unsafe} đánh dấu rõ ràng vùng mã không an toàn, trong khi các nút con của nó thể hiện các hoạt động cụ thể có khả năng gây ra lỗi.
+% Để khắc phục lỗi này, Rust cung cấp macro \texttt{vec!} giúp khởi tạo vectơ một cách an toàn hơn. Khi sử dụng macro này, chúng ta có thể chỉ định rõ độ dài và giá trị ban đầu cho các phần tử của vectơ, đảm bảo rằng tất cả các phần tử đều được khởi tạo với giá trị mong muốn. Trong Hình \ref{img:c5_RUSTSEC-2021-0086}, nút \texttt{BLOCK} với thuộc tính \texttt{unsafe} đánh dấu rõ ràng vùng mã không an toàn, trong khi các nút con của nó thể hiện các hoạt động cụ thể có khả năng gây ra lỗi.
 
 Đoạn mã \ref{code:c5_RUSTSEC-2021-0086} minh họa một lỗ hổng bảo mật phổ biến liên quan đến việc khởi tạo bộ nhớ không an toàn trong Rust.
 Lỗi xảy ra khi sử dụng hàm \texttt{Vec::with\_capacity} để tạo một vectơ có dung lượng được định sẵn là $N$, sau đó tùy chỉnh độ dài của vectơ bằng hàm \texttt{set\_len}.
 Tuy nhiên hàm \texttt{set\_len}, một hàm được coi là \texttt{"unsafe"}, chỉ đơn thuần thay đổi kích thước của vectơ mà không khởi tạo giá trị cho các phần tử mới được thêm vào.
 Điều này dẫn đến tình trạng các phần tử này chứa giá trị rác, tiềm ẩn nhiều nguy cơ như lỗi tràn bộ nhớ, truy cập trái phép vào vùng nhớ và các vấn đề bảo mật nghiêm trọng khác.
 Để sửa lỗi, ta có thể sử dụng macro \texttt{vec!} để khởi tạo vectơ với độ dài và dung lượng là $N$, giá trị mặc định của mỗi phần tử là $0$.
-% Trong hình \ref{img:c5_RUSTSEC-2021-0086}, nút \texttt{BLOCK} với thuộc tính \texttt{unsafe} biểu diễn việc bắt đầu một khối lệnh không an toàn.
-Trong hình \ref{img:c5_RUSTSEC-2021-0086}, nút \texttt{BLOCK} với thuộc tính \texttt{unsafe} đánh dấu rõ ràng vùng mã không an toàn.
+% Trong Hình \ref{img:c5_RUSTSEC-2021-0086}, nút \texttt{BLOCK} với thuộc tính \texttt{unsafe} biểu diễn việc bắt đầu một khối lệnh không an toàn.
+Trong Hình \ref{img:c5_RUSTSEC-2021-0086}, nút \texttt{BLOCK} với thuộc tính \texttt{unsafe} đánh dấu rõ ràng vùng mã không an toàn.
 Các nút con của nút \texttt{BLOCK} này biểu diễn các mệnh đề, lời gọi hàm không an toàn.
 
 \begin{listing}[H]
@@ -50,6 +50,7 @@ where
 {
     // ...
 }
+
 // After fix
 pub fn external<'a, T>(data: T) -> Handle<'a, Self>
 where
@@ -67,11 +68,11 @@ Trong bối cảnh này, \texttt{external} là hàm được dùng để tạo r
 Việc kiểu tổng quát \texttt{T} không được xác định đúng lifetime cho phép tạo ra một vùng dữ liệu có thể bị giải phóng trong khi chúng vẫn được tham chiếu bởi mã nguồn Javascript.
 Để hai ngôn ngữ có thể giao tiếp được thì dữ liệu đó phải tồn tại trong suốt thời gian chạy của cả hai ngôn ngữ.
 Để sửa lỗi, cần thêm ràng buộc \texttt{T: 'static} để đảm bảo rằng dữ liệu được tham chiếu sẽ không bị giải phóng trong suốt thời gian tồn tại của chương trình.
-Lỗi RUSTSEC-2022-0028 là một lỗi thực sự rất khó để phát hiện tự động vì nó liên quan đến bối cảnh bài toán, ở đây là giao tiếp giữa 2 ngôn ngữ Rust và Javascript thông qua Web Assembly Binding.
-Hình \ref{img:c5_RUSTSEC-2022-0028} cũng thể chưa trình bày một cách rõ ràng lỗi có thể xảy ra khi sử dụng hàm \texttt{external} và kiểu tổng quát \texttt{T}, do cần đến bối cảnh bài toán.
-Nếu sử dụng đồ thị CPG kết hợp với các mẫu khai phá để tự động phân tích thì chưa thể phát hiện ra lỗ hổng.
+RUSTSEC-2022-0028 là một lỗi thực sự rất khó để phát hiện tự động vì nó liên quan đến bối cảnh mã nguồn, ở đây là dữ liệu giao tiếp giữa 2 ngôn ngữ Rust và Javascript thông qua Web Assembly Binding.
+Nếu chỉ sử dụng các mẫu khai phá tự động thông thường trên đồ thị CPG để phân tích thì chưa chắc phát hiện ra lỗi.
 Do cần kiến thức về bối cảnh bài toán nên sự can thiệp của con người là cần thiết trong trường hợp này.
-Các câu truy vấn đồ thị CPG kết hợp với kiến thức miền của các chuyên gia có thể được xây dựng thủ công mới có thể phát hiện ra lỗi.
+Trong Hình \ref{img:c5_RUSTSEC-2022-0028}, các câu truy vấn trên đồ thị CPG kết hợp với kiến thức miền của các chuyên gia cần được xây dựng thủ công để có thể phát hiện ra lỗ hổng.
+% Hình \ref{img:c5_RUSTSEC-2022-0028} cũng thể chưa trình bày một cách rõ ràng lỗi có thể xảy ra khi sử dụng hàm \texttt{external} và kiểu tổng quát \texttt{T}, do cần đến bối cảnh bài toán.
 
 % \begin{listing}[H]
 % \begin{minted}[mathescape, breaklines, frame=lines, framesep=2mm, baselinestretch=1.2, fontsize=\footnotesize, linenos]{rust}
@@ -139,7 +140,7 @@ Tuy nhiên chỉ mình \texttt{Atom} được cài đặt thuộc tính \texttt{
 Lỗi RUSTSEC-2020-0044 là một lỗi xảy ra thường xuyên khi lập trình đa luồng trong Rust.
 Kiểu cha muốn đảm bảo an toàn về đa luồng thì kiểu con cũng phải đảm bảo an toàn về đa luồng.
 Trong bối cảnh của Rust, điều này có nghĩa là nếu kiểu cha muốn được gửi qua các luồng một cách an toàn bằng thuộc tính \texttt{Send} và \texttt{Sync} thì kiểu con cũng phải có khả năng này.
-Khi được biểu diễn trực quan trên hình \ref{code:c5_RUSTSEC-2020-0044}, hoàn toàn ta có thể thấy một mẫu duyệt đồ thị để phát hiện lỗi này.
+Khi được biểu diễn trực quan trên Hình \ref{code:c5_RUSTSEC-2020-0044}, hoàn toàn ta có thể thấy một mẫu duyệt đồ thị để phát hiện lỗi này.
 Một mẫu khai phá đồ thị phổ biến có thể được xây dựng và sử dụng cho nhiều đoạn mã khác nhau.
 Các truy vấn hoặc phân tích dựa trên mẫu này có thể được áp dụng trên đồ thị CPG để phát hiện các lỗi tương tự.
 
