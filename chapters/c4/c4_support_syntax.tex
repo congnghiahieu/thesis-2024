@@ -2,7 +2,7 @@
 
 Phần này sẽ trình bày một số cú pháp của Rust khác biệt so với ngôn ngữ C/C++ và cách mà công cụ đã hỗ trợ cho các cú pháp này.
 Các cú pháp bao gồm: if let, while let, match, lifetime.
-Những đoạn mã nguồn và hình ảnh mô tả đồ thị CPG được sử dụng từ giờ đến cuối chương đã được đơn giản hóa để dễ dàng thể hiện và minh họa.
+Những đoạn mã nguồn và hình ảnh mô tả đồ thị CPG được sử dụng từ giờ đến cuối khóa luận đã được đơn giản hóa để dễ dàng thể hiện và minh họa.
 Các cạnh và các nút không phải trọng tâm của đồ thị CPG sẽ được loại bỏ để tập trung vào các tính năng cần trình bày.
 
 \subsection{Cú pháp if let}
@@ -23,7 +23,7 @@ if let <pattern> = <expression> {
      <block>
 }
 \end{minted}
-\caption{Mã giả cho cú pháp tổng quát của if let}
+\caption{Mã giả cho cú pháp tổng quát của if let.}
 \label{code:c4_iflet_general}
 \end{listing}
 
@@ -40,7 +40,7 @@ if let Some(i) = number {
     // ...
 }
 \end{minted}
-\caption{Ví dụ mã nguồn cho cú pháp if let}
+\caption{Ví dụ mã nguồn cho cú pháp if let.}
 \label{code:c4_iflet}
 \end{listing}
 
@@ -58,19 +58,19 @@ if (obj != nullptr) { // 1 câu lệnh kiểm tra điều kiện
     std::cout << "Matched " << number << "!" << std::endl;
 }
 \end{minted}
-\caption{Ví dụ mã nguồn cho cú pháp if let tương đương trong C++}
+\caption{Ví dụ mã nguồn cho cú pháp if let tương đương trong C++.}
 \label{code:c4_iflet_cpp}
 \end{listing}
 
 \begin{figure}[H]
 \includegraphics[width=1\columnwidth]{figures/c4/c4_iflet.png}
 \centering
-\caption{Ví dụ đồ thị CPG cho đoạn mã nguồn của cú pháp if let \ref{code:c4_iflet}}
+\caption{Ví dụ đồ thị CPG cho đoạn mã nguồn của cú pháp if let \ref{code:c4_iflet}.}
 \label{img:c4_cpg_iflet}
 \end{figure}
 
 Trong hình \ref{img:c4_cpg_iflet}, cạnh \texttt{CONDITION} của nút \texttt{ExprIf} trỏ tới nút \texttt{Assignment}, đồng thời cũng khai báo biến mới với tên \texttt{i}.
-Mặc định Joern sẽ không cho phép cạnh \texttt{CONDITION} trỏ tới nút \texttt{Assignment} bởi vì trong ngôn ngữ C/C++ không thể lấy một phép gán làm điều kiện cho câu lệnh if.
+Mặc định Joern sẽ không cho phép cạnh \texttt{CONDITION} trỏ tới nút \texttt{Assignment} bởi vì trong ngôn ngữ C/C++ không thể lấy một phép gán làm điều kiện.
 Khóa luận đã thực hiện chỉnh sửa đặc tả CPG của Joern để cho phép cạnh \texttt{CONDITION} trỏ tới nút \texttt{Assignment} trong trường hợp này.
 Các mệnh đề trong khối điều kiện đúng được thực thi, nếu có sử dụng tới biến \texttt{i} thì sẽ tham chiếu tới biến \texttt{i} vừa được khai báo thông qua cạnh \texttt{REF}.
 
@@ -98,7 +98,7 @@ while let Some(i) = optional {
     }
 }
 \end{minted}
-\caption{Ví dụ mã nguồn cho cú pháp while let}
+\caption{Ví dụ mã nguồn cho cú pháp while let.}
 \label{code:c4_whilelet}
 \end{listing}
 
@@ -113,7 +113,7 @@ Hình \ref{img:c4_cpg_whilelet} mô tả đồ thị CPG cho đoạn mã nguồn
 \begin{figure}[H]
     \includegraphics[width=1\columnwidth]{figures/c4/c4_whilelet.png}
     \centering
-    \caption{Ví dụ đồ thị CPG cho đoạn mã nguồn cú pháp while let \ref{code:c4_whilelet}}
+    \caption{Ví dụ đồ thị CPG cho đoạn mã nguồn cú pháp while let \ref{code:c4_whilelet}.}
     \label{img:c4_cpg_whilelet}
 \end{figure}
 
@@ -153,7 +153,7 @@ fn main() {
     }
 }
 \end{minted}
-\caption{Ví dụ mã nguồn cho cú pháp match}
+\caption{Ví dụ mã nguồn cho cú pháp match.}
 \label{code:c4_match}
 \end{listing}
 
@@ -167,7 +167,7 @@ Mỗi trường hợp của match sẽ được thể hiện bằng nút \texttt
 \begin{figure}[H]
     \includegraphics[width=1\columnwidth]{figures/c4/c4_match.png}
     \centering
-    \caption{Ví dụ đồ thị CPG cho đoạn mã nguồn cú pháp match \ref{code:c4_match}}
+    \caption{Ví dụ đồ thị CPG cho đoạn mã nguồn cú pháp match \ref{code:c4_match}.}
     \label{img:c4_match}
 \end{figure}
 
@@ -204,7 +204,7 @@ fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
     }
 }
 \end{minted}
-\caption{Ví dụ mã nguồn cho lifetime cho hàm}
+\caption{Ví dụ mã nguồn cho lifetime.}
 \label{code:c4_lifetime_1}
 \end{listing}
 
@@ -221,7 +221,7 @@ Khi sử dụng hàm, nếu đối số đầu vào hay biến nhận giá trị
 \begin{figure}[H]
     \includegraphics[width=1\columnwidth]{figures/c4/c4_lifetime_1.png}
     \centering
-    \caption{Ví dụ đồ thị CPG cho đoạn mã nguồn \ref{code:c4_lifetime_1}}
+    \caption{Ví dụ đồ thị CPG cho đoạn mã nguồn \ref{code:c4_lifetime_1}.}
     \label{img:c4_lifetime_1}
 \end{figure}
 
@@ -244,7 +244,7 @@ where
     // ...
 }
 \end{minted}
-\caption{Ví dụ mã nguồn cho cú pháp lifetime kết hợp cú pháp where}
+\caption{Ví dụ mã nguồn cho cú pháp lifetime kết hợp cú pháp where.}
 \label{code:c4_lifetime_2}
 \end{listing}
 
@@ -252,7 +252,7 @@ where
 \begin{figure}[H]
     \includegraphics[width=1\columnwidth]{figures/c4/c4_lifetime_2.png}
     \centering
-    \caption{Ví dụ đồ thị CPG cho đoạn mã nguồn cú pháp lifetime \ref{code:c4_lifetime_2}}
+    \caption{Ví dụ đồ thị CPG cho đoạn mã nguồn cú pháp where \ref{code:c4_lifetime_2}.}
     \label{img:c4_lifetime_2}
 \end{figure}
 

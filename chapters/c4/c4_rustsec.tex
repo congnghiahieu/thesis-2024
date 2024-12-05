@@ -74,12 +74,12 @@ where
 
 \subsection{RUSTSEC-2020-0044}
 
-RUSTSEC-2020-0044 là lỗi liên quan đến việc không triển khai \texttt{trait Send} cho kiểu dữ liệu con của kiểu \texttt{Atom}.
+RUSTSEC-2020-0044 là lỗi liên quan đến việc không triển khai thuộc tính \texttt{Send} cho kiểu dữ liệu con của kiểu \texttt{Atom}.
 Trong bối cảnh này, \texttt{Atom} đóng vai trò như một "hộp" cho kiểu dữ liệu \texttt{P} bên trong, giúp quản lý việc sử dụng bộ nhớ an toàn hơn.
-Tuy nhiên chỉ mình \texttt{Atom} được cài đặt \texttt{trait Send} và \texttt{Sync}, không đảm bảo rằng kiểu dữ liệu con \texttt{P} cũng phải cài đặt \texttt{trait Send}.
+Tuy nhiên chỉ mình \texttt{Atom} được cài đặt thuộc tính \texttt{Send} và \texttt{Sync}, không đảm bảo rằng kiểu dữ liệu con \texttt{P} cũng phải cài đặt thuộc tính \texttt{Send}.
 Điều này có nghĩa việc truy cập đến \texttt{Atom} có thể an toàn nhưng khi truy cập vào dữ liệu kiểu \texttt{P} bên trong thì không an toàn, có thể dẫn đến các vấn đề như sử dụng bộ nhớ sau khi đã giải phóng hoặc tương tranh dữ liệu cho kiểu dữ liệu \texttt{P} bên trong.
-Để sửa lỗi này, cần đảm bảo rằng kiểu \texttt{P} cũng phải được đánh dấu \texttt{trait Send}.
-Điều này có nghĩa là nếu kiểu cha muốn được gửi qua các luồng một cách an toàn bằng \texttt{trait Send} thì kiểu con \texttt{P} cũng phải có khả năng này, tương tự với trait \texttt{Sync}.
+Để sửa lỗi này, cần đảm bảo rằng kiểu \texttt{P} cũng phải được đánh dấu thuộc tính \texttt{Send}.
+Điều này có nghĩa là nếu kiểu cha muốn được gửi qua các luồng một cách an toàn bằng thuộc tính \texttt{Send} thì kiểu con \texttt{P} cũng phải có khả năng này, tương tự với trait \texttt{Sync}.
 
 \begin{listing}[H]
 \begin{minted}[mathescape, breaklines, frame=lines, framesep=2mm, baselinestretch=1.2, fontsize=\footnotesize, linenos]{rust}

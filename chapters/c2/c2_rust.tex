@@ -19,12 +19,12 @@ Với cơ chế borrowing, một giá trị có thể được đọc hoặc c�
 Có hai loại borrowing: 1) shared read-borrowing (mượn chia sẻ để đọc) và 2) exclusive mutable-borrowing (mượn độc quyền để ghi).
 Trình biên dịch Rust đảm bảo rằng tham chiếu đọc và tham chiếu ghi không bao giờ xuất hiện cùng một lúc.
 Điều này có nghĩa là các thao tác đọc và ghi đồng thời là không thể trong Rust, từ đó loại bỏ khả năng xảy ra tương tranh dữ liệu hay các lỗi lập trình khác.
-% các lỗi an toàn bộ nhớ như null pointer dereferencing
+% các lỗi an toàn bộ nhớ như con trỏ chỉ tới địa chỉ null
 
 \textbf{Lifetime.} Lifetime đại diện cho phạm vi mà tham chiếu có hiệu lực, hay việc sử dụng tham chiếu đó để lấy giá trị là an toàn về bộ nhớ.
 Tính năng lifetime trong Rust là một loại kiểu tổng quát, các lifetime tổng quát thể hiện mối quan hệ ràng buộc giữa thời gian hợp lệ của tham chiếu và thời gian sống của giá trị mà chúng tham chiếu tới.
 Cụ thể, để xác định khi nào các tham chiếu ra khỏi phạm vi, trình biên dịch liên kết mỗi tham chiếu với một lifetime và theo dõi các ràng buộc giữa các lifetime.
-Hệ thống lifetime kết hợp với borrowing của Rust đảm bảo rằng các vấn đề an toàn bộ nhớ truyền thống như use after free, null pointer dereferencing, dangling pointer là không thể xảy ra bằng cách không cho phép các tham chiếu tồn tại lâu hơn biến thực sự sở hữu giá trị.
+Hệ thống lifetime kết hợp với borrowing của Rust đảm bảo rằng các vấn đề an toàn bộ nhớ truyền thống như sử dụng sau khi giải phóng, con trỏ chỉ tới địa chỉ null, con trỏ treo là không thể xảy ra bằng cách không cho phép các tham chiếu tồn tại lâu hơn biến thực sự sở hữu giá trị.
 
 \textbf{Thread safe.} Lập trình đa luồng trong Rust được đảm bảo an toàn nhờ mô hình ownership và borrowing, ngăn chặn tương tranh dữ liệu, bế tắc ngay từ khi biên dịch.
 Rust sử dụng thuộc tính (thuộc tính) Send (Gửi) và Sync (Đồng bộ) để đảm bảo an toàn đa luồng ở cấp độ kiểu dữ liệu.
@@ -108,7 +108,7 @@ fn main() {
   }
 }
 \end{minted}
-\caption{Ví dụ về biểu thức if else trong Rust}
+\caption{Ví dụ về biểu thức if else trong Rust.}
 \label{code:fp_expression}
 \end{listing}
 
@@ -126,7 +126,7 @@ fn match_example(value: Option<i32>) {
   }
 }
 \end{minted}
-\caption{Ví dụ cú pháp pattern matching trong Rust}
+\caption{Ví dụ cú pháp pattern matching trong Rust.}
 \label{code:fp_patternmatching}
 \end{listing}
 
@@ -190,7 +190,7 @@ fn main() {
   }
 }
 \end{minted}
-\caption{Ví dụ sử dụng mẫu thiết kế Monad trong Rust}
+\caption{Ví dụ sử dụng mẫu thiết kế Monad trong Rust.}
 \label{code:fp_monad}
 \end{listing}
 
@@ -242,6 +242,6 @@ fn main() {
     }
 }
 \end{minted}
-\caption{Ví dụ về kiểu dữ liệu đại số trong Rust}
+\caption{Ví dụ về kiểu dữ liệu đại số trong Rust.}
 \label{code:fp_adt}
 \end{listing}
