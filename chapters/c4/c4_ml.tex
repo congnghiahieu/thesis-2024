@@ -6,10 +6,10 @@
 % Baseline
 % Kết quả thực nghiệm
 
-Để chứng minh tiềm năng của đồ thị CPG dành cho ngôn ngữ Rust, khóa luận xây dựng một thực nghiệm sử dụng kĩ thuật học máy để phát hiện lỗ hổng bảo mật trong mã nguồn Rust dựa trên đồ thị CPG.
+Để chứng minh tiềm năng của đồ thị CPG dành cho ngôn ngữ Rust, khóa luận xây dựng một thực nghiệm sử dụng kỹ thuật học máy để phát hiện lỗ hổng bảo mật trong mã nguồn Rust dựa trên đồ thị CPG.
 Bài toán đặt ra là phân loại tệp mã nguồn Rust có lỗ hổng bảo mật và không có lỗ hổng bảo mật.
 Thực nghiệm sẽ tiến hành so sánh độ hiệu quả giữa mô hình học máy sử dụng đồ thị CPG và mô hình học máy học sử dụng mã nguồn Rust truyền thống.
-Mô hình học máy chỉ sử dụng dữ liệu mã nguồn Rust, tạm gọi là Baseline, sẽ sử dụng kĩ thuật Word2Vec \cite{church2017word2vec} để biểu diễn mã nguồn và Logistic Regression \cite{lavalley2008logistic} để phân loại.
+Mô hình học máy chỉ sử dụng dữ liệu mã nguồn Rust, tạm gọi là Baseline, sẽ sử dụng phương pháp Word2Vec \cite{church2017word2vec} để biểu diễn mã nguồn và Logistic Regression \cite{lavalley2008logistic} để phân loại.
 Đối với bài toán học máy để phát hiện lỗ hổng bảo mật trên đồ thị CPG, trước đây đã có phương pháp Devign, một phương pháp kinh điển cho lớp bài toán này \cite{zhou2019devign}.
 Devign đã sử dụng đồ thị CPG cho ngôn ngữ C/C++, do đó hoàn toàn có thể áp dụng phương pháp Devign với đồ thị CPG cho ngôn ngữ Rust trong khóa luận này.
 
@@ -53,7 +53,7 @@ Trong Bảng \ref{table:c4_ml}, phương pháp Devign đã cho kết quả tốt
 Ta thấy được Accuracy hơn 0.04, Precision hơn 0.04, Recall hơn 0.29, F1-Score hơn 0.15.
 % , Precision-Recall AUC hơn 0.04 và Error Rate thấp hơn 0.04.
 % Tuy nhiên, ROC AUC và MCC của phương pháp Devign lại thấp hơn so với phương pháp Baseline.
-Điều này chứng tỏ rằng đồ thị CPG cho ngôn ngữ Rust có tiềm năng áp dụng cho bài toán phát hiện lỗ hổng bảo mật kết hợp bằng kĩ thuật học máy.
+Điều này chứng tỏ rằng đồ thị CPG cho ngôn ngữ Rust có tiềm năng áp dụng cho bài toán phát hiện lỗ hổng bảo mật kết hợp bằng kỹ thuật học máy.
 Mã nguồn và bộ dữ liệu sử dụng trong thực nghiệm được lưu trữ lần lượt tại địa chỉ \href{https://github.com/congnghiahieu/devign}{devign}, \href{https://github.com/congnghiahieu/rust-ecosystem}{rust-ecosystem}.
 
 Độ chính xác của phương pháp Devign cho ngôn ngữ Rust mới chỉ đạt được ở mức 0.77 bởi một vài nguyên do.
