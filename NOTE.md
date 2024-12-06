@@ -364,3 +364,22 @@ Error Rate & 0.2678571428571429 & 10.012780811437555 \\
 \hline
 \end{tabular}
 \end{table}
+
+# Background
+
+- RustBelt, kiểm chứng
+- Miri, kiểm thử động, kiểm thử mờ
+- Thực thi tượng trưng
+- Rudra, Yuga, thuật toán HIR, MIR
+- Cơ chế an toàn của Rust:
+  - ownership
+  - borrowing: exclusive mutability
+  - lifetime, 3 rule of lifetime ellision
+  - thread safe: Send, Sync, Mutex, Arc
+- Monad
+- Algebraic Data Types
+- AST, CFG, PDG
+- Joern
+- Linear Regression, Logistic Regression, Word2Vec
+- Devign
+- Accuracy, Precision, Recall, F1-score. TP, FP, TN, FN
