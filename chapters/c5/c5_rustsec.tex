@@ -28,14 +28,14 @@ unsafe { buf.set_len(N) };
 // After fix
 let mut buf: Vec<u8> = vec![0; N];
 \end{minted}
-\caption{Ví dụ mã nguồn cho RUSTSEC-2021-0086.}
+\caption{Ví dụ đoạn mã nguồn cho RUSTSEC-2021-0086.}
 \label{code:c5_RUSTSEC-2021-0086}
 \end{listing}
 
 \begin{figure}[H]
     \includegraphics[width=1\columnwidth]{figures/c5/c5_RUSTSEC-2021-0086}
     \centering
-    \caption{Ví dụ đồ thị CPG cho đoạn mã nguồn RUSTSEC-2021-0086 \ref{code:c5_RUSTSEC-2021-0086}.}
+    \caption{Minh họa đồ thị CPG cho đoạn mã nguồn RUSTSEC-2021-0086 \ref{code:c5_RUSTSEC-2021-0086}.}
     \label{img:c5_RUSTSEC-2021-0086}
 \end{figure}
 
@@ -59,7 +59,7 @@ where
     // ...
 }
 \end{minted}
-\caption{Ví dụ mã nguồn cho RUSTSEC-2022-0028.}
+\caption{Ví dụ đoạn mã nguồn cho RUSTSEC-2022-0028.}
 \label{code:c5_RUSTSEC-2022-0028}
 \end{listing}
 
@@ -94,7 +94,7 @@ Trong Hình \ref{img:c5_RUSTSEC-2022-0028}, các câu truy vấn trên đồ th�
 %     // ...
 % }
 % \end{minted}
-% \caption{Ví dụ mã nguồn cho RUSTSEC-2022-0028}
+% \caption{Ví dụ đoạn mã nguồn cho RUSTSEC-2022-0028}
 % \label{code:c5_RUSTSEC-2022-0028}
 % \end{listing}
 
@@ -102,7 +102,7 @@ Trong Hình \ref{img:c5_RUSTSEC-2022-0028}, các câu truy vấn trên đồ th�
 \begin{figure}[H]
     \includegraphics[width=1\columnwidth]{figures/c5/c5_RUSTSEC-2022-0028.png}
     \centering
-    \caption{Ví dụ đồ thị CPG cho đoạn mã nguồn RUSTSEC-2022-0028 \ref{code:c5_RUSTSEC-2022-0028}.}
+    \caption{Minh họa đồ thị CPG cho đoạn mã nguồn RUSTSEC-2022-0028 \ref{code:c5_RUSTSEC-2022-0028}.}
     \label{img:c5_RUSTSEC-2022-0028}
 \end{figure}
 
@@ -120,7 +120,7 @@ unsafe impl<P> Sync for Atom<P> where P: IntoRawPtr + FromRawPtr {}
 unsafe impl<P> Send for Atom<P> where P: IntoRawPtr + FromRawPtr + Send {}
 unsafe impl<P> Sync for Atom<P> where P: IntoRawPtr + FromRawPtr + Sync {}
 \end{minted}
-\caption{Ví dụ mã nguồn cho RUSTSEC-2020-0044.}
+\caption{Ví dụ đoạn mã nguồn cho RUSTSEC-2020-0044.}
 \label{code:c5_RUSTSEC-2020-0044}
 \end{listing}
 
@@ -133,7 +133,7 @@ Tuy nhiên chỉ mình \texttt{Atom} được cài đặt thuộc tính \texttt{
 \begin{figure}[H]
     \includegraphics[width=1\columnwidth]{figures/c5/c5_RUSTSEC-2020-0044.png}
     \centering
-    \caption{Ví dụ đồ thị CPG cho đoạn mã nguồn RUSTSEC-2020-0044 \ref{code:c5_RUSTSEC-2020-0044}.}
+    \caption{Minh họa đồ thị CPG cho đoạn mã nguồn RUSTSEC-2020-0044 \ref{code:c5_RUSTSEC-2020-0044}.}
     \label{img:c5_RUSTSEC-2020-0044}
 \end{figure}
 
@@ -157,7 +157,7 @@ pub fn iter(&self) -> Iter<'_, K, V> {
     Iter { ptr: unsafe { (*self.head).next }, }
 }
 \end{minted}
-\caption{Ví dụ mã nguồn cho RUSTSEC-2021-0130.}
+\caption{Ví dụ đoạn mã nguồn cho RUSTSEC-2021-0130.}
 \label{code:c5_RUSTSEC-2021-0130}
 \end{listing}
 
@@ -184,7 +184,7 @@ Từ đó lifetime của \texttt{Iter} sẽ không lớn hơn lifetime của \te
 \begin{figure}[H]
     \includegraphics[width=1\columnwidth]{figures/c5/c5_RUSTSEC-2021-0130.png}
     \centering
-    \caption{Ví dụ đồ thị CPG cho đoạn mã nguồn RUSTSEC-2021-0130 \ref{code:c5_RUSTSEC-2021-0130}.}
+    \caption{Minh họa đồ thị CPG cho đoạn mã nguồn RUSTSEC-2021-0130 \ref{code:c5_RUSTSEC-2021-0130}.}
     \label{img:c5_RUSTSEC-2021-0130}
 \end{figure}
 
