@@ -149,20 +149,20 @@ enum Color {
     Green {
         red: u32,
         green: u32,
-        blue: u32,
+        blue: u32
     },
 }
 
 fn main() {
     let color = Color::Blue(0, 0, 255);
-
     match color {
         Color::Red =>
-            println!("The color is Red!")
+            println!("The color is Red!"),
         Color::Blue(r, g, b) =>
-            println!("R: {}, G: {}, B: {}!", r, g, b)
-        Color::Green {red, green, blue} =>
-            println!("R: {}, G: {}, B: {}!", red, green, blue),
+            println!("R: {}, G: {}, B: {}!", r, g, b),
+        Color::Green { red, green, blue } => {
+            println!("Red: {}, Green: {}, Blue: {}!", red, green, blue)
+        }
     }
 }
 \end{minted}
@@ -174,7 +174,7 @@ Trong Hình \ref{img:c4_match}, các biến thể của \texttt{enum Color} đư
 Biến thể \texttt{Red} do không có giá trị nên không có nút con nào khác.
 Biến thể \texttt{Blue} có giá trị là 3 số nguyên tính theo chỉ mục nên sẽ có 3 nút con \texttt{MEMBER} tương ứng, nhưng mỗi nút \texttt{MEMBER} này không có nút con \texttt{IDENTIFIER} chỉ ra tên thành phần.
 Ngược lại mỗi nút \texttt{MEMBER} của \texttt{Green} sẽ có nút con \texttt{IDENTIFIER} thể hiện tên của thành phần.
-Còn cú pháp match được thể hiện bằng nút \texttt{CONTROL STRUCTURE} và cạnh \texttt{CONDITION} nối với nút \texttt{IDENTITER} chi tới biến \texttt{color}.
+Còn cú pháp match được thể hiện bằng nút \texttt{CONTROL STRUCTURE} và cạnh \texttt{CONDITION} nối với nút \texttt{IDENTITER} chỉ tới biến \texttt{color}.
 Mỗi trường hợp của match sẽ được thể hiện bằng nút \texttt{ARM} và mỗi \texttt{ARM} cũng có sẽ cạnh \texttt{CONDITION} nối tới nút thể hiện biểu thức điều kiện.
 
 \begin{figure}[H]
@@ -281,14 +281,14 @@ Trên đồ thị CPG ở Hình \ref{img:c4_lifetime_2}, điều này tức là 
 Cạnh \texttt{OUT LIVE} từ nút \texttt{LIFETIME} \texttt{'c} tới nút \texttt{LIFETIME} \texttt{'b} được thể hiện rõ ràng trên đồ thị CPG.
 
 Không chỉ ràng buộc giữa các lifetime với nhau, hoàn toàn có thể ràng buộc lifetime cho một kiểu dữ liệu tổng quát.
-Kiểu dữ liệu \texttt{T} của biến \texttt{y} phải có lifetime lớn hơn \texttt{'b} thông qua cú pháp \texttt{T: 'b}.
-Cú pháp này sẽ có ý nghĩa trong trường hợp khi T là một kiểu \texttt{struct} tự định nghĩa, thì tất cả các thuộc tính tham chiếu của T cũng phải có lifetime lớn hơn hoặc bằng \texttt{'b}.
-Sẽ có cạnh \texttt{LIFETIME} từ nút \texttt{TYPE} của kiểu \texttt{T} tới nút \texttt{LIFETIME} \texttt{'b} để thể hiện mối quan hệ ràng buộc giữa chúng.
+Kiểu dữ liệu \texttt{T} của biến \texttt{z} phải có lifetime lớn hơn \texttt{'c} thông qua cú pháp \texttt{T: 'c}.
+Cú pháp này sẽ có ý nghĩa trong trường hợp khi T là một kiểu \texttt{struct} tự định nghĩa, thì tất cả các thuộc tính tham chiếu của T cũng phải có lifetime lớn hơn hoặc bằng \texttt{'c}.
+Sẽ có cạnh \texttt{LIFETIME} từ nút \texttt{TYPE} của kiểu \texttt{T} tới nút \texttt{LIFETIME} \texttt{'c} để thể hiện mối quan hệ ràng buộc giữa chúng.
 Rust cung cấp hai cách để thể hiện ràng buộc cho kiểu dữ liệu và kiểu lifetime tổng quát.
 Một là khai báo ngay tại phần khai báo hàm, hai là sử dụng cú pháp \texttt{where} để thể hiện ràng buộc.
 Lưu ý rằng khai báo ngay tại hàm và cú pháp \texttt{where} không thay thế cho nhau mà cùng tồn tại để có thể kết hợp với nhau.
 Khai báo ngay tại hàm mang ý nghĩa khai báo nên sẽ sử dụng các nút \texttt{TYPE PARAMETER} và \texttt{LIFETIME PARAMETER} để thể hiện.
-Còn cú pháp \texttt{where} mang ý nghĩa ràng buộc nên sẽ sử dụng các nút \texttt{TYPE}, \texttt{LIFETIME} và cạnh \texttt{OUT LIVE}.
+Còn cú pháp \texttt{where} mang ý nghĩa ràng buộc nên sẽ sử dụng nút \texttt{LIFETIME}, cạnh \texttt{OUT LIVE}, cạnh \texttt{REF}.
 
 Ownership, borrowing và lifetime là 3 tính năng làm nên cơ chế an toàn bộ nhớ trong Rust.
 Đây là bộ ba tính năng quan trọng làm cho Rust trở nên khác biệt so với các ngôn ngữ lập trình khác.

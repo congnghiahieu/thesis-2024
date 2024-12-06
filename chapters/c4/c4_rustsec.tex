@@ -33,7 +33,7 @@ let mut buf: Vec<u8> = vec![0; N];
 \end{listing}
 
 \begin{figure}[H]
-    \includegraphics[width=1\columnwidth]{figures/c4/c4_RUSTSEC-2021-0086}
+    \includegraphics[width=1\columnwidth]{figures/c4/c4_RUSTSEC-2021-0086.png}
     \centering
     \caption{Minh họa đồ thị CPG cho đoạn mã nguồn RUSTSEC-2021-0086 \ref{code:c4_RUSTSEC-2021-0086}.}
     \label{img:c4_RUSTSEC-2021-0086}
@@ -192,4 +192,4 @@ Việc đánh dấu lifetime không chính xác có thể đánh lừa trình bi
 Lifetime của kiểu trả về phải đảm bảo không lớn hơn lifetime của tham số truyền vào nếu kiểu trả về có truy cập đến bộ nhớ của tham số truyền vào.
 Có thể áp dụng ba quy tắc lược bỏ lifetime để suy diễn việc xác định lifetime giữa tham số và tham số, giữa tham số và kiểu trả về.
 Kết hợp với đồ thị CPG \ref{img:c4_RUSTSEC-2021-0130}, các luật có thể được đề ra để phát hiện sự không đồng bộ về lifetime giữa các biến dựa vào các nút \texttt{LIFETIME},
-\texttt{LIFETIME PARAMETER} và các cạnh thể hiện mối quan hệ giữa chúng như \texttt{OUT LIVE}, \texttt{REF}.
+\texttt{LIFETIME PARAMETER} và các cạnh thể hiện mối quan hệ giữa chúng như , \texttt{REF}, \texttt{OUT LIVE}.
