@@ -131,7 +131,7 @@ Ngoài ra, biến \texttt{i} được khai báo riêng tại nút \texttt{LOCAL}
 \subsection{Cú pháp match}
 
 Ngoài việc sử dụng mệnh đề gán biến thành biểu thức điều kiện, tính hướng hàm của Rust còn thể hiện ở sự kết hợp giữa cơ chế pattern matching và kiểu dữ liệu đại số.
-Ví dụ \ref{code:c4_match} cho thấy cấu trúc match không chỉ kiểm tra giá trị mà còn kết hợp với các mẫu phức tạp, bao gồm kiểm tra điều kiện, kiểm tra các kiểu dữ liệu khác nhau và so sánh.
+Đoạn mã \ref{code:c4_match} cho thấy cấu trúc match không chỉ kiểm tra giá trị mà còn kết hợp với các mẫu phức tạp, bao gồm kiểm tra điều kiện, kiểm tra các kiểu dữ liệu khác nhau và so sánh.
 Điều này mang lại cho Rust tính linh hoạt cao hơn so với switch trong C/C++ khi chỉ so sánh giá trị nguyên thủy.
 Một điểm khác biệt quan trọng giữa match và switch là tính toàn diện của match.
 Rust yêu cầu các mẫu trong match phải bao quát tất cả các khả năng có thể xảy ra, nếu không trình biên dịch sẽ báo lỗi.
