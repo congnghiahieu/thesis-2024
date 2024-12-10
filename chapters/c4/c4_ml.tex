@@ -13,9 +13,9 @@ Mô hình học máy chỉ sử dụng dữ liệu mã nguồn Rust, tạm gọi
 Đối với bài toán học máy để phát hiện lỗ hổng bảo mật trên đồ thị CPG, trước đây đã có phương pháp Devign, một phương pháp kinh điển cho lớp bài toán này \cite{zhou2019devign}.
 Devign đã sử dụng đồ thị CPG cho ngôn ngữ C/C++, do đó hoàn toàn có thể áp dụng phương pháp Devign với đồ thị CPG cho ngôn ngữ Rust trong khóa luận này.
 
-Bộ dữ liệu được sử dụng bao gồm 277 tệp mã nguồn, trong đó 138 tệp có lỗ hổng bảo mật và 139 tệp không có lỗ hổng bảo mật.
-Đối với 138 tệp có lỗ hổng bảo mật, các tệp này được trích xuất từ bộ dữ liệu trong nghiên cứu của David Lo và cộng sự \cite{zheng2023closer}.
-Còn 139 tệp không có lỗ bảo mật được thu thập từ 100 dự án mã nguồn mở của Rust nhiều sao nhất trên Github \cite{githubGithubRankingTop100RustmdMaster} và xác nhận thủ công.
+Bộ dữ liệu được sử dụng bao gồm 788 tệp mã nguồn, trong đó 381 tệp có lỗ hổng bảo mật và 407 tệp không có lỗ hổng bảo mật.
+Đối với 381 tệp có lỗ hổng bảo mật, các tệp này được trích xuất từ bộ dữ liệu trong nghiên cứu của David Lo và cộng sự \cite{zheng2023closer}.
+Còn 407 tệp không có lỗ bảo mật được thu thập từ 100 dự án mã nguồn mở của Rust nhiều sao nhất trên Github \cite{githubGithubRankingTop100RustmdMaster} và xác nhận thủ công.
 Tập dữ liệu được chia thành 3 phần, 80\% dữ liệu được sử dụng cho quá trình huấn luyện, 10\% dữ liệu được sử dụng cho kiểm chứng, 10\% dữ liệu được sử dụng cho kiểm thử.
 Để đánh giá, mỗi phương pháp được chạy 10 lần đối với tập dữ liệu như trên.
 Kết quả của các chỉ số là giá trị trung bình của 10 lần chạy.
@@ -26,8 +26,7 @@ Với bài toán phân loại, thang đo đánh giá hiệu suất của phươn
 Accuracy biểu thị tỷ lệ phần trăm các dự đoán đúng trên tổng số các dự đoán, thể hiện độ chính xác tổng thể của mô hình, nhưng có thể không phản ánh đúng với dữ liệu mất cân bằng.
 Precision đo độ chính xác trong việc phân loại đúng một lớp cụ thể, hữu ích khi cần giảm thiểu dự đoán dương tính sai.
 Recall, hay độ nhạy, đánh giá khả năng phát hiện đầy đủ các mẫu thuộc một lớp, đặc biệt quan trọng trong việc giảm thiểu bỏ sót các trường hợp dương tính.
-F1-score là chỉ số thể hiện sự cân bằng giữa Precision và Recall, giúp đánh giá hiệu suất chung khi cả hai chỉ số này đều quan trọng.
-
+F1-score là chỉ số thể hiện sự cân bằng giữa Precision và Recall, giúp đánh giá hiệu suất chung của cả hai chỉ số quan trọng này.
 
 \begin{table}[H]
     \centering
@@ -37,10 +36,10 @@ F1-score là chỉ số thể hiện sự cân bằng giữa Precision và Recal
         \hline
          & Baseline & \textbf{Devign (Rust)} \\
         \hline
-        Accuracy & 0.73 & \textbf{0.77} \\
-        Precision & 0.73 & \textbf{0.77} \\
+        Accuracy & 0.73 & \textbf{0.76} \\
+        Precision & 0.73 & \textbf{0.76} \\
         Recall & 0.70 & \textbf{0.99} \\
-        F1-score & 0.72 & \textbf{0.87} \\
+        F1-score & 0.72 & \textbf{0.86} \\
         % ROC AUC & 0.81 & \textbf{0.47} \\
         % Precision-Recall AUC & 0.74 & \textbf{0.78} \\
         % MCC & 0.46 & \textbf{0.01} \\
@@ -50,13 +49,13 @@ F1-score là chỉ số thể hiện sự cân bằng giữa Precision và Recal
 \end{table}
 
 Trong Bảng \ref{table:c4_ml}, phương pháp Devign đã cho kết quả tốt hơn so với phương pháp Baseline với hầu hết các chỉ số.
-Ta thấy được Accuracy hơn 0.04, Precision hơn 0.04, Recall hơn 0.29, F1-Score hơn 0.15.
+Ta thấy được Accuracy hơn 0.03, Precision hơn 0.03, Recall hơn 0.29, F1-Score hơn 0.16.
 % , Precision-Recall AUC hơn 0.04 và Error Rate thấp hơn 0.04.
 % Tuy nhiên, ROC AUC và MCC của phương pháp Devign lại thấp hơn so với phương pháp Baseline.
 Điều này chứng tỏ rằng đồ thị CPG cho ngôn ngữ Rust có tiềm năng áp dụng cho bài toán phát hiện lỗ hổng bảo mật kết hợp bằng kỹ thuật học máy.
 Mã nguồn và bộ dữ liệu sử dụng trong thực nghiệm được lưu trữ lần lượt tại địa chỉ \href{https://github.com/congnghiahieu/devign}{devign}, \href{https://github.com/congnghiahieu/rust-ecosystem}{rust-ecosystem}.
 
-Độ chính xác của phương pháp Devign cho ngôn ngữ Rust mới chỉ đạt được ở mức 0.77 bởi một vài nguyên do.
+Độ chính xác của phương pháp Devign cho ngôn ngữ Rust mới chỉ đạt được ở mức 0.76 bởi một vài nguyên do.
 Thứ nhất là kích cỡ của bộ dữ liệu cho ngôn ngữ Rust.
 Hiện tại các mã nguồn có lỗi được xác nhận đều lấy từ RUSTSEC Database.
 Rust là ngôn ngữ mới phát triển gần đây, hệ sinh thái chưa lớn mạnh nên số lượng mã nguồn có lỗi được báo cáo không nhiều.

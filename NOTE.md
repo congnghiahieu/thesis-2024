@@ -365,6 +365,19 @@ Error Rate & 0.2678571428571429 & 10.012780811437555 \\
 \end{tabular}
 \end{table}
 
+Confusion matrix:
+[[0  408]
+ [   0 1321]]
+TP: 1321, FP: 408, TN: 0, FN: 0
+Accuracy: 0.7640254482359745
+Precision: 0.7640254482359745
+Recall: 1.0
+F-measure: 0.8662295081967213
+Precision-Recall AUC: 0.7568713941418994
+AUC: 0.4589363375933265
+MCC: 0.0
+Error: 0.09518895039839971
+
 # Background
 
 - RustBelt, kiểm chứng
