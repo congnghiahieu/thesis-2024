@@ -6,7 +6,7 @@
 % Baseline
 % Kết quả thực nghiệm
 
-Để chứng minh tiềm năng của đồ thị CPG dành cho ngôn ngữ Rust, khóa luận xây dựng một thực nghiệm sử dụng kỹ thuật học máy để phát hiện lỗ hổng bảo mật trong mã nguồn Rust dựa trên đồ thị CPG.
+Để chứng minh tiềm năng sử dụng, khóa luận xây dựng một thực nghiệm sử dụng kỹ thuật học máy để phát hiện lỗ hổng bảo mật trong mã nguồn Rust dựa trên đồ thị CPG.
 Bài toán đặt ra là phân loại tệp mã nguồn Rust có lỗ hổng bảo mật và không có lỗ hổng bảo mật.
 Thực nghiệm sẽ tiến hành so sánh độ hiệu quả giữa mô hình học máy sử dụng đồ thị CPG và mô hình học máy học sử dụng mã nguồn Rust truyền thống.
 Mô hình học máy chỉ sử dụng dữ liệu mã nguồn Rust, tạm gọi là Baseline, sẽ sử dụng phương pháp Word2Vec \cite{church2017word2vec} để biểu diễn mã nguồn và Logistic Regression \cite{lavalley2008logistic} để phân loại.
@@ -15,11 +15,11 @@ Devign đã sử dụng đồ thị CPG cho ngôn ngữ C/C++, do đó hoàn to�
 
 Bộ dữ liệu được sử dụng bao gồm 788 tệp mã nguồn, trong đó 381 tệp có lỗ hổng bảo mật và 407 tệp không có lỗ hổng bảo mật.
 Đối với 381 tệp có lỗ hổng bảo mật, các tệp này được trích xuất từ bộ dữ liệu trong nghiên cứu của David Lo và cộng sự \cite{zheng2023closer}.
-Còn 407 tệp không có lỗ bảo mật được thu thập từ 100 dự án mã nguồn mở của Rust nhiều sao nhất trên Github \cite{githubGithubRankingTop100RustmdMaster} và xác nhận thủ công.
+Còn 407 tệp không có lỗ bảo mật được thu thập từ 100 dự án Rust  mã nguồn mở nhiều sao nhất trên Github \cite{githubGithubRankingTop100RustmdMaster}.
 Tập dữ liệu được chia thành 3 phần, 80\% dữ liệu được sử dụng cho quá trình huấn luyện, 10\% dữ liệu được sử dụng cho kiểm chứng, 10\% dữ liệu được sử dụng cho kiểm thử.
 Để đánh giá, mỗi phương pháp được chạy 10 lần đối với tập dữ liệu như trên.
 Kết quả của các chỉ số là giá trị trung bình của 10 lần chạy.
-Kết quả thực nghiệm được thể hiện bằng bảng phía dưới.
+Kết quả thực nghiệm thể hiện ở bảng phía dưới.
 
 Với bài toán phân loại, thang đo đánh giá hiệu suất của phương pháp sẽ bao gồm các chỉ số Accuracy, Precision, Recall và F1-score.
 % ROC AUC, Precision-Recall AUC, MCC, Error Rate
@@ -48,11 +48,11 @@ F1-score là chỉ số thể hiện sự cân bằng giữa Precision và Recal
     \end{tabular}
 \end{table}
 
-Trong Bảng \ref{table:c4_ml}, phương pháp Devign đã cho kết quả tốt hơn so với phương pháp Baseline với hầu hết các chỉ số.
-Ta thấy được Accuracy hơn 0.03, Precision hơn 0.03, Recall hơn 0.29, F1-Score hơn 0.16.
+Trong Bảng \ref{table:c4_ml}, phương pháp Devign đã cho kết quả tốt hơn so với phương pháp Baseline ở tất cả các chỉ số.
+Ta thấy được Accuracy hơn 0.03, Precision hơn 0.03, Recall hơn 0.29, F1-Score hơn 0.14.
 % , Precision-Recall AUC hơn 0.04 và Error Rate thấp hơn 0.04.
 % Tuy nhiên, ROC AUC và MCC của phương pháp Devign lại thấp hơn so với phương pháp Baseline.
-Điều này chứng tỏ rằng đồ thị CPG cho ngôn ngữ Rust có tiềm năng áp dụng cho bài toán phát hiện lỗ hổng bảo mật kết hợp bằng kỹ thuật học máy.
+Điều này chứng tỏ rằng đồ thị CPG cho ngôn ngữ Rust có tiềm năng áp dụng cho bài toán phát hiện lỗ hổng bảo mật kết hợp kỹ thuật học máy.
 Mã nguồn và bộ dữ liệu sử dụng trong thực nghiệm được lưu trữ lần lượt tại địa chỉ \href{https://github.com/congnghiahieu/devign}{devign}, \href{https://github.com/congnghiahieu/rust-ecosystem}{rust-ecosystem}.
 
 Độ chính xác của phương pháp Devign cho ngôn ngữ Rust mới chỉ đạt được ở mức 0.76 bởi một vài nguyên do.
@@ -64,7 +64,7 @@ Tồn tại các tính năng của Rust như marco, module chưa thể phân tí
 Các hạn chế này sẽ được trình bày chi tiết ở phần \ref{sec:limit}.
 % Các lớp thông tin về CFG, PDG vẫn chưa được hoàn thiện, hay các lớp thông tin khác có giá trị khai thác được sinh ra từ Joern cũng chưa được cung cấp.
 Thứ ba là giới hạn trong cài đặt của phương pháp Devign.
-Hiện tại, phiên bản cài đặt của Devign là mô phỏng lại từ bài báo gốc.
+Hiện tại, phiên bản cài đặt của Devign là mô phỏng lại từ bài báo khoa học gốc.
 Devign mới chỉ có thể sử dụng lớp thông tin về AST và CFG mà không có PDG, do vậy không thể khai thác được hết toàn bộ thông tin từ đồ thị CPG.
 % chưa kể các lớp thông tin khác của Joern CPG.
 Nếu có thể khắc phục được các hạn chế kể trên, phương pháp Devign có thể đạt được kết quả tốt hơn nữa.

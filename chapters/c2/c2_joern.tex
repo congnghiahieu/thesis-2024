@@ -12,7 +12,8 @@
 % Thiết kế hiện tại chủ yếu nhắm vào các ngôn ngữ lập trình hướng đối tượng.
 % Để đối phó với khả năng thiếu một số đoạn mã hoặc lỗi trong mã, thư viện có khả năng chịu lỗi với mã không đầy đủ, không biên dịch được và thậm chí ở mức độ nào đó còn không chính xác.
 
-Đồ thị CPG đã được nghiên cứu rộng rãi và có rất nhiều phiên bản cài đặt được xây dựng dành cho các mục đích khác nhau \cite{ kuchler2022representing, weiss2022language, keirsgieter2020graft}.
+Đồ thị CPG đã được nghiên cứu rộng rãi và có rất nhiều phiên bản cài đặt được xây dựng dành cho các mục đích khác nhau \cite{ kuchler2022representing, weiss2022language}.
+% \cite{keirsgieter2020graft}.
 Tuy nhiên có một phiên bản được do chính tác giả của khái niệm đồ thị CPG, Fabian Yamaguchi, đích thân phát triển và mã nguồn mở mang tên Joern \cite{joernJoernHunteraposs}.
 Các thành phần trong đồ thị CPG theo đặc tả CPG của Joern bao gồm nút, cạnh, và thuộc tính.
 Các nút đại diện cho các thành phần cấu trúc của chương trình như phương thức, biến, và cấu trúc điều khiển.
@@ -21,7 +22,7 @@ Ví dụ, một nút với loại \texttt{METHOD} đại diện cho một phươ
 Cạnh thể hiện quan hệ giữa các thành phần chương trình, cạnh này có hướng và có nhãn.
 Ví dụ, để biểu thị rằng một phương thức chứa một biến cục bộ, chúng ta có thể tạo một cạnh với nhãn \texttt{CONTAINS} từ nút phương thức đến nút biến cục bộ.
 Bằng cách sử dụng các cạnh có nhãn, có thể biểu diễn nhiều loại quan hệ khác nhau trong cùng một đồ thị.
-Hơn nữa, dùng các cạnh có hướng để biểu thị mối quan hệ có chiều, ví dụ như phương thức chứa biến cục bộ nhưng không xảy ra điều ngược lại.
+Hơn nữa, các cạnh có hướng giúp biểu thị mối quan hệ có chiều, ví dụ như phương thức chứa biến cục bộ nhưng không xảy ra điều ngược lại.
 Giữa hai nút có thể tồn tại nhiều cạnh.
 Các nút, cạnh có các thuộc tính, tồn tại dưới dạng khóa và giá trị, trong đó các khóa phụ thuộc vào loại nút, nhãn cạnh riêng biệt.
 Đồ thị CPG được lưu trữ trong một cơ sở dữ liệu đồ thị và khai thác thông qua một ngôn ngữ truy vấn đặc thù dựa trên Scala.
@@ -29,7 +30,7 @@ Các nút, cạnh có các thuộc tính, tồn tại dưới dạng khóa và g
 Một phiên bản cài đặt cụ thể của đồ thị CPG sẽ có một bản đặc tả, gọi là đặc tả CPG.
 Bản đặc tả này định nghĩa các loại nút, loại cạnh, thuộc tính và quan hệ giữa chúng, ngoài ra có thể bao gồm các mở rộng khác.
 Định nghĩa về cạnh, nút có thể được chuyên biệt cho một ngôn ngữ cụ thể hoặc tổng quát cho nhiều ngôn ngữ.
-Đặc tả CPG của Joern được thiết kế chủ yếu cho C/C++ và Java, và cũng có hỗ trợ cú pháp của ngôn ngữ lập trình khác như Python, Go, Typescript, v.v.
+Đặc tả CPG của Joern được thiết kế chủ yếu cho C/C++ và Java, và cũng có hỗ trợ cú pháp của ngôn ngữ lập trình khác như Python, Go, TypeScript, v.v.
 Tuy nhiên hiện tại đặc tả CPG của Joern chưa hỗ trợ cho ngôn ngữ Rust.
 
 Đặc tả CPG của Joern được thiết kết chủ yếu cho ngôn ngữ C/C++ và Java, đưa ra định nghĩa cho các cấu trúc chung như if else, while, for, v.v mà nhiều ngôn ngữ khác có cấu trúc tương đồng.
@@ -98,7 +99,8 @@ Các công cụ này bao gồm:
 
 \begin{itemize}
   \item \textbf{Joern Export.} Dùng để chuyển đổi đồ thị CPG từ dạng nhị phân sang dạng dữ liệu tương thích với các cơ sở dữ liệu đồ thị bao gồm neo4jcsv, graphml, graphson, graphviz dot.
-  Từ các định dạng tương thích với cơ sở dữ liệu đồ thị, các ứng dụng về học máy, học tăng cường để phát hiện lỗ hổng trên đồ thị CPG có thể được áp dụng \cite{, alsulami2017source, li2016vulpecker, dauber2018git, machiry2020spider}.
+  Từ các định dạng tương thích với cơ sở dữ liệu đồ thị, các ứng dụng về học máy, học tăng cường để phát hiện lỗ hổng trên đồ thị CPG có thể được áp dụng.
+  % \cite{alsulami2017source, li2016vulpecker, dauber2018git, machiry2020spider}.
   \item \textbf{Joern Slice.} Dùng để chia nhỏ đồ thị CPG của các mã nguồn lớn thành từng phần nhỏ, từ đó dễ dàng khai thác tập trung vào một khía cạnh cụ thể của mã, chẳng hạn như luồng dữ liệu xung quanh một biến cụ thể.
   \item \textbf{Joern Scan.} Thực hiện quét toàn bộ đồ thị CPG để tìm ra lỗ hổng bảo mật.
   Joern QueryDB \cite{joernJoernQuery} cung cấp cho Joern Scan một tập các truy vấn được định nghĩa sẵn để tìm kiếm các mẫu cụ thể trong mã.

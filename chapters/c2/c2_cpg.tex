@@ -28,7 +28,7 @@ Hình \ref{img:c2_ast} biểu diễn một cây AST tương ứng với một đ
 Các nút là các mệnh đề hoặc mệnh đề điều kiện, được nối với nhau bằng các cạnh có hướng, thể hiện thứ tự điều khiển giữa các nút.
 Một nút là mệnh đề thì có 1 cạnh ra.
 Nếu một nút là mệnh đề điều kiện thì sẽ có 2 cạnh ra, bao gồm một cạnh điều khiển khi điều kiện đúng và một cạnh điều khiển khi điều kiện sai.
-CFG được sử dụng cho nhiều ứng dụng phân tích ngữ cảnh, phân tích mã độc hại \cite{gascon2013structural}, định hướng cho công cụ kiểm thử mờ \cite{sparks2007automated}.
+CFG được sử dụng cho nhiều ứng dụng phân tích ngữ cảnh, phân tích mã độc hại, định hướng cho công cụ kiểm thử mờ \cite{gascon2013structural}. % \cite{sparks2007automated}
 Tuy nhiên, CFG không chứa thông tin về luồng dữ liệu, do vậy không đủ toàn diện để ứng dụng phát hiện lỗ hổng bảo mật trong mã nguồn.
 
 \begin{figure}[H]
@@ -81,8 +81,8 @@ Hình \ref{img:c2_pdg} biểu diễn ví dụ về một đồ thị PDG với c
 Đồ thị CPG tạo ra một lớp biểu diễn trung gian cho mã nguồn mà không bị phụ thuộc vào ngôn ngữ lập trình cụ thể.
 Các nút đại diện cho các thành phần như hàm, biến, lớp và các cạnh đại diện cho mối quan hệ giữa chúng như lời gọi hàm, sự gán giá trị, quan hệ cha con hay tham chiếu.
 Mỗi nút, cạnh đều có các thuộc tính, mỗi thuộc tính có giá trị riêng.
-Đồ thị CPG được ứng dụng để tìm kiếm lỗ hổng trong mã nguồn, phát hiện sao chép mã nguồn bằng học máy, học tăng cường \cite{zhou2019devign, han2023bjxnet}.
-Hình \ref{img:c2_cpg_yamaguchi} minh họa một đồ thị CPG cho mã nguồn C \cite{yamaguchi2014modeling}.
+Đồ thị CPG được ứng dụng để tìm kiếm lỗ hổng trong mã nguồn bằng học máy, học tăng cường \cite{zhou2019devign} % \cite{han2023bjxnet}.
+Hình \ref{img:c2_cpg_yamaguchi} minh họa đồ thị CPG cho một đoạn mã nguồn C \cite{yamaguchi2014modeling}.
 
 % \begin{figure}[H]
 %   \includegraphics[width=1\columnwidth]{figures/c2/c2_cpg.png}
@@ -94,10 +94,10 @@ Hình \ref{img:c2_cpg_yamaguchi} minh họa một đồ thị CPG cho mã nguồ
 \begin{figure}[H]
   \includegraphics[width=1\columnwidth]{figures/c2/c2_cpg_yamaguchi.png}
   \centering
-  \caption{Minh họa đồ thị CPG \cite{yamaguchi2014modeling}.}
+  % \caption{Minh họa đồ thị CPG của một đoạn mã nguồn C \cite{yamaguchi2014modeling}.}
+  \caption{Minh họa đồ thị CPG của một đoạn mã nguồn C.}
   \label{img:c2_cpg_yamaguchi}
 \end{figure}
-
 
 % \begin{listing}[H]
 % \begin{minted}[mathescape, breaklines, frame=lines, framesep=2mm, baselinestretch=1.2, fontsize=\footnotesize, linenos]{rust}
