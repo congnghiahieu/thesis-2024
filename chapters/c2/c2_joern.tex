@@ -61,7 +61,7 @@ Hình \ref{img:c2_frontend_backend} mô tả luồng hoạt động dựa trên 
 Mỗi ngôn ngữ có tập cú pháp khác nhau, tương ứng cũng sẽ có định nghĩa về cây AST khác nhau.
 Đây là phần người dùng muốn mở rộng một ngôn ngữ mới cho Joern cần phải tự đảm nhiệm.
 Bước đầu, mã nguồn của một ngôn ngữ được bộ phân tích ngôn ngữ chuyển thành cây AST\texttt{'}.
-Cây AST\texttt{'} ở đây không nhất thiết chỉ dừng ở đúng mức độ thông tin của một cây AST thông thường mà có thể bổ sung thêm thông tin khác như kiểu dữ liệu, vị trí nút tương ứng trong mã nguồn, v.v nhưng đảm bảo tối thiểu đủ thông tin của một cây AST .
+Cây AST\texttt{'} ở đây không nhất thiết chỉ dừng ở đúng mức độ thông tin của một cây AST thông thường mà có thể bổ sung thêm thông tin khác như kiểu dữ liệu, vị trí nút tương ứng trong mã nguồn, v.v nhưng đảm bảo tối thiểu đủ thông tin của một cây AST.
 Ví dụ như các ngôn ngữ có sự phát triển lâu dài như C/C++ sử CDT \cite{eclipseEclipseCC} để làm bộ phân tích ngôn ngữ.
 CDT là công cụ lớn, được dùng trong các IDE nên số lượng thông tin khai thác được rất đáng kể.
 Còn những ngôn ngữ hiện đại như Rust, thì các công cụ như này chưa được phát triển toàn diện nên thông tin của cây AST\texttt{'} chưa được chi tiết.

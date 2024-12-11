@@ -12,7 +12,7 @@ Khi chủ sở hữu của giá trị ra khỏi phạm vi cụ thể, giá trị
 Gán biến cho một biến khác dẫn đến chuyển ownership.
 Khi một biến mất quyền sở hữu một giá trị, biến đó sẽ không còn sử dụng được nữa.
 Trình biên dịch Rust theo dõi sự tồn tại của mỗi giá trị thông qua cơ chế ownership và thực hiện thu hồi bộ nhớ cần thiết.
-Cơ chế ownership tương tự như mẫu thiết kế Resource Acquisition Is Initialization (RAII) \cite{cppreferenceRAIICppreferencecom} thường được sử dụng trong ngôn ngữ C++.
+Cơ chế ownership tương tự như mẫu thiết kế RAII (Resource Acquisition Is Initialization) \cite{cppreferenceRAIICppreferencecom} thường được sử dụng trong ngôn ngữ C++.
 
 \textbf{Borrowing.} Để có thể chia sẻ giá trị mà không chuyển ownership, cơ chế borrowing cho phép việc tạo một tham chiếu đến giá trị và biến mới sẽ sử dụng tham chiếu đó.
 Với cơ chế borrowing, một giá trị có thể được đọc hoặc cập nhật mà không thay đổi ownership của giá trị.

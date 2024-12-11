@@ -3,25 +3,25 @@
 
 \subsection{Chưa hỗ trợ cú pháp Macro}
 
-Trong ngôn ngữ lập trình C/C++ và Rust có tính năng macro, là cách viết mã nguồn để sinh ra mã nguồn khác \cite{rustlangMacrosRust}.
+Trong ngôn ngữ lập trình C/C++ và Rust có khái niệm macro, là cách viết mã nguồn để sinh ra mã nguồn khác \cite{rustlangMacrosRust}.
 % Macro trong Rust bao gồm 2 loại declarative macro và procedural macro.
 % Declarative macro giống như macro trong C/C++ \cite{}, còn procedural macro giống như inline function.
-Ngôn ngữ C/C++ có bộ tiền xử lý trước khi cho mã nguồn vào trình biên dịch, đo đó sau khi được tiền xử lý thì mã nguồn đã được xử lý toàn bộ macro.
+Ngôn ngữ C/C++ có bộ tiền xử lý trước khi cho mã nguồn vào trình biên dịch, do đó sau khi được tiền xử lý thì mã nguồn C/C++ đã được mở rộng toàn bộ macro.
 Tuy nhiên, Rust không giống C/C++, macro của Rust không được xử lý trước khi sinh cây AST mà sẽ được xử lý sau khi sinh cây AST nhưng trước khi đi vào pha phân tích ngữ cảnh của trình biên dịch \cite{veykrilSourceAnalysis}.
 Như đã đề cập ở phần các trước, công cụ hiện tại sử dụng thư viện syn để sinh cây AST cho mã nguồn và syn không hỗ trợ xử lý macro.
 Do đó tất cả các mã lệnh nằm bên trong macro sẽ không được xử lý, dẫn đến việc không thể sinh cây AST cho đoạn mã lệnh sử dụng macro.
 Tất cả các đoạn lệnh nằm trong một lời gọi macro hiện tại được xem như một chuỗi ký tự.
 Không chỉ vậy macro trong Rust sử dụng DSL (Domain-Specific Language) riêng.
-DSL này gần với ngôn ngữ Rust nhưng có sự mở rộng biến đổi để phù hợp với vai trò macro, do đó gây khó khăn cho việc sinh cây AST cho macro.
+DSL này gần với ngôn ngữ Rust nhưng có sự mở rộng, biến đổi để phù hợp với tính năng macro, do đó gây khó khăn cho việc sinh cây AST.
 
 Để xử lý trường hợp trên, một bước tiền xử lý mã nguồn có thể được thêm vào để mở rộng macro như C/C++.
 Công cụ có thể sử dụng đến tính năng mở rộng marco của trình biên dịch Rust \cite{rustlangMacroExpansion}.
 Tính năng này có tác dụng đưa đoạn mã macro mà lập trình viên nhìn thấy thành đoạn mã mà trình biên dịch nhìn thấy.
-Mã nguồn sau khi được mở rộng sẽ thay thế các lời gọi macro bằng định nghĩa gốc của macro.
-Các macro nạp sẵn của ngôn ngữ Rust như \texttt{println!}, \texttt{vec!} hay kể cả macro do người dùng định nghĩa cũng sẽ được xử lý.
-Không chỉ vậy, mã nguồn sau khi được mở rộng thì sẽ có được các thông tin bị ẩn đi như các mặc định của Rust bao gồm các hàm, các biến được nạp sẵn trong ngôn ngữ.
-Tuy nhiên, việc mở rộng macro trước khi cho vào sinh cây AST sẽ làm cho mã nguồn bị biến đổi so với mã nguồn gốc, đồng thời tăng kích cỡ và độ lớn của mã nguồn.
-Việc thêm các thông tin ẩn mà lập trình viên không nhìn thấy có thể gây nhầm lẫn.
+Mã nguồn sau khi được mở rộng sẽ thay thế các lời gọi macro bằng định nghĩa gốc của macro đó.
+Các macro được nạp sẵn của ngôn ngữ Rust như \texttt{println!}, \texttt{vec!} hay kể cả macro do người dùng định nghĩa cũng sẽ được xử lý.
+Không chỉ vậy, mã nguồn sau khi được mở rộng sẽ có được các thông tin bị ẩn đi như các mặc định của Rust bao gồm các hàm, các biến được nạp sẵn trong ngôn ngữ.
+Tuy nhiên, việc mở rộng macro trước khi sinh cây AST sẽ làm cho mã nguồn bị biến đổi so với mã nguồn gốc, đồng thời tăng kích cỡ và độ lớn của mã nguồn.
+Việc thêm các thông tin ẩn mà lập trình viên không nhìn thấy ở mã nguồn gốc có thể gây nhầm lẫn.
 Điều này cũng đồng nghĩa với việc quá trình sinh cây AST cho mã nguồn sau khi xử lý macro sẽ phức tạp và tốn nhiều thời gian hơn.
 
 \subsection{Chưa hỗ trợ cơ chế Module}
@@ -31,10 +31,10 @@ Module chia nhỏ mã nguồn thành các phần nhỏ hơn, tổ chức, sắp 
 Module giúp tái sử dụng mã nguồn, tránh xung đột tên biến, tên hàm giữa các module khác nhau.
 Mỗi module trong Rust có thể là một tệp riêng biệt hoặc nằm chung trong một tệp mã nguồn.
 Các module có thể được tổ chức thành một hệ thống phân cấp, với các module con được khai báo bên trong các module cha.
-Có một số tệp được coi là tệp đặc biệt trong cấu trúc mã nguồn Rust.
+Ngoài ra, có một số tệp được coi là tệp đặc biệt trong cấu trúc mã nguồn Rust.
 Ví dụ như tệp với tên \texttt{mod.rs}, đây là tệp module gốc của thư mục chứa nó.
 Tất cả các module con trong thư mục đó sẽ không được phép truy cập trực tiếp từ bên ngoài mà phải thông qua tệp \texttt{mod.rs}.
-Ngoài ra còn có tệp tên \texttt{main.rs} hoặc \texttt{lib.rs} để đánh dấu điểm đầu vào của chương trình và xác định xem dự án là một thư viện hay một ứng dụng.
+Còn có tệp tên \texttt{main.rs} hoặc \texttt{lib.rs} để đánh dấu điểm đầu vào của chương trình và xác định xem dự án là một thư viện hay một ứng dụng.
 Rust còn cung cấp cơ chế workspace, cho phép quản lý nhiều dự án nhỏ trong cùng một dự án lớn, mỗi dự án là một thư mục con trong thư mục gốc lớn nhất \cite{rustlangCargoWorkspaces}.
 Để kiểm soát khả năng truy cập, Rust sử dụng cơ chế visibility \cite{rustlangVisibilityPrivacy}.
 Mặc định các thành phần trong module chỉ có phạm vi truy cập giới hạn trong module nó được định nghĩa.

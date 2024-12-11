@@ -13,8 +13,8 @@ Mặc dù Rust có các cơ chế để khắc phục những lỗi này, nhưng
 
 Đoạn mã \ref{code:c4_RUSTSEC-2021-0086} minh họa một lỗ hổng bảo mật phổ biến liên quan đến việc khởi tạo bộ nhớ không an toàn trong Rust.
 Lỗi xảy ra khi sử dụng hàm \texttt{Vec::with\_capacity} để tạo một vectơ có dung lượng được định sẵn là $N$, sau đó tùy chỉnh độ dài của vectơ bằng hàm \texttt{set\_len}.
-Tuy nhiên hàm \texttt{set\_len}, một hàm được coi là \texttt{unsafe}, chỉ đơn thuần thay đổi kích thước của vectơ mà không khởi tạo giá trị cho các phần tử mới được thêm vào.
-Điều này dẫn đến tình trạng các phần tử này chứa giá trị rác, tiềm ẩn nhiều nguy cơ như lỗi tràn bộ nhớ, truy cập trái phép vào vùng nhớ và các vấn đề bảo mật nghiêm trọng khác.
+Tuy nhiên hàm \texttt{set\_len}, một hàm được coi là \texttt{unsafe}, chỉ đơn thuần thay đổi biến thể hiện chiều dài của vectơ mà không khởi tạo giá trị cho các phần tử mới được thêm vào.
+Điều này dẫn đến tình trạng các phần tử này chứa giá trị không xác định, tiềm ẩn nhiều nguy cơ như lỗi tràn bộ nhớ, truy cập trái phép vào vùng nhớ và các vấn đề bảo mật nghiêm trọng khác.
 Để sửa lỗi, ta có thể sử dụng macro \texttt{vec!} để khởi tạo vectơ với độ dài và dung lượng là $N$, giá trị mặc định của mỗi phần tử là $0$.
 % Trong Hình \ref{img:c4_RUSTSEC-2021-0086}, nút \texttt{BLOCK} với thuộc tính \texttt{unsafe} biểu diễn việc bắt đầu một khối lệnh không an toàn.
 Trong Hình \ref{img:c4_RUSTSEC-2021-0086}, nút \texttt{BLOCK} với thuộc tính \texttt{unsafe} đánh dấu rõ ràng vùng mã không an toàn.
@@ -124,9 +124,9 @@ unsafe impl<P> Sync for Atom<P> where P: IntoRawPtr + FromRawPtr + Sync {}
 \label{code:c4_RUSTSEC-2020-0044}
 \end{listing}
 
-Đoạn mã \ref{code:c4_RUSTSEC-2020-0044} mô tả lỗi liên quan đến việc không triển khai thuộc tính \texttt{Send} và \texttt{Sync} cho kiểu dữ liệu con bên trong kiểu \texttt{Atom}.
+Đoạn mã \ref{code:c4_RUSTSEC-2020-0044} mô tả lỗi liên quan đến việc không triển khai thuộc tính \texttt{Send} và \texttt{Sync} cho kiểu dữ liệu con bên trong kiểu cha tên \texttt{Atom}.
 Trong bối cảnh này, \texttt{Atom} đóng vai trò như một hộp chứa cho kiểu dữ liệu \texttt{P} bên trong, giúp quản lý việc sử dụng bộ nhớ an toàn hơn.
-Tuy nhiên chỉ mình \texttt{Atom} được cài đặt thuộc tính \texttt{Send} và \texttt{Sync}, không đảm bảo rằng kiểu dữ liệu con \texttt{P} cũng phải cài đặt thuộc tính \texttt{Send} và \texttt{Sync}.
+Tuy nhiên việc chỉ mình kiểu cha \texttt{Atom} được cài đặt thuộc tính \texttt{Send} và \texttt{Sync}, không đảm bảo rằng kiểu dữ liệu con \texttt{P} cũng phải cài đặt thuộc tính \texttt{Send} và \texttt{Sync}.
 Điều này có nghĩa việc truy cập đến \texttt{Atom} có thể an toàn nhưng khi truy cập vào dữ liệu kiểu \texttt{P} bên trong thì không an toàn, có thể dẫn đến các vấn đề như sử dụng bộ nhớ sau khi đã giải phóng hoặc tương tranh dữ liệu cho kiểu dữ liệu \texttt{P} bên trong.
 Để sửa lỗi này, cần đảm bảo rằng kiểu \texttt{P} cũng phải được đánh dấu thuộc tính \texttt{Send} và \texttt{Sync}.
 
@@ -188,8 +188,8 @@ Từ đó lifetime của \texttt{Iter} sẽ không lớn hơn lifetime của \te
 \end{figure}
 
 Đánh dấu lifetime một cách tường minh cần được thực hiện cẩn thận để tránh được các lỗi liên quan đến bộ nhớ.
-Việc đánh dấu lifetime không chính xác có thể đánh lừa trình biên dịch và dẫn đến việc sử dụng bộ nhớ sau khi đã giải phóng.
+Việc đánh dấu lifetime không chính xác có thể đánh lừa trình biên dịch và dẫn đến việc sử dụng bộ nhớ sau khi đã giải phóng, con trỏ treo.
 Lifetime của kiểu trả về phải đảm bảo không lớn hơn lifetime của tham số truyền vào nếu kiểu trả về có truy cập đến bộ nhớ của tham số truyền vào.
-Có thể áp dụng ba quy tắc lược bỏ lifetime để suy diễn việc xác định lifetime giữa tham số và tham số, giữa tham số và kiểu trả về.
-Kết hợp với đồ thị CPG \ref{img:c4_RUSTSEC-2021-0130}, các luật có thể được đề ra để phát hiện sự không đồng bộ về lifetime giữa các biến dựa vào các nút \texttt{LIFETIME},
+Có thể sử dụng ba quy tắc lược bỏ lifetime để suy diễn việc xác định lifetime giữa tham số và tham số, giữa tham số và kiểu trả về.
+Kết hợp với đồ thị CPG được minh hoạ bằng Hình \ref{img:c4_RUSTSEC-2021-0130}, các luật có thể được đề ra để phát hiện sự không đồng bộ về lifetime giữa các biến dựa vào các nút \texttt{LIFETIME},
 \texttt{LIFETIME PARAMETER} và các cạnh thể hiện mối quan hệ giữa chúng như \texttt{REF}, \texttt{OUT LIVE}.
