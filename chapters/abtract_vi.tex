@@ -5,23 +5,26 @@
 \addcontentsline{toc}{chapter}{Tóm tắt}
 
 \begin{small}
-\textbf{Tóm tắt}: Rust đang trở thành một ngôn ngữ lập trình vô cùng nổi bật và được sử dụng rộng rãi trong những năm gần đây.
-Nhờ vào cơ chế đảm bảo an toàn bộ nhớ và hiệu suất vượt trội, Rust được rất nhiều dự án lớn lựa chọn làm ngôn ngữ kế thừa và tiếp nối C/C++.
+\textbf{Tóm tắt}: Rust đang trở thành một ngôn ngữ lập trình nổi bật và được sử dụng rộng rãi trong những năm gần đây.
+Nhờ vào cơ chế đảm bảo an toàn bộ nhớ và hiệu suất vượt trội, Rust được rất nhiều dự án lớn lựa chọn làm ngôn ngữ kế thừa và nối tiếp C/C++.
 Những dự án này cho thấy Rust không chỉ là một xu hướng mà còn là một ngôn ngữ có tiềm năng phát triển lâu dài.
-Khi các dự án lớn chuyển sang sử dụng Rust, việc đảm bảo mã nguồn an toàn, tránh lỗ hổng bảo mật trở thành một thách thức.
-Với sự phổ biến và tiếp cận mạnh mẽ, nhu cầu về các công cụ phân tích mã nguồn Rust cũng ngày càng tăng.
-Rust chỉ mới được sử dụng phổ biến trong thời gian gần đây, vì vậy việc phát triển các công cụ phân tích mã nguồn vẫn còn trong giai đoạn khởi đầu.
-Đã có những nghiên cứu được thực hiện và cho thấy tiềm năng cũng như kết quả thực tiễn nhất định.
-Tuy nhiên các nghiên cứu này vẫn còn hạn chế về hiệu suất, khả năng áp dụng vào dự án thực tế hay kết hợp với các nghiên cứu khác.
+Khi các dự án lớn chuyển sang sử dụng Rust, việc đảm bảo mã nguồn an toàn, tránh lỗ hổng bảo mật rất được đề cao.
+Đã có những nghiên cứu về đảm bảo chất lượng mã nguồn được thực hiện và cho thấy tiềm năng, kết quả thực tiễn nhất định.
+Các phương pháp đa dạng trong cách tiếp cận từ kiểm chứng, kiểm thử động và phân tích tĩnh.
+Điểm chung của các phương pháp là đều sử dụng một loại đầu vào riêng biệt của ngôn ngữ Rust.
+Rust là ngôn ngữ nối tiếp của C/C++, do vậy Rust có khả năng tương thích với C/C++.
+Các nghiên cứu đã có về đảm bảo chất lượng mã nguồn cho C/C++ hoàn toàn có thể áp dụng được cho Rust.
+Tuy nhiên, việc sử dụng đầu vào riêng biệt của Rust khiến cho các nghiên cứu đã có phải sửa đổi đáng kể thì mới có thể phù hợp.
+Điều này làm chậm quá trình mở rộng, chuyển tiếp giữa Rust và C/C++ trong các dự án thực tế.
 Khóa luận phát triển một công cụ phân tích mã nguồn cho ngôn ngữ lập trình Rust với mục tiêu khắc phục được các hạn chế kế trên.
-Khóa luận tiếp cận theo hướng phân tích tĩnh dựa trên nền tảng đồ thị thuộc tính mã nguồn.
-Điều này giúp giải pháp trong khóa luận có thể áp dụng vào các dự án mã nguồn lớn và tốn ít chi phí hơn so với các giải pháp khác.
-Công cụ thực hiện phân tích ngôn ngữ Rust ở mức độ mã nguồn thay vì lựa chọn các cấp độ thấp hơn để đảm bảo không bị mất mát thông tin về các cơ chế đảm bảo an toàn bộ nhớ.
-Được xây dựng trên kiến trúc mở rộng và tái sử dụng mạnh mẽ của Joern, điều này làm cho công cụ có thể tương thích với nhiều công cụ phân tích và các nghiên cứu đã có từ trước.
+Khóa luận lựa chọn đồ thị thuộc tính mã nguồn làm kiểu biểu diễn trung gian cho mã nguồn Rust.
+Điều này giúp giải pháp trong khóa luận tương thích với nhiều công cụ và nghiên cứu đã có từ trước.
+Với bản chất là phân tích tĩnh, đồ thị thuộc tính mã nguồn cho ngôn ngữ Rust có thể áp dụng vào các dự án lớn và tốn ít chi phí.
+Công cụ thực hiện phân tích ngôn ngữ Rust ở mức độ mã nguồn, thay vì các cấp độ trung gian thấp hơn để không bị mất mát thông tin về các cơ chế đảm bảo an toàn bộ nhớ.
 Với đầu ra là đồ thị thuộc tính mã nguồn, các thao tác truy vấn và phân tích tự động có thể được thực hiện nhằm phục vụ cho các mục đích khác nhau.
-Ngoài ra đồ thị thuộc tính mã nguồn có thể được áp dụng cho các lớp bài toán học máy, học tăng cường để phát hiện lỗ hổng bảo mật cho mã nguồn Rust.
+Ngoài ra, đồ thị thuộc tính mã nguồn có thể được áp dụng cho các lớp bài toán học máy, học tăng cường để phát hiện lỗ hổng bảo mật cho mã nguồn Rust.
 
 \vspace*{1cm}
-\textbf{Từ khóa}: Phân tích mã nguồn, phân tích tĩnh, ngôn ngữ lập trình Rust
+\textbf{Từ khóa}: \textit{Phân tích mã nguồn, đồ thị thuộc tính mã nguồn, ngôn ngữ lập trình Rust}
 
 \end{small}

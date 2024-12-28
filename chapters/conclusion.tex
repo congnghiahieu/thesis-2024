@@ -1,23 +1,25 @@
 \chapter*{Kết luận}
 \addcontentsline{toc}{chapter}{Kết luận}
 
-Phân tích mã nguồn là một bước quan trọng trong quy trình đảm bảo chất lượng phần mềm, giúp phát hiện lỗ hổng bảo mật trong mã nguồn.
-Việc phân tích mã nguồn với ngôn ngữ Rust trở nên khó khăn do cú pháp đan xen lập trình hướng đối tượng và lập trình hướng hàm, hệ thống kiểu dữ liệu phức tạp và các cơ chế đảm bảo an toàn bộ nhớ.
-Những điều trên tạo ra sự khác biệt của Rust so với các ngôn ngữ đã xuất hiện trước đó.
-Cũng đã có các nghiên cứu được đề xuất để giải quyết vấn đề này, nhưng các công cụ vẫn còn tồn tại những hạn chế về hiệu suất, khả năng áp dụng vào dự án thực tế hay kết hợp với các nghiên cứu khác.
+Đảm bảo chất lượng mã nguồn là một trong những vấn đề quan trọng trong quy trình phát triển phần mềm.
+Việc sử dụng các công cụ đảm bảo chất lượng mã nguồn giúp giảm thiểu lỗ hổng bảo mật, chi phí bảo trì và tăng cường hiệu suất.
+Đối với Rust, một ngôn ngữ lập trình mới nổi nhưng có tốc độ phát triển vượt trội, nhu cầu đảm bảo chất lượng mã nguồn là vô cùng cấp thiết.
+Rust có vai trò kế thừa và nối tiếp C/C++, do vậy Rust có khả năng tương thích mạnh mẽ với C/C++.
+Các nghiên cứu đã có về đảm bảo chất lượng mã nguồn cho C/C++ hoàn toàn có thể áp dụng được cho Rust.
+Đã có các nghiên cứu được đề ra, từ kiểm chứng, kiểm thử động và phân tích tĩnh.
+Các giải pháp này sử dụng các đầu vào riêng biệt của Rust, do vậy còn tồn tại hạn chế về khả năng tương thích với các công cụ và nghiên cứu đã có từ trước.
+Nhu cầu về sự mở rộng và chuyển tiếp nhanh chóng giữa Rust và C/C++ trong các dự án thực tế vẫn chưa thực sự được đáp ứng.
 
-Khóa luận phát triển thành công một công cụ phân tích mã nguồn cho ngôn ngữ lập trình Rust với mục tiêu khắc phục được các điểm yếu kể trên.
-Khóa luận lựa chọn hướng tiếp cận phân tích tĩnh thay vì các giải pháp kiểm chứng, kiểm thử động hay thực thi tượng trưng.
-Điều này giúp giải pháp trong khóa luận có thể áp dụng vào các dự án mã nguồn lớn và tốn ít chi phí hơn so với các giải pháp còn lại.
-Công cụ thực hiện phân tích ngôn ngữ Rust ở mức độ mã nguồn thay vì các cấp độ thấp hơn để đảm bảo không bị mất mát thông tin về các cơ chế đảm bảo an toàn bộ nhớ.
-Công cụ lựa chọn đồ thị thuộc tính mã nguồn làm kiểu biểu diễn trung gian.
-Việc này làm cho công cụ có thể tương thích, mở rộng với nhiều nghiên cứu đã có trước đó về đồ thị thuộc tính mã nguồn, đồng thời tái sử dụng được nhiều công cụ phân tích khác.
+Khóa luận phát triển thành công một công cụ phân tích mã nguồn cho ngôn ngữ lập trình Rust với mục tiêu khắc phục điểm yếu kể trên.
+Khóa luận lựa chọn đồ thị thuộc tính mã nguồn làm kiểu biểu diễn trung gian cho mã nguồn Rust.
+Việc này làm cho công cụ có thể tương thích, mở rộng với nhiều nghiên cứu đã có, đồng thời tái sử dụng được các công cụ khác nhau.
+Với đặc điểm phân tích tĩnh, đồ thị thuộc tính mã nguồn cho ngôn ngữ Rust có thể áp dụng vào các dự án lớn và tốn ít tài nguyên, chi phí.
+Công cụ thực hiện xây dựng đồ thị thuộc tính mã nguồn cho Rust ở mức độ mã nguồn thay vì các cấp độ thấp hơn để đảm bảo không bị mất mát thông tin về các cơ chế đảm bảo an toàn bộ nhớ.
 
-Công cụ được phát triển dựa trên Joern, kế thừa kiến trúc mở rộng và tái sử dụng mạnh mẽ.
-Công cụ được thử nghiệm trên các đoạn mã nguồn có lỗ hổng trong thực tế và ứng dụng vào bài toán học máy phân loại mã nguồn Rust, cho thấy khả năng khai thác to lớn.
+Công cụ phát triển dựa trên Joern, kế thừa kiến trúc mở rộng và tái sử dụng.
+Công cụ được thực nghiệm trên các đoạn mã nguồn có lỗ hổng trong thực tế và ứng dụng vào bài toán học máy phân loại mã nguồn Rust, cho thấy khả năng khai thác to lớn.
 Mặc dù công cụ đã đạt được kết quả nhất định, các hạn chế vẫn còn tồn tại.
-Hiện tại công cụ chỉ có thể phân tích từng tệp mã nguồn Rust riêng lẻ, chưa xử lý được liên kết bằng module giữa các tệp mã nguồn.
-Ngoài ra các macro trong Rust vẫn là khó khăn lớn do tính chất không được xử lý trước khi xây dựng cây AST.
-Marco vẫn đang được giữ ở dạng chuỗi ký tự và chưa thể xây dựng được cây AST từ đó.
-Nhìn chung, bên cạnh các hạn chế liệt kê ở trên, phương pháp đã cho thấy tiềm năng khi áp dụng phân tích mã nguồn cho dự án Rust thực tế.
-Phương pháp giải quyết được những hạn chế gặp phải của các nghiên cứu phân tích mã nguồn Rust trước đó.
+Hiện tại, công cụ chỉ có thể phân tích từng tệp mã nguồn Rust riêng lẻ, chưa xử lý được liên kết bằng module giữa các tệp mã nguồn.
+Ngoài ra, các macro trong Rust vẫn là khó khăn lớn do tính chất không được xử lý trước khi xây dựng cây AST.
+Nhìn chung, bên cạnh các hạn chế liệt kê ở trên, phương pháp đã cho thấy tiềm năng khi áp dụng phân tích mã nguồn Rust thực tế.
+Phương pháp giải quyết được hạn chế gặp phải của các nghiên cứu trước đó.

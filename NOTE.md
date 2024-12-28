@@ -382,7 +382,6 @@ Error: 0.09518895039839971
 
 - RustBelt, kiểm chứng
 - Miri, kiểm thử động, kiểm thử mờ
-- Thực thi tượng trưng
 - Rudra, Yuga, thuật toán HIR, MIR
 - Cơ chế an toàn của Rust:
   - ownership

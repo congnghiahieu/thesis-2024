@@ -7,21 +7,23 @@
 
 \textbf{Abstract}:
 Rust has become a widely used programming language in recent years.
-Thanks to its memory safety guarantees and superior performance, Rust has been adopted by many large projects as a successor to C/C++.
-These projects demonstrate that Rust is not just a trend but a language with long-term potential.
-As major projects transition to Rust, ensuring safe source code and avoiding security vulnerabilities becomes a challenge.
-With its growing popularity and strong adoption, the demand for source code analysis tools is also increasing.
-Rust has gained its popularity recently, so the development of source code analysis tools is still in its early stages.
-Some studies have been conducted, showing certain practical results and potential.
-However, these studies are still limited in terms of performance, applicability to real-world projects, and integration with other research.
-This thesis develops a source code analysis tool for the Rust programming language with the aim of overcoming these limitations.
-The thesis adopts a static analysis approach based on code property graphs.
-This allows the solution to be applied to large codebases and be more cost-effective compared to other solutions.
-The tool performs analysis at the source code level rather than lower levels to ensure no loss of information regarding memory safety mechanisms.
-Built on the extensible and reusable architecture of Joern, the tool is compatible with many existing analysis tools and research.
-With code property graphs as the output, automated querying and analysis can be performed for various purposes.
+Thanks to its memory safety features and outstanding performance, Rust has been adopted by many large projects as a successor to C/C++.
+These projects show that Rust is not just a trend but also a language with long-term potential.
+As major projects transition to Rust, ensuring safe source code and avoiding security vulnerabilities have become high priorities.
+Research on Rust source code quality assurance has been conducted, showing potential and delivering some practical results.
+Various methods, such as formal verification, static analysis, and dynamic testing, are being used.
+A common feature of these methods is their reliance on Rust-specific input formats.
+Since Rust is a successor to C/C++, it is compatible with C/C++.
+Existing research on source code quality assurance for C/C++ can be applied to Rust.
+However, Rust-specific input requirements mean these studies need significant adjustments to work well, which slows down the transition and integration of Rust with C/C++ in real-world projects.
+This thesis develops a source code analysis tool for the Rust programming language to address these limitations.
+The thesis uses code property graphs as an intermediate representation for Rust source code.
+This approach ensures compatibility with many existing tools and studies.
+It can be applied to large-scale projects at low cost due to the static analysis nature of code property graph.
+The tool performs analysis at the source level rather than lower levels to keep all information about Rust’s memory safety mechanisms.
+With code property graphs as the output, automated querying and analysis can be performed for different purposes.
 Additionally, code property graphs can be applied to machine learning and reinforcement learning tasks to detect security vulnerabilities in Rust source code.
 
 \vspace*{1cm}
-\textbf{Keywords}: Source code analysis, static analysis, Rust programming language
+\textbf{Keywords}: \textit{Source code analysis, code property graph, Rust programming language}
 \end{small}

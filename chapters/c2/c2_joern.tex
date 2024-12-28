@@ -5,7 +5,7 @@
 % Dự án CPG [6, 8] cho phép biểu diễn mã nguồn của các ngôn ngữ lập trình khác nhau dưới dạng đồ thị.
 % Cho đến nay, trọng tâm là Java và C/C++ nhưng có hỗ trợ thử nghiệm cho Python, Go và TypeScript.
 % Mục tiêu của dự án là cung cấp một cách biểu diễn mã nguồn không phụ thuộc vào ngôn ngữ.
-% Hơn nữa, thư viện CPG cung cấp một cách để lưu trữ đồ thị trong neo4j, và truy cập đồ thị thông qua giao diện dòng lệnh.
+% Hơn nữa, thư viện CPG cung cấp một cách để lưu trữ đồ thị trong Neo4j, và truy cập đồ thị thông qua giao diện dòng lệnh.
 % Thư viện CPG được thiết kế để cho phép tái sử dụng các truy vấn chung cho tất cả các ngôn ngữ lập trình được hỗ trợ.
 % Để đạt được mục tiêu này, thư viện CPG định nghĩa một hệ thống phân cấp lớp đầy đủ, bao gồm các loại câu lệnh và biểu thức khác nhau.
 % CPG chứa thông tin như hệ thống kế thừa của mã nguồn, đồ thị CFG điều khiển và đồ thị lời gọi hàm, đồ thị phụ thuộc dữ liệu.
@@ -14,7 +14,7 @@
 
 Đồ thị CPG đã được nghiên cứu rộng rãi và có rất nhiều phiên bản cài đặt được xây dựng dành cho các mục đích khác nhau \cite{ kuchler2022representing, weiss2022language}.
 % \cite{keirsgieter2020graft}.
-Tuy nhiên có một phiên bản được do chính tác giả của khái niệm đồ thị CPG, Fabian Yamaguchi, đích thân phát triển và mã nguồn mở mang tên Joern \cite{joernJoernHunteraposs}.
+Tuy nhiên, có một phiên bản được do chính tác giả của khái niệm đồ thị CPG, Fabian Yamaguchi, đích thân phát triển và mã nguồn mở mang tên Joern \cite{joernJoernHunteraposs}.
 Các thành phần trong đồ thị CPG theo đặc tả CPG của Joern bao gồm nút, cạnh, và thuộc tính.
 Các nút đại diện cho các thành phần cấu trúc của chương trình như phương thức, biến, và cấu trúc điều khiển.
 Mỗi nút có một loại riêng, loại này chỉ ra loại thành phần chương trình mà nút đó đại diện.
@@ -31,7 +31,7 @@ Một phiên bản cài đặt cụ thể của đồ thị CPG sẽ có một b
 Bản đặc tả này định nghĩa các loại nút, loại cạnh, thuộc tính và quan hệ giữa chúng, ngoài ra có thể bao gồm các mở rộng khác.
 Định nghĩa về cạnh, nút có thể được chuyên biệt cho một ngôn ngữ cụ thể hoặc tổng quát cho nhiều ngôn ngữ.
 Đặc tả CPG của Joern được thiết kế chủ yếu cho C/C++ và Java, và cũng có hỗ trợ cú pháp của ngôn ngữ lập trình khác như Python, Go, TypeScript, v.v.
-Tuy nhiên hiện tại đặc tả CPG của Joern chưa hỗ trợ cho ngôn ngữ Rust.
+Tuy nhiên, đặc tả CPG hiện thời của Joern chưa hỗ trợ cho ngôn ngữ Rust.
 
 Đặc tả CPG của Joern được thiết kết chủ yếu cho ngôn ngữ C/C++ và Java, đưa ra định nghĩa cho các cấu trúc chung như if else, while, for, v.v mà nhiều ngôn ngữ khác có cấu trúc tương đồng.
 Dù vậy, chuẩn chung này không thể đáp ứng được đặc thù của tất cả các ngôn ngữ.
@@ -73,12 +73,12 @@ Joern Frontend đóng vai trò chuyển đổi cây AST\texttt{'} sang đồ th�
 Sau khi được Joern Frontend xử lý, ta sẽ có được đồ thị CPG\texttt{'} nhưng đồ thị CPG\texttt{'} này là đồ thị CPG không hoàn chỉnh.
 Để hoàn thiện được đồ thị CPG\texttt{'} thì ta cần phải sử dụng đến Joern Backend.
 Ở Joern Frontend, ta đã thực hiện bước chuyển đổi một nút AST thành một nút CPG tương ứng, tạo thêm các cạnh để thể hiện các mối quan hệ giữa các nút.
-Tuy nhiên các nút, cạnh này chưa thể hiện được đầy đủ đồ thị CPG bao gồm cây AST, đồ thị CFG, đồ thị PDG.
+Tuy nhiên, các nút và các cạnh này chưa thể hiện được đầy đủ đồ thị CPG bao gồm cây AST, đồ thị CFG, đồ thị PDG.
 Với cấu trúc dữ liệu CPG của Joern, ta chỉ cần định nghĩa một phần số cạnh, nút cần thiết của đồ thị CPG, phần còn lại sẽ được Joern Backend thực hiện các thuật toán để có thể tự động suy diễn các nút, cạnh còn lại.
 Ví dụ trong cây AST có nút thể hiện vòng lặp \texttt{for}, ta chuyển thành nút \texttt{CONTROL STRUCTURE} của CPG kèm thêm một số thông tin như mệnh đề điều kiện, biến chỉ số vòng lặp.
 Joern Backend sử dụng thông tin đã có thể tự động suy diễn ra các mối quan hệ như \texttt{REACHING DEFINITION}, \texttt{DOMINATOR}, \texttt{POST DOMINATOR}, \texttt{CONTROL DEPENDENCY}, \texttt{DATA DEPENDENCY}, v.v từ đó tạo ra đồ thị CPG hoàn chỉnh.
 
-Trong Joern, thông tin của 3 thành phần cây AST, đồ thị CFG, đồ thị PDG được ánh xạ thành các lớp trong kiến trúc, tương ứng 3 lớp.
+Trong Joern, thông tin của ba thành phần cây AST, đồ thị CFG, đồ thị PDG được ánh xạ thành các lớp trong kiến trúc, tương ứng ba lớp.
 Một đồ thị CPG được cấu tạo từ nhiều lớp chồng lên nhau, có thể sinh ra đồ thị CPG chỉ có lớp AST, hoặc AST và CFG, hoặc AST, CFG và PDG.
 Hoàn toàn có thể mở rộng, viết thêm các lớp thông tin khác nếu cần thiết.
 Ví dụ như bổ sung một lớp thông tin về an toàn bộ nhớ, cụ thể trong Rust là lớp chứa thông tin về ownership, borrowing và lifetime.

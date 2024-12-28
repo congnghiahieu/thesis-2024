@@ -11,12 +11,12 @@ Bài toán đặt ra là phân loại tệp mã nguồn Rust có lỗ hổng b�
 Thực nghiệm sẽ tiến hành so sánh độ hiệu quả giữa mô hình học máy sử dụng đồ thị CPG và mô hình học máy học sử dụng mã nguồn Rust truyền thống.
 Mô hình học máy chỉ sử dụng dữ liệu mã nguồn Rust, tạm gọi là Baseline, sẽ sử dụng phương pháp Word2Vec \cite{church2017word2vec} để biểu diễn mã nguồn và Logistic Regression \cite{lavalley2008logistic} để phân loại.
 Đối với bài toán học máy để phát hiện lỗ hổng bảo mật trên đồ thị CPG, trước đây đã có phương pháp Devign, một phương pháp kinh điển cho lớp bài toán này \cite{zhou2019devign}.
-Devign đã sử dụng đồ thị CPG cho ngôn ngữ C/C++, do đó hoàn toàn có thể áp dụng phương pháp Devign với đồ thị CPG cho ngôn ngữ Rust trong khóa luận này.
+Devign đã sử dụng đồ thị CPG cho ngôn ngữ C/C++, do đó hoàn toàn có thể áp dụng phương pháp Devign với đồ thị CPG cho ngôn ngữ Rust trong khóa luận.
 
 Bộ dữ liệu được sử dụng bao gồm 788 tệp mã nguồn, trong đó 381 tệp có lỗ hổng bảo mật và 407 tệp không có lỗ hổng bảo mật.
 Đối với 381 tệp có lỗ hổng bảo mật, các tệp này được trích xuất từ bộ dữ liệu trong nghiên cứu của David Lo và cộng sự \cite{zheng2023closer}.
 Còn 407 tệp không có lỗ bảo mật được thu thập từ 100 dự án Rust  mã nguồn mở nhiều sao nhất trên Github \cite{githubGithubRankingTop100RustmdMaster}.
-Tập dữ liệu được chia thành 3 phần, 80\% dữ liệu được sử dụng cho quá trình huấn luyện, 10\% dữ liệu được sử dụng cho kiểm chứng, 10\% dữ liệu được sử dụng cho kiểm thử.
+Tập dữ liệu được chia thành ba phần, 80\% dữ liệu được sử dụng cho quá trình huấn luyện, 10\% dữ liệu được sử dụng cho kiểm chứng, 10\% dữ liệu được sử dụng cho kiểm thử.
 Để đánh giá, mỗi phương pháp được chạy 10 lần đối với tập dữ liệu như trên.
 Kết quả của các chỉ số là giá trị trung bình của 10 lần chạy.
 Kết quả thực nghiệm thể hiện ở bảng phía dưới.
@@ -57,7 +57,7 @@ Mã nguồn và bộ dữ liệu sử dụng trong thực nghiệm được lưu
 
 Chỉ số Accuracy của phương pháp Devign cho ngôn ngữ Rust mới chỉ đạt được ở mức 0.76 bởi một vài nguyên nhân.
 Thứ nhất là kích cỡ của bộ dữ liệu cho ngôn ngữ Rust.
-Hiện tại các mã nguồn có lỗ hổng được xác nhận đều lấy từ RUSTSEC Database.
+Hiện tại, các mã nguồn có lỗ hổng được xác nhận đều lấy từ RUSTSEC Database.
 Rust là ngôn ngữ mới phát triển gần đây, hệ sinh thái chưa lớn mạnh nên số lượng mã nguồn có lỗ hổng được báo cáo không nhiều.
 Thứ hai là đồ thị CPG của Rust vẫn chưa đầy đủ hoàn toàn.
 Tồn tại các tính năng của Rust như marco, module chưa thể phân tích ra cây AST hay lấy được các lớp thông tin cần thiết.

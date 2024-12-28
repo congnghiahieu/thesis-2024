@@ -16,7 +16,7 @@ Cơ chế ownership tương tự như mẫu thiết kế RAII (Resource Acquisit
 
 \textbf{Borrowing.} Để có thể chia sẻ giá trị mà không chuyển ownership, cơ chế borrowing cho phép việc tạo một tham chiếu đến giá trị và biến mới sẽ sử dụng tham chiếu đó.
 Với cơ chế borrowing, một giá trị có thể được đọc hoặc cập nhật mà không thay đổi ownership của giá trị.
-Có hai loại borrowing: 1) shared read-borrowing (mượn chia sẻ để đọc) và 2) exclusive mutable-borrowing (mượn độc quyền để ghi).
+Có hai kiểu borrowing là shared read-borrowing (mượn chia sẻ để đọc) và exclusive mutable-borrowing (mượn độc quyền để ghi).
 Trình biên dịch Rust đảm bảo rằng tham chiếu đọc và tham chiếu ghi không bao giờ xuất hiện cùng một lúc.
 Điều này có nghĩa là các thao tác đọc và ghi đồng thời là không thể trong Rust, từ đó loại bỏ khả năng xảy ra tương tranh dữ liệu, bế tắc hay các lỗi lập trình khác.
 % các lỗi an toàn bộ nhớ như con trỏ chỉ tới địa chỉ null
@@ -92,10 +92,10 @@ Rust là sự kết hợp giữa lập trình hướng đối tượng và lập
 Do có sự pha trộn của tính hướng hàm nên một số tính năng, cú pháp của Rust sẽ khác biệt so với ngôn ngữ tiêu biểu như C/C++.
 
 \textbf{Expression over statement (Sử dụng biểu thức hơn mệnh đề).}
-Trong Rust, hầu hết mọi thứ đều là biểu thức, có thể trả về một giá trị.
+Trong Rust, hầu hết mọi thứ đều là biểu thức và có thể trả về một giá trị.
 Điều này tạo ra sự khác biệt so với các ngôn ngữ cổ điển như C/C++.
-Đoạn mã \ref{code:fp_expression} mô tả cú pháp điều kiện if else trong Rust là biểu thức.
-Cú pháp if else có thể trả về giá trị và gán giá trị cho một biến khác hoặc truyền vào hàm khác.
+Đoạn mã \ref{code:fp_expression} mô tả cú pháp điều kiện if else trong Rust là một biểu thức.
+Cú pháp if else có thể trả về giá trị và gán giá trị đó cho một biến khác hoặc truyền vào hàm khác.
 
 \begin{listing}[H]
 \begin{minted}[mathescape, breaklines, frame=lines, framesep=2mm, baselinestretch=1.2, fontsize=\footnotesize, linenos]{rust}
@@ -165,7 +165,7 @@ fn match_example(value: Option<i32>) {
 
 \textbf{Monad design pattern (Mẫu thiết kế Monad).} Monad là một mẫu thiết kế cho phép nối chuỗi các tính toán một cách tuần tự, đồng thời cung cấp ngữ cảnh cho các tính toán đó \cite{gill2015remote}.
 Monad sẽ ở dạng một lớp cha bọc lấy dữ liệu con bên trong, thường được ví như "hộp" chứa giá trị, và hộp này có những quy tắc đặc biệt về cách lấy giá trị bên trong.
-Đoạn mã \ref{code:fp_monad} ví dụ về 2 loại dữ liệu \texttt{Option} và \texttt{Result} trong Rust, một dạng Maybe Monad \cite{wikibooksHaskellUnderstandingMonadsMaybe}, dùng để xử lý trường hợp không có giá trị và ngoại lệ một cách an toàn.
+Đoạn mã \ref{code:fp_monad} lấy ví dụ về hai loại dữ liệu \texttt{Option} và \texttt{Result} trong Rust, một dạng Maybe Monad \cite{wikibooksHaskellUnderstandingMonadsMaybe}, dùng để xử lý trường hợp không có giá trị và ngoại lệ một cách an toàn.
 
 \begin{listing}[H]
 \begin{minted}[mathescape, breaklines, frame=lines, framesep=2mm, baselinestretch=1.2, fontsize=\footnotesize, linenos]{rust}

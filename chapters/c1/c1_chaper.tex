@@ -5,7 +5,7 @@ Rust được phát triển bởi Mozilla Foundation và giới thiệu lần đ
 Phiên bản 1.0 của Rust được công bố vào năm 2015 \cite{seidel2024bringing}, đánh dấu phiên bản ổn định đầu tiên được đem vào sử dụng.
 Kể từ đó đến nay, Rust liên tục cải tiến và ngày càng được nhiều dự án sử dụng, đặc biệt là những dự án ở cấp độ hệ thống.
 Rust được thiết kế nhằm giải quyết các vấn đề về an toàn bộ nhớ, an toàn đa luồng mà ngôn ngữ C/C++ mắc phải và đảm bảo tốc độ, hiệu năng trong việc phát triển phần mềm hệ thống \cite{je2020scientists}. % cite{stackoverflowStackOverflow}
-Rust là một ngôn ngữ lập trình an toàn về bộ nhớ, cung cấp nhiều tính năng mới như ownership (tính sở hữu), borrowing (mượn giá trị), lifetime (vòng đời) giúp tránh được một lớp lớn các lỗi điển hình trong ngôn ngữ C/C++ như tràn bộ đệm, sử dụng sau khi giải phóng, giải phóng 2 lần, con trỏ chỉ tới địa chỉ null, con trỏ treo.
+Rust là một ngôn ngữ lập trình an toàn về bộ nhớ, cung cấp nhiều tính năng mới như ownership (tính sở hữu), borrowing (mượn giá trị), lifetime (vòng đời). Các tính năng trên giúp tránh được một lớp lớn các lỗi điển hình trong ngôn ngữ C/C++ như tràn bộ đệm, sử dụng sau khi giải phóng, giải phóng hai lần, con trỏ chỉ tới địa chỉ null, con trỏ treo.
 Những tính năng đảm bảo an toàn bộ nhớ trên được áp dụng ngay trong quá trình phát triển, cụ thể là thông qua trình biên dịch.
 Rust có thể ngăn chặn được các lỗi trên ở thời điểm biên dịch, giúp cho mã nguồn Rust ít lỗi hơn so với mã nguồn C/C++.
 Với ưu điểm vượt trội, Rust hiện tại đã được tích hợp vào mã nguồn của nhân Linux \cite{kernelRustx2014} hay trong phát triển hệ điều hành Android của Google \cite{androidAndroidRust}. % \cite{googleblogMemorySafe}
@@ -33,55 +33,59 @@ Mặc dù số lượng mã không an toàn trung bình chỉ chiếm một ph�
 Rust là ngôn ngữ mới nổi dạo gần đây nhưng cũng đã có một số lượng nghiên cứu về đảm bảo chất lượng mã nguồn cho Rust, một số cái tên nổi bật có thể kể đến như RustBelt \cite{jung2017rustbelt}, Miri \cite{githubGitHubRustlangmiri}, Rudra \cite{bae2021rudra}, Yuga \cite{nitin2024uga}.
 RustBelt sử dụng kiểm chứng để chứng minh tính đúng đắn của đoạn mã nguồn Rust.
 Rustbelt chỉ ra một đoạn mã nguồn Rust nhất định cần đảm bảo điều kiện gì thì đoạn mã đó sẽ được coi là an toàn.
-Tuy nhiên theo nghiên cứu của Yechan Bae và cộng sự \cite{jung2017rustbelt}, hướng tiếp cận của RustBelt không thể sử dụng ở phạm vi lớn, dành cho nhiều dự án mã nguồn khác nhau do hạn chế của việc sử dụng kiểm chứng.
+Tuy nhiên, theo nghiên cứu của Yechan Bae và cộng sự \cite{jung2017rustbelt}, hướng tiếp cận của RustBelt không thể sử dụng ở phạm vi lớn, dành cho nhiều dự án mã nguồn khác nhau do hạn chế của việc sử dụng kiểm chứng.
 RustBelt có hiệu năng thấp và phụ thuộc vào chỉ dẫn thủ công của chuyên gia thì mới có thể sinh ra các điều kiện kiểm chứng chính xác.
 
 Miri là một phương pháp sử dụng kiểm thử động thay vì kiểm chứng như RustBelt.
 Đầu tiên, Miri là một trình thông dịch dành cho ngôn ngữ Rust MIR (Rust Mid-Level Intermediate Representation), một ngôn ngữ trung gian được trình biên dịch sử dụng khi dịch mã nguồn Rust thành mã máy.
-Miri thực thi từng đoạn mã Rust ở dưới dạng MIR và sử dụng mô hình Stacked Borrow \cite{jung2019stacked} để lý giải cho những hành vi borrowing mà không quy định lifetime tường mình.
-Như đã nói đây là một công cụ kiểm thử động, nó phát hiện ra lỗi với giá trị thực sự, do vậy Miri chỉ tìm được lỗi khi chạy chương trình, không phải vào khoảng thời gian biên dịch khi mà đa số tính năng liên quan đến an toàn bộ nhớ của Rust được thực hiện.
+Miri thực thi từng đoạn mã Rust ở dưới dạng MIR và sử dụng mô hình Stacked Borrow \cite{jung2019stacked} để lý giải cho những hành vi borrowing mà không quy định lifetime tường minh.
+Như đã đề cập, Miri là một công cụ kiểm thử động và nó phát hiện ra lỗi với giá trị thực sự.
+Vì vậy, Miri chỉ tìm được lỗi khi chạy chương trình, không phải vào khoảng thời gian biên dịch khi mà đa số tính năng liên quan đến an toàn bộ nhớ của Rust được thực hiện.
 Vì Miri sử dụng kiểm thử động và kiểm thử mờ \cite{klees2018evaluating} nên cũng có các hạn chế nhất định.
-Thứ nhất đoạn mã được kiểm thử phải có yếu tố có thể khai thác thì mới có thể phát hiện được lỗi khi chạy chương trình.
-Do vậy muốn đạt hiệu quả thì phải có ca kiểm thử được viết thủ công hay đoạn mã được kiểm thử phải dễ xuất hiện lỗi, mà việc này rất khó đạt được trong dự án thực tế ở cấp độ hệ thống.
-Thứ hai là kiểm thử động và kiểm thử mờ sẽ tốn rất nhiều tài nguyên máy tính và thời gian, do vậy không thể áp dụng cho nhiều dự án mã nguồn lớn.
+Thứ nhất, đoạn mã được kiểm thử phải có yếu tố có thể khai thác thì mới có thể phát hiện được lỗi khi chạy chương trình.
+Để đạt hiệu quả thì phải có ca kiểm thử được viết thủ công hay đoạn mã được kiểm thử phải dễ xuất hiện lỗi, nhưng việc này rất khó đạt được trong dự án thực tế ở cấp độ hệ thống.
+Thứ hai, kiểm thử động và kiểm thử mờ sẽ tốn rất nhiều tài nguyên máy tính và thời gian, do vậy không thể áp dụng cho nhiều dự án mã nguồn lớn.
 
 Rudra và Yuga là hai công cụ phát hiện lỗ hổng trong mã nguồn Rust dựa trên phân tích tĩnh.
 Rudra chuyên tìm kiếm các lỗi về bộ nhớ và an toàn luồng, Yuga tìm kiếm một loại lỗi hiếm gặp khi thực hiện sai tính năng Lifetime Annotation \cite{nitin2024uga}.
-Hiện tại đây là 2 công cụ cho thấy kết quả tốt nhất so với các phương pháp kiểm chứng hay kiểm thử động như đã đề cập ở trên.
-Rudra với phương pháp phân tích tĩnh nên tốn ít tài nguyên và thời gian.
-Rudra thực hiện quét trên 43 nghìn dự án mã nguồn Rust và phát hiện ra 264 lỗi chưa từng được phát hiện trước đó, trong khi Yuga thực hiện trên 21 đoạn mã có lỗi và phát hiện được 16 lỗi Lifetime Annotation.
-Rudra và Yuga sử dụng HIR (High-level Intermediate Representation) \cite{rustlangHighlevelRust} và MIR (Mid-level Intermediate Representation) \cite{rustlangMidlevelRust}, thực hiện các thuật toán riêng biệt trên 2 loại dữ liệu này để phát hiện lỗ hổng trong mã nguồn Rust.
+Hiện tại, đây là hai công cụ cho thấy kết quả tốt nhất so với các phương pháp kiểm chứng hay kiểm thử động đã đề cập ở trên.
+% Rudra là phương pháp phân tích tĩnh nên tốn ít tài nguyên và thời gian.
+Rudra thực hiện kiểm tra trên 43 nghìn dự án mã nguồn Rust và phát hiện ra 264 lỗi chưa từng được phát hiện trước đó, trong khi Yuga thực hiện trên 21 đoạn mã có lỗi và phát hiện được 16 lỗi Lifetime Annotation.
+Rudra và Yuga sử dụng HIR (High-level Intermediate Representation) \cite{rustlangHighlevelRust} và MIR (Mid-level Intermediate Representation) \cite{rustlangMidlevelRust}, thực hiện các thuật toán riêng biệt trên hai loại dữ liệu này để phát hiện lỗ hổng trong mã nguồn Rust.
 HIR là ngôn ngữ trung gian được sinh ra từ AST và vẫn giữ được cấu trúc của mã nguồn.
 MIR là ngôn ngữ trung gian bậc thấp hơn của HIR, tập trung vào các thông tin ngữ cảnh.
 Với mục tiêu là tìm ra các lỗi nhất định dựa trên thuật toán, Rudra và Yuga không được áp dụng cho các loại lỗi phổ biến.
-Hơn nữa hai công cụ này khai thác HIR và MIR, là 2 ngôn ngữ trung gian riêng biệt của Rust, do vậy các thuật toán và công cụ phân tích truyền thống đã được làm từ trước cho các ngôn ngữ tương thích với Rust như C/C++ và LLVM-IR là không sử dụng được.
+Điểm chung của các giải pháp RustBelt, Miri, Rudra và Yuga là đều khai thác các đầu vào riêng biệt của Rust, như HIR và MIR.
+Với đặc điểm trên, các nghiên cứu đã được phát triển từ trước cho các ngôn ngữ tương thích với Rust như C/C++ không thể tái sử dụng ngay lập tức.
+Cần những sự thay đổi đáng kể từ các nghiên cứu đã có để có thể áp dụng được cho Rust.
+Điều này cản trở tốc độ phát triển cũng như quá trình chuyển tiếp giữa Rust và C/C++ trong các dự án thực tế.
 Do vậy cần có một cấu trúc dữ liệu thống nhất cho việc phân tích mã nguồn Rust.
 
-Ngoài ra, cũng có đã nghiên cứu khác thực hiện phân tích tĩnh áp dụng cho Rust và sử dụng đồ thị CPG để biểu diễn mã nguồn.
+Ngoài ra, cũng đã có nghiên cứu thực hiện phân tích mã nguồn áp dụng cho Rust và sử dụng đồ thị CPG để biểu diễn.
 Đồ thị CPG là một dạng biểu diễn mã nguồn dưới dạng đồ thị thuộc tính chứa nhiều thông tin về phân tích mã nguồn \cite{yamaguchi2014modeling}.
 Đồ thị CPG đã được sử dụng cho nhiều ngôn ngữ khác nhau như Java, C/C++, Python, JavaScript, v.v và đã chứng minh hiệu quả trong việc phân tích mã nguồn.
 Đồ thị CPG có thể coi là một cấu trúc dữ liệu, nền tảng chung cho nhiều ngôn ngữ, có khả năng tái sử dụng và mở rộng cao.
-Tuy nhiên, hiện tại chưa xuất hiện đồ thị CPG cho Rust ở mức độ mã nguồn, mà chỉ có công cụ hỗ trợ gián tiếp ở mức độ trung gian, cụ thể là LLVM-IR \cite{kuchler2022representing}.
+Hiện tại, chưa xuất hiện đồ thị CPG cho Rust ở mức độ mã nguồn mà mới chỉ có công cụ hỗ trợ gián tiếp ở mức độ trung gian, cụ thể là LLVM-IR \cite{kuchler2022representing}.
 Ưu điểm khi sử dụng LLVM-IR \cite{lattner2004llvm} là không chỉ áp dụng được cho Rust mà còn dùng cho các ngôn ngữ khác cũng sử dụng LLVM-IR làm ngôn ngữ trung gian như Clang C/C++, Swift, Zig, v.v.
-Tuy nhiên chính việc sử dụng LLVM-IR lại mang lại những bất lợi khiến nó không phù hợp với Rust.
+Tuy nhiên, chính việc sử dụng LLVM-IR lại mang lại những bất lợi khiến nó không phù hợp với Rust.
 LLVM-IR sử dụng hệ thống định kiểu đơn giản và không có kiểu tổng quát, trái ngược với Rust sử dụng hệ thống kiểu phức tạp và có kiểu tổng quát, do vậy LLVM-IR sẽ mất đi thông tin về kiểu tổng quát so với mã nguồn Rust gốc.
 Tiếp theo, LLVM-IR không giữ được thông tin về ownership, borrowing, lifetime đây là các tính năng mà trình biên dịch Rust xây dựng để đảm bảo an toàn về bộ nhớ và đa luồng.
 Đây là điểm đặc trưng của Rust, không có trong các ngôn ngữ khác, đặc biệt là ngôn ngữ trung gian bậc thấp như LLVM-IR.
-Do vậy LLVM-IR không phù hợp để phân tích tĩnh cho Rust.
+Do vậy LLVM-IR không phù hợp để phân tích mã nguồn cho Rust.
 
 % Ta có thể thấy được với sự phát triển và nổi lên của Rust hiện nay thì nhu cầu đảm bảo chất lượng cho Rust là cấp thiết.
 % Mặc dù Rust đang trong đà phát triển trong những năm gần đây nhưng hệ sinh thái của Rust chưa được lớn mạnh như các ngôn ngữ C/C++, Java.
 % Không chỉ vậy, với vai trò là ngôn ngữ sử dụng cho các chương trình hệ thống, Rust còn được mang vào thực hiện trong các lĩnh vực yêu cầu an toàn nghiêm ngặt như IOT \cite{sharma2023rust}, khám phá vũ trụ \cite{seidel2024bringing}.
 % Do vậy phát triển hệ sinh thái cho Rust nói chung và đảm bảo chất lượng Rust nói riêng là rất cần thiết.
 
-Để xử lý những hạn chế của các giải pháp đi trước, khóa luận này đưa ra một giải pháp cho việc phân tích tĩnh mã nguồn, đó là sử dụng đồ thị CPG để biểu diễn mã nguồn Rust.
-Với việc sử dụng đồ thị CPG cho Rust, đồ thị này không chỉ giới hạn ở việc khai thác để phát hiện một số lớp lỗi nhất định mà có thể sử dụng cho nhiều tập lỗi khác nhau.
+Để xử lý hạn chế của các giải pháp đi trước, khóa luận đưa ra một giải pháp cho việc phân tích mã nguồn Rust, đó là sử dụng đồ thị CPG để biểu diễn.
+Việc sử dụng đồ thị CPG cho ngôn ngữ Rust không chỉ giới hạn ở việc khai thác để phát hiện một số lớp lỗi nhất định mà có thể sử dụng cho nhiều tập lỗi khác nhau.
 Với nền tảng chung như vậy, các nghiên cứu đi trước cho việc khai thác đồ thị CPG có thể được áp dụng lại cho Rust mà không cần xử lý việc không tương thích cấu trúc dữ liệu riêng biệt của từng ngôn ngữ, ví dụ như HIR và MIR của Rust.
 Mã nguồn Rust có thể được chuyển thành LLVM-IR, và sử dụng nghiên cứu đồ thị CPG cho LLVM-IR đã có sẵn.
-Tuy nhiên vì hạn chế của LLVM-IR không thể biểu diễn hết được các tính năng đặc trưng của Rust, do vậy khóa luận này sẽ phân tích mã nguồn Rust ngay tại cấp độ mã nguồn, không phải ở cấp độ trung gian như LLVM-IR.
+Tuy nhiên, LLVM-IR không thể biểu diễn hết được các tính năng đặc trưng của Rust, vì vậy khóa luận sẽ phân tích mã nguồn Rust ngay tại cấp độ mã nguồn, không phải ở cấp độ trung gian như LLVM-IR.
 
 Phần còn lại của khóa luận sẽ được trình bày với cấu trúc như sau.
-Chương \ref{chap:background} thảo luận một số kiến thức cơ sở liên quan đến chủ đề phân tích tĩnh cho ngôn ngữ lập trình Rust.
+Chương \ref{chap:background} thảo luận một số kiến thức cơ sở liên quan đến chủ đề phân tích mã nguồn cho ngôn ngữ lập trình Rust.
 Chương \ref{chap:design} trình bày về quy trình hoạt động, kiến trúc và cài đặt của công cụ phân tích mã nguồn Rust.
 Ngoài ra, chương này cũng sẽ mô tả cách mã nguồn Rust được ánh xạ thành đồ thị CPG trên các cú pháp đặc trưng.
 Chương \ref{chap:experiment} bao gồm các thực nghiệm nhằm chứng tỏ được tiềm năng khai thác của đồ thị CPG trong việc đảm bảo chất lượng mã nguồn Rust.

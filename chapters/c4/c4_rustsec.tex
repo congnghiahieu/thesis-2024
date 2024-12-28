@@ -2,23 +2,29 @@
 
 Tính đến năm 2023, tổng cộng có 17 thể loại lỗi được báo cáo về RUSTSEC Database \cite{zheng2023closer}.
 Trong đó, lỗi về an toàn bộ nhớ và đa luồng chiếm tới gần hai phần ba tổng số loại lỗi.
-Mặc dù Rust có các cơ chế để khắc phục những lỗi này, nhưng dường như trong những dự án thực tế phức tạp, vẫn tồn tại một số lỗi nhất định, đặc biệt khi sử dụng tính năng \texttt{unsafe} (mã không an toàn) của Rust.
-Để minh họa cho việc áp dụng đồ thị CPG vào thực tế, khóa luận sẽ trình bày ứng dụng của đồ thị CPG trên 4 lỗi trong RUSTSEC Database thuộc các thể loại lỗi phổ biến nhất.
+Mặc dù Rust có cơ chế để khắc phục những lỗi này, nhưng trong dự án thực tế vẫn tồn tại một số lỗ hổng, nhất là khi sử dụng tính năng \texttt{unsafe} (mã không an toàn).
+Để minh họa cho việc áp dụng đồ thị CPG vào thực tế, khóa luận sẽ trình bày ứng dụng của đồ thị CPG trên bốn lỗi nằm trong RUSTSEC Database.
+Bốn lỗi được minh họa có gán nhãn thể loại là \texttt{memory-exposure}, \texttt{memory-corruption} và \texttt{thread-safety}.
+Việc phân tích đoạn mã có lỗ hổng của các lỗi nêu trên sẽ cho thấy khả năng khai thác của đồ thị CPG cho ngôn ngữ Rust, đặc biệt đối với thể loại lỗi phổ biến nhất là an toàn bộ nhớ và đa luồng.
+
+% RUSTSEC-2021-0086: memory-exposure
+% RUSTSEC-2022-0028: memory-corruption, memory-exposure
+% RUSTSEC-2020-0044: thread-safety
+% RUSTSEC-2021-0130: memory-corruption
 
 \subsection{RUSTSEC-2021-0086}
 
-% Đoạn mã \ref{code:c4_RUSTSEC-2021-0086} minh họa một lỗ hổng bảo mật phổ biến liên quan đến việc khởi tạo bộ nhớ không an toàn trong Rust. Lỗi xảy ra khi sử dụng hàm \texttt{Vec::with_capacity} để tạo một vectơ có dung lượng dự kiến, sau đó tùy ý điều chỉnh độ dài của vectơ bằng hàm \texttt{set_len}. Tuy nhiên, hàm \texttt{set_len}, một hàm không an toàn, chỉ đơn thuần thay đổi kích thước của vectơ mà không khởi tạo giá trị cho các phần tử mới được thêm vào. Điều này dẫn đến tình trạng các phần tử này chứa giá trị rác, tiềm ẩn nhiều nguy cơ như lỗi tràn bộ nhớ, truy cập trái phép vào vùng nhớ và các vấn đề bảo mật nghiêm trọng khác.
-
-% Để khắc phục lỗi này, Rust cung cấp macro \texttt{vec!} giúp khởi tạo vectơ một cách an toàn hơn. Khi sử dụng macro này, chúng ta có thể chỉ định rõ độ dài và giá trị ban đầu cho các phần tử của vectơ, đảm bảo rằng tất cả các phần tử đều được khởi tạo với giá trị mong muốn. Trong Hình \ref{img:c4_RUSTSEC-2021-0086}, nút \texttt{BLOCK} với thuộc tính \texttt{unsafe} đánh dấu rõ ràng vùng mã không an toàn, trong khi các nút con của nó thể hiện các hoạt động cụ thể có khả năng gây ra lỗi.
-
-Đoạn mã \ref{code:c4_RUSTSEC-2021-0086} minh họa một lỗ hổng bảo mật phổ biến liên quan đến việc khởi tạo bộ nhớ không an toàn trong Rust.
+Đoạn mã \ref{code:c4_RUSTSEC-2021-0086} minh họa một lỗ hổng bảo mật phổ biến liên quan đến việc khởi tạo bộ nhớ không an toàn trong Rust, được gán nhãn \texttt{memory-exposure}.
 Lỗi xảy ra khi sử dụng hàm \texttt{Vec::with\_capacity} để tạo một vectơ có dung lượng được định sẵn là $N$, sau đó tùy chỉnh độ dài của vectơ bằng hàm \texttt{set\_len}.
-Tuy nhiên hàm \texttt{set\_len}, một hàm được coi là \texttt{unsafe}, chỉ đơn thuần thay đổi biến thể hiện chiều dài của vectơ mà không khởi tạo giá trị cho các phần tử mới được thêm vào.
-Điều này dẫn đến tình trạng các phần tử này chứa giá trị không xác định, tiềm ẩn nhiều nguy cơ như lỗi tràn bộ nhớ, truy cập trái phép vào vùng nhớ và các vấn đề bảo mật nghiêm trọng khác.
-Để sửa lỗi, ta có thể sử dụng macro \texttt{vec!} để khởi tạo vectơ với độ dài và dung lượng là $N$, giá trị mặc định của mỗi phần tử là $0$.
+Tuy nhiên hàm \texttt{set\_len}, một hàm được coi là \texttt{unsafe}, chỉ thay đổi biến thể hiện chiều dài của vectơ mà không khởi tạo giá trị cho các phần tử mới được thêm vào.
+Điều này dẫn đến việc các phần tử chứa giá trị không xác định, tiềm ẩn nhiều nguy cơ như lỗi tràn bộ nhớ, truy cập trái phép vào vùng nhớ.
+Để sửa lỗi, ta có thể dùng macro \texttt{vec!} để khởi tạo vectơ với độ dài và dung lượng là $N$, giá trị mặc định của mỗi phần tử là $0$.
 % Trong Hình \ref{img:c4_RUSTSEC-2021-0086}, nút \texttt{BLOCK} với thuộc tính \texttt{unsafe} biểu diễn việc bắt đầu một khối lệnh không an toàn.
-Trong Hình \ref{img:c4_RUSTSEC-2021-0086}, nút \texttt{BLOCK} với thuộc tính \texttt{unsafe} đánh dấu rõ ràng vùng mã không an toàn.
-Các nút con của nút \texttt{BLOCK} này biểu diễn các mệnh đề, lời gọi hàm không an toàn.
+Trong Hình \ref{img:c4_RUSTSEC-2021-0086}, nút \texttt{BLOCK} với thuộc tính \texttt{unsafe} đánh dấu bắt đầu khối các lệnh không an toàn.
+Các nút con của nút \texttt{BLOCK} này biểu diễn các mệnh đề, lời gọi hàm có nguy cơ gây ra lỗi.
+Ngoài ra, ngay sau nút \texttt{BLOCK} không phải là các mệnh đề không an toàn mà là một nút \texttt{EXPR RETURN}.
+Trong Rust, mỗi mệnh đề đều trả về một giá trị, nhưng trong trường hợp này hàm \texttt{set\_len} không trả về giá trị nào.
+Do hạn chế của giao diện Neo4j, nút \texttt{BLOCK} với thuộc tính {unsafe} không thể được nhìn thấy một cách dễ dàng ngay trên Hình \ref{img:c4_RUSTSEC-2021-0086}.
 
 \begin{listing}[H]
 \begin{minted}[mathescape, breaklines, frame=lines, framesep=2mm, baselinestretch=1.2, fontsize=\footnotesize, linenos]{rust}
@@ -33,7 +39,7 @@ let mut buf: Vec<u8> = vec![0; N];
 \end{listing}
 
 \begin{figure}[H]
-    \includegraphics[width=1\columnwidth]{figures/c4/c4_RUSTSEC-2021-0086.png}
+    \includegraphics[width=1\columnwidth]{figures/c4.highlight/c4_RUSTSEC-2021-0086_low.png}
     \centering
     \caption{Minh họa đồ thị CPG cho đoạn mã nguồn RUSTSEC-2021-0086 \ref{code:c4_RUSTSEC-2021-0086}.}
     \label{img:c4_RUSTSEC-2021-0086}
@@ -63,12 +69,12 @@ where
 \label{code:c4_RUSTSEC-2022-0028}
 \end{listing}
 
-Đoạn mã \ref{code:c4_RUSTSEC-2022-0028} mô tả lỗi xảy ra khi sử dụng hàm \texttt{external} mà không xác định đúng ràng buộc lifetime cho kiểu tổng quát \texttt{T}.
+Đoạn mã \ref{code:c4_RUSTSEC-2022-0028} mô tả lỗi xảy ra khi sử dụng hàm \texttt{external} mà không xác định đúng ràng buộc lifetime cho kiểu tổng quát \texttt{T}, được gán nhãn \texttt{memory-corruption} và \texttt{memory-exposure}.
 Trong bối cảnh này, \texttt{external} là hàm được dùng để tạo ra dữ liệu giao tiếp chung giữa Rust và JavaScript thông qua Web Assembly Binding \cite{ githubGitHubRustwasmwasmbindgen}.
 Việc kiểu tổng quát \texttt{T} không được xác định đúng lifetime cho phép tạo ra một vùng dữ liệu có thể bị giải phóng trong khi chúng vẫn được tham chiếu bởi mã nguồn JavaScript.
 Để hai ngôn ngữ có thể giao tiếp được thì dữ liệu đó phải tồn tại trong suốt thời gian chạy của cả hai ngôn ngữ.
 Để sửa lỗi, cần thêm ràng buộc \texttt{T: 'static} để đảm bảo rằng dữ liệu được tham chiếu sẽ không bị giải phóng trong suốt thời gian tồn tại của chương trình.
-RUSTSEC-2022-0028 là một lỗi thực sự rất khó để phát hiện tự động vì nó liên quan đến bối cảnh mã nguồn, ở đây là dữ liệu giao tiếp giữa 2 ngôn ngữ Rust và JavaScript thông qua Web Assembly Binding.
+RUSTSEC-2022-0028 là một lỗi thực sự rất khó để phát hiện tự động vì nó liên quan đến bối cảnh mã nguồn, ở đây là dữ liệu giao tiếp giữa hai ngôn ngữ Rust và JavaScript thông qua Web Assembly Binding.
 Nếu chỉ sử dụng các mẫu khai phá tự động thông thường trên đồ thị CPG để phân tích thì chưa chắc phát hiện ra lỗi.
 Do cần kiến thức về bối cảnh bài toán nên sự can thiệp của con người là cần thiết trong trường hợp này.
 Trong Hình \ref{img:c4_RUSTSEC-2022-0028}, các câu truy vấn trên đồ thị CPG kết hợp với kiến thức miền của các chuyên gia cần được xây dựng thủ công để có thể phát hiện ra lỗ hổng.
@@ -109,7 +115,6 @@ Trong Hình \ref{img:c4_RUSTSEC-2022-0028}, các câu truy vấn trên đồ th�
 
 \subsection{RUSTSEC-2020-0044}
 
-
 \begin{listing}[H]
 \begin{minted}[mathescape, breaklines, frame=lines, framesep=2mm, baselinestretch=1.2, fontsize=\footnotesize, linenos]{rust}
 // Before fix
@@ -124,9 +129,9 @@ unsafe impl<P> Sync for Atom<P> where P: IntoRawPtr + FromRawPtr + Sync {}
 \label{code:c4_RUSTSEC-2020-0044}
 \end{listing}
 
-Đoạn mã \ref{code:c4_RUSTSEC-2020-0044} mô tả lỗi liên quan đến việc không triển khai thuộc tính \texttt{Send} và \texttt{Sync} cho kiểu dữ liệu con bên trong kiểu cha tên \texttt{Atom}.
+Đoạn mã \ref{code:c4_RUSTSEC-2020-0044} mô tả lỗi liên quan đến việc không triển khai thuộc tính \texttt{Send} và \texttt{Sync} cho kiểu dữ liệu con bên trong kiểu cha tên \texttt{Atom}, được gán nhãn \texttt{thread-safety}.
 Trong bối cảnh này, \texttt{Atom} đóng vai trò như một hộp chứa cho kiểu dữ liệu \texttt{P} bên trong, giúp quản lý việc sử dụng bộ nhớ an toàn hơn.
-Tuy nhiên việc chỉ mình kiểu cha \texttt{Atom} được cài đặt thuộc tính \texttt{Send} và \texttt{Sync}, không đảm bảo rằng kiểu dữ liệu con \texttt{P} cũng phải cài đặt thuộc tính \texttt{Send} và \texttt{Sync}.
+Tuy nhiên, việc chỉ mình kiểu cha \texttt{Atom} được cài đặt thuộc tính \texttt{Send} và \texttt{Sync} không đảm bảo rằng kiểu dữ liệu con \texttt{P} cũng phải cài đặt thuộc tính \texttt{Send} và \texttt{Sync}.
 Điều này có nghĩa việc truy cập đến \texttt{Atom} có thể an toàn nhưng khi truy cập vào dữ liệu kiểu \texttt{P} bên trong thì không an toàn, có thể dẫn đến các vấn đề như sử dụng bộ nhớ sau khi đã giải phóng hoặc tương tranh dữ liệu cho kiểu dữ liệu \texttt{P} bên trong.
 Để sửa lỗi này, cần đảm bảo rằng kiểu \texttt{P} cũng phải được đánh dấu thuộc tính \texttt{Send} và \texttt{Sync}.
 
@@ -161,13 +166,13 @@ pub fn iter(&self) -> Iter<'_, K, V> {
 \label{code:c4_RUSTSEC-2021-0130}
 \end{listing}
 
-Đoạn mã \ref{code:c4_RUSTSEC-2021-0130} mô tả về một lỗi sử dụng bộ nhớ sau khi đã giải phóng.
-Trong bối cảnh này, \texttt{Iter} là một \texttt{struct} được sử dụng để duyệt qua các phần tử trong một danh sách liên kết.
-Tuy nhiên, khi \texttt{Iter} được trả về từ hàm \texttt{iter} thì nó sẽ trỏ tới \texttt{self.head} mà \texttt{self.head} có thể bị giải phóng trước khi \texttt{Iter} được sử dụng, dẫn đến việc sử dụng bộ nhớ sau khi đã giải phóng.
+Đoạn mã \ref{code:c4_RUSTSEC-2021-0130} mô tả một lỗi sử dụng bộ nhớ sau khi đã giải phóng, được gán nhãn \texttt{memory-corruption}.
+\texttt{Iter} là một \texttt{struct} được sử dụng để duyệt qua các phần tử trong một danh sách liên kết.
+Khi \texttt{Iter} được trả về từ hàm \texttt{iter}, nó sẽ trỏ tới \texttt{self.head}, nhưng \texttt{self.head} có thể bị giải phóng trước khi \texttt{Iter} được sử dụng, dẫn đến việc sử dụng bộ nhớ sau khi đã giải phóng.
 Nguyên nhân là do quan hệ lifetime giữa biến \texttt{self} và giá trị trả về kiểu \texttt{Iter} không đồng bộ.
 Biến \texttt{self} được chỉ định lifetime là \texttt{'\_}, tức là để trình biên dịch tự động gán một giá trị lifetime mặc định, trong khi đó kiểu trả về \texttt{Iter} được chỉ định lifetime là \texttt{'a}.
-Trong trường hợp này \texttt{'\_} và \texttt{'a} không có liên hệ với nhau do đó lifetime của \texttt{Iter} có thể lớn hơn lifetime của \texttt{self}, dẫn đến việc truy cập đến \texttt{self.head} sau khi \texttt{self} đã bị giải phóng.
-Để sửa lỗi, cần sử dụng chung một lifetime cho \texttt{self} và \texttt{Iter} thông qua việc sử dụng 3 quy tắc lược bỏ lifetime \cite{rustlangLifetimeElision}.
+Trong trường hợp này, \texttt{'\_} và \texttt{'a} không có liên hệ với nhau do đó lifetime của \texttt{Iter} có thể lớn hơn lifetime của \texttt{self}, dẫn đến việc truy cập đến \texttt{self.head} sau khi \texttt{self} đã bị giải phóng.
+Để sửa lỗi, cần sử dụng chung một lifetime cho \texttt{self} và \texttt{Iter} thông qua việc sử dụng ba quy tắc lược bỏ lifetime \cite{rustlangLifetimeElision}.
 Nếu không chỉ định lifetime một cách tường minh, ba quy tắc lược bỏ lifetime sẽ được trình biên dịch sử dụng để tự động xác định lifetime của các biến dựa trên cấu trúc của hàm, bao gồm:
 
 \begin{enumerate}
@@ -177,7 +182,7 @@ Nếu không chỉ định lifetime một cách tường minh, ba quy tắc lư�
 \end{enumerate}
 
 Trong trường hợp này, ta sửa lỗi bằng cách không chỉ định lifetime cho \texttt{self} mà để trình biên dịch tự xác định, lifetime của \texttt{Iter} sẽ để là \texttt{'\_}.
-Ký hiệu \texttt{'\_} tức là tự động suy diễn và áp dụng quy tắc số 3 thì lifetime của \texttt{Iter} sẽ được gán bằng lifetime của \texttt{self}.
+Ký hiệu \texttt{'\_} tức là tự động suy diễn và áp dụng quy tắc số ba thì lifetime của \texttt{Iter} sẽ được gán bằng lifetime của \texttt{self}.
 Từ đó lifetime của \texttt{Iter} sẽ không lớn hơn lifetime của \texttt{self} và việc truy cập đến \texttt{self.head} sau khi \texttt{self} đã bị giải phóng sẽ không xảy ra.
 
 \begin{figure}[H]
